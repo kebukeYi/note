@@ -1,6 +1,5 @@
 package com.java.note.Jdk.thread.local;
 
-import com.java.note.spring.bean.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;

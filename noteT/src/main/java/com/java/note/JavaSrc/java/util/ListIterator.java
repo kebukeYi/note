@@ -23,7 +23,9 @@
  *
  */
 
-package java.util;
+package com.java.note.JavaSrc.java.util;
+
+import java.util.*;
 
 /**
  * An iterator for lists that allows the programmer

@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Documented
 @Inherited
-public @interface Autowried {
+public @interface MAutowried {
 
 
 }

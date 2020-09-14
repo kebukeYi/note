@@ -14,10 +14,13 @@ public class InsertSort {
         int[] arr = {9, 8, 7, 6, 5, 4, 3, 2, 1};
         insertSort(arr);
         System.out.println(Arrays.toString(arr));
-
     }
 
 
+    /**
+     * 时间：O(n^2)
+     * 空间：O（1）
+     */
     public static void insertSort(int[] array) {
         for (int i = 1; i < array.length; i++) {
             int temp = array[i];

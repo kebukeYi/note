@@ -103,6 +103,7 @@ import sun.misc.SharedSecrets;
  * @see LinkedList
  * @see Vector
  * @since 1.2
+ * 查询效率⾼，增删效率低，线程不安全。使⽤频率很⾼
  */
 
 public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAccess, Cloneable, java.io.Serializable {
@@ -257,6 +258,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
     private void grow(int minCapacity) {
         // overflow-conscious code
         int oldCapacity = elementData.length;
+        //1.5 倍
         int newCapacity = oldCapacity + (oldCapacity >> 1);
         if (newCapacity - minCapacity < 0)
             newCapacity = minCapacity;
@@ -494,6 +496,8 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
         modCount++;
         E oldValue = elementData(index);
         int numMoved = size - index - 1;
+        //删除其实跟新增是⼀样的，不过叫是叫删除，但是在代码⾥⾯我们发现，他还是在copy⼀个数组。
+        // 那代码他就复制⼀个index5+1开始到最后的数组，然后把它放到index开始的位置
         if (numMoved > 0)
             System.arraycopy(elementData, index + 1, elementData, index, numMoved);
         elementData[--size] = null; // clear to let GC do its work

@@ -456,9 +456,13 @@ public class Hashtable<K, V>
      *                              <code>null</code>
      * @see Object#equals(Object)
      * @see #get(Object)
+     *
      * HashTable的键和值都不能为null，如果将HashTable的一个键值对的key设置为null，
-     * 因为null值没法调用hashCode()方法获取哈希值，所以会抛出空指针异常。
+     * 因为 null 值没法调用hashCode()方法获取哈希值，所以会抛出空指针异常。
      * 同样value为null时，在put方法中会进行判断，然后抛出空指针异常。
+     * 这是因为Hashtable使⽤的是安全失败机制（fail-safe），这种机制会使你此次读到的数据不⼀定是最新的数据。
+     * 如果你使⽤null值，就会使得其⽆法判断对应的key是不存在还是为空，因为你⽆法再调⽤⼀次
+     * contain(key）来对key是否存在进⾏判断，ConcurrentHashMap同理。
      */
     public synchronized V put(K key, V value) {
         // Make sure the value is not null

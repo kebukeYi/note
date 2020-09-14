@@ -7,8 +7,9 @@ import java.util.List;
  * @Author : mmy
  * @Creat Time : 2020/4/16  14:42
  * @Description 输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）
- * 利用递归的回溯
- * 利用辅助栈 （先进后出）
+ * 1.利用递归的回溯
+ * 2.利用辅助栈 （先进后出）
+ * 3.头插法
  */
 public class Offer06 {
 

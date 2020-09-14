@@ -8,7 +8,7 @@ package com.java.note.Jdk.proxy.main;
 public class MyController {
 
 
-    @Autowried
+    @MAutowried
     private MyService myService;
 
 

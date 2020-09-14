@@ -7,13 +7,14 @@
             http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 
-    <bean id="beanPostProcessor" class="com.java.note.spring.aop.MyBeanPostProcessor">
+    <bean id="beanPostProcessor" class="com.java.note.spring.ioc.MyBeanPostProcessor">
     </bean>
 
-    <bean id="instantiationAwareBeanPostProcessor" class="com.java.note.spring.aop.MyInstantiationAwareBeanPostProcessor">
+    <bean id="instantiationAwareBeanPostProcessor"
+          class="com.java.note.spring.ioc.MyInstantiationAwareBeanPostProcessor">
     </bean>
 
-    <bean id="beanFactoryPostProcessor" class="com.java.note.spring.aop.MyBeanFactoryPostProcessor">
+    <bean id="beanFactoryPostProcessor" class="com.java.note.spring.ioc.MyBeanFactoryPostProcessor">
     </bean>
 
     <bean id="people" name="people2" class="com.java.note.spring.bean.People" init-method="init"

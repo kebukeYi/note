@@ -19,7 +19,7 @@ public class MyMain2 {
 
         Stream.of(aClass.getDeclaredFields()).forEach(fired -> {
             //获取是否有注解
-            Autowried autowried = fired.getAnnotation(Autowried.class);
+            MAutowried autowried = fired.getAnnotation(MAutowried.class);
             if (autowried != null) {
                 fired.setAccessible(true);
                 //获取当前类型

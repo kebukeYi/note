@@ -7,8 +7,29 @@ package com.java.note.Algorithm.JZoffer;
  * 请完成一个函数,输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
  */
 public class Offer04 {
+
     public static void main(String[] args) {
 
+    }
+
+    public static boolean get(int[][] matrix, int target) {
+        if ((matrix == null || matrix.length == 0) || (matrix.length == 1 && matrix[0].length == 0)) {
+            return false;
+        }
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int r = 0, c = cols - 1;// 从右上到左下缩小范围
+
+        while (r <= rows - 1 && c >= 0) {
+            if (matrix[r][c] == target) {
+                return true;
+            } else if (target > matrix[r][c]) {
+                r++;
+            } else {
+                c--;
+            }
+        }
+        return false;
     }
 
     public boolean findNumberIn2DArray(int[][] matrix, int target) {

@@ -253,6 +253,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * than 2 and should be at least 8 to mesh with assumptions in
      * tree removal about conversion back to plain bins upon
      * shrinkage.
+     * 链表转树的 阈值
      */
     static final int TREEIFY_THRESHOLD = 8;
 
@@ -260,6 +261,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * The bin count threshold for untreeifying a (split) bin during a
      * resize operation. Should be less than TREEIFY_THRESHOLD, and at
      * most 6 to mesh with shrinkage detection under removal.
+     * 树 转 链表的阈值
      */
     static final int UNTREEIFY_THRESHOLD = 6;
 
@@ -268,12 +270,14 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * (Otherwise the table is resized if too many nodes in a bin.)
      * Should be at least 4 * TREEIFY_THRESHOLD to avoid conflicts
      * between resizing and treeification thresholds.
+     * hash 表阈值
      */
     static final int MIN_TREEIFY_CAPACITY = 64;
 
     /**
      * Basic hash bin node, used for most entries.  (See below for
      * TreeNode subclass, and in LinkedHashMap for its Entry subclass.)
+     * 存储的元素
      */
     static class Node<K, V> implements Map.Entry<K, V> {
         final int hash;
@@ -352,6 +356,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     /**
      * Returns x's Class if it is of the form "class C implements
      * Comparable<C>", else null.
+     * 未知
      */
     static Class<?> comparableClassFor(Object x) {
         if (x instanceof Comparable) {
@@ -376,8 +381,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     }
 
     /**
-     * Returns k.compareTo(x) if x matches kc (k's screened comparable
-     * class), else 0.
+     * Returns k.compareTo(x) if x matches kc (k's screened comparable class), else 0.
      */
     @SuppressWarnings({"rawtypes", "unchecked"}) // for cast to Comparable
     static int compareComparables(Class<?> kc, Object k, Object x) {
@@ -397,7 +401,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
         n |= n >>> 4;
         n |= n >>> 8;
         n |= n >>> 16;
-        //如果入参cap为小于或等于0的数，那么经过cap-1之后n为负数，n经过无符号右移和或操作后仍未负数,
+        //如果入参cap为小于或等于0的数，那么经过cap-1之后n为负数，n经过无符号右移和或操作后仍为负数,
         // 所以如果n<0,则返回1;如果n大于或等于最大容量，则返回最大容量;否则返回n+1
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
@@ -409,17 +413,20 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * necessary. When allocated, length is always a power of two.
      * (We also tolerate length zero in some operations to allow
      * bootstrapping mechanics that are currently not needed.)
+     * 存储的底层元素数组
      */
     transient Node<K, V>[] table;
 
     /**
      * Holds cached entrySet(). Note that AbstractMap fields are used
      * for keySet() and values().
+     * 数组的元素 Set
      */
     transient Set<Map.Entry<K, V>> entrySet;
 
     /**
      * The number of key-value mappings contained in this map.
+     * 数组长度
      */
     transient int size;
 
@@ -441,11 +448,12 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     // (The javadoc description is true upon serialization.
     // Additionally, if the table array has not been allocated, this
     // field holds the initial array capacity, or zero signifying
-    // threshold表示当HashMap的size大于threshold时会执行resize操作。
+    // 扩容 threshold 表示当HashMap的size大于threshold时会执行resize操作
     int threshold;
 
     /**
      * The load factor for the hash table.
+     * 加载因子
      *
      * @serial
      */
@@ -586,12 +594,15 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
         int n;
         K k;
         if ((tab = table) != null && (n = tab.length) > 0 && (first = tab[(n - 1) & hash]) != null) {
-            if (first.hash == hash && // always check first node
-                    ((k = first.key) == key || (key != null && key.equals(k))))
+            if (first.hash == hash && // always check first node  经常检查第一个   1。先比较 hash 值
+                    ((k = first.key) == key || (key != null && key.equals(k))))//再比较 key  当 key 比较不出时字符串  在采用 equals 比较
                 return first;
+
             if ((e = first.next) != null) {
+                //树节点的话
                 if (first instanceof TreeNode)
                     return ((TreeNode<K, V>) first).getTreeNode(hash, key);
+                //链表节点 开始从头遍历
                 do {
                     if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
                         return e;
@@ -624,12 +635,14 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * <tt>null</tt> if there was no mapping for <tt>key</tt>.
      * (A <tt>null</tt> return can also indicate that the map
      * previously associated <tt>null</tt> with <tt>key</tt>.)
-     * 那么HashMap又是如何实现key不重复的呢？
+     * 那么HashMap又是如何实现 key不重复的呢？
      * 1.根据key计算hash值。
      * 2.根据hash值映射数组下标，然后获取数组下标的对应的元素。
-     * 3.数组下标存储的是一个链表，链表包含了哈希冲突的元素，会对链表进行遍历，判断hash1==hash2，除此以外，还必须要key1==key2，或者key1.equals(key2)。
+     * 3.数组下标存储的是一个链表，链表包含了哈希冲突的元素，会对链表进行遍历，判断hash1==hash2，
+     * 除此以外，还必须要key1==key2，或者key1.equals(key2)。
      * 因为两个不同的对象的hashCode可能相等，但是相同的对象的hashCode肯定相等，
      * ==是判断两个变量或实例是不是指向同一个内存地址，如果是同一个内存地址，对象肯定相等。
+     * ⽆法保证上⼀秒put的值，下⼀秒get的时候还是原值，所以线程安全还是⽆法保证。
      */
     public V put(K key, V value) {
         return putVal(hash(key), key, value, false, true);
@@ -649,10 +662,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
         Node<K, V>[] tab;
         Node<K, V> p;
         int n, i;
-        //1、判断当 table 为 null 或者 tab 的长度为 0 时，即 table 尚未初始化，此时通过 resize() 方法得到初始化的 table
+        //1、1、判断当 table 为 null 或者 tab 的长度为 0 时，即 table 尚未初始化，此时通过 resize() 方法得到初始化的 table
         if ((tab = table) == null || (n = tab.length) == 0)
             n = (tab = resize()).length;
-        //1.1 、判断当 table 为 null 或者 tab 的长度为 0 时，即 table 尚未初始化，此时通过 resize() 方法得到初始化的 table
         if ((p = tab[i = (n - 1) & hash]) == null)
             tab[i] = newNode(hash, key, value, null);
             //1.1.1、当 p 为 null 时，表明 tab[i] 上没有任何元素，那么接下来就 new 第一个 Node 节点，调用 newNode 方法返回新节点赋值给 tab[i]
@@ -689,6 +701,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                     p = e;
                 }
             }
+
             // 表示在桶中找到key值、hash值与插入元素相等的结点
             if (e != null) { // existing mapping for key
                 // 记录e的value
@@ -697,7 +710,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                 if (!onlyIfAbsent || oldValue == null)
                     //用新值替换旧值
                     e.value = value;
-                // 访问后回调
+                // 访问后回调函数
                 afterNodeAccess(e);
                 return oldValue;
             }
@@ -720,6 +733,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * with a power of two offset in the new table.
      *
      * @return the table
+     * 初始化 数组
      */
     final Node<K, V>[] resize() {
         // 保存老的table和老table的长度
@@ -732,11 +746,12 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
             if (oldCap >= MAXIMUM_CAPACITY) {
                 threshold = Integer.MAX_VALUE;
                 return oldTab;
-            } else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY && oldCap >= DEFAULT_INITIAL_CAPACITY)
+            } else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY && oldCap >= DEFAULT_INITIAL_CAPACITY) {
                 newThr = oldThr << 1; // double threshold
-        } else if (oldThr > 0) // initial capacity was placed in threshold
+            }
+        } else if (oldThr > 0) {
             newCap = oldThr;
-        else {               // zero initial threshold signifies using defaults
+        } else {               // zero initial threshold signifies using defaults
             newCap = DEFAULT_INITIAL_CAPACITY;
             newThr = (int) (DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
         }
@@ -745,6 +760,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
             float ft = (float) newCap * loadFactor;
             newThr = (newCap < MAXIMUM_CAPACITY && ft < (float) MAXIMUM_CAPACITY ? (int) ft : Integer.MAX_VALUE);
         }
+
         threshold = newThr;
 
         @SuppressWarnings({"rawtypes", "unchecked"})
@@ -788,10 +804,12 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                                 hiTail = e;
                             }
                         } while ((e = next) != null);
+
                         if (loTail != null) {
                             loTail.next = null;
                             newTab[j] = loHead;
                         }
+
                         if (hiTail != null) {
                             hiTail.next = null;
                             newTab[j + oldCap] = hiHead;
@@ -865,6 +883,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * @param matchValue if true only remove if value is equal
      * @param movable    if false do not move other nodes while removing
      * @return the node, or null if none
+     * 删除节点
      */
     final Node<K, V> removeNode(int hash, Object key, Object value,
                                 boolean matchValue, boolean movable) {

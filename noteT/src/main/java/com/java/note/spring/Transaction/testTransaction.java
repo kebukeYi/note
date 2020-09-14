@@ -1,9 +1,8 @@
 package com.java.note.spring.Transaction;
 
-import com.java.note.Jdk.proxy.main.Autowried;
+
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -15,10 +14,10 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class testTransaction {
 
-    @Autowried
+    //    @Autowried
     TransactionTemplate transactionTemplate;
 
-    @Autowried
+    //    @Autowried
     PlatformTransactionManager platformTransactionManager;
 
     /**
@@ -57,7 +56,7 @@ public class testTransaction {
      * 声明式事务管理
      * 推荐使用（代码侵入性最小），实际是通过 AOP 实现（基于@Transactional 的全注解方式使用最多）。
      */
-    @Transactional
+//    @Transactional
     public void testTransactional() {
         //业务代码
     }

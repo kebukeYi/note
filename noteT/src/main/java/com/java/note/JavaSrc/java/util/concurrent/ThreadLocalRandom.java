@@ -33,11 +33,14 @@
  * http://creativecommons.org/publicdomain/zero/1.0/
  */
 
-package java.util.concurrent;
+package com.java.note.JavaSrc.java.util.concurrent;
+
+import sun.misc.VM;
 
 import java.io.ObjectStreamField;
 import java.util.Random;
 import java.util.Spliterator;
+import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.DoubleConsumer;
@@ -47,12 +50,11 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.StreamSupport;
-import sun.misc.VM;
 
 /**
  * A random number generator isolated to the current thread.  Like the
- * global {@link java.util.Random} generator used by the {@link
- * java.lang.Math} class, a {@code ThreadLocalRandom} is initialized
+ * global {@link Random} generator used by the {@link
+ * Math} class, a {@code ThreadLocalRandom} is initialized
  * with an internally generated seed that may not otherwise be
  * modified. When applicable, use of {@code ThreadLocalRandom} rather
  * than shared {@code Random} objects in concurrent programs will
