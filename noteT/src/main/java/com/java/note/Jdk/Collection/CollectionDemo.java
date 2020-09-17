@@ -28,10 +28,9 @@ public class CollectionDemo {
 
         Hashtable hashtable = new Hashtable();
 
-        MyHashMap myHashMap = new MyHashMap();
 
         ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
-        ConcurrentSkipListMap concurrentSkipListMap=new ConcurrentSkipListMap();
+        ConcurrentSkipListMap concurrentSkipListMap = new ConcurrentSkipListMap();
         LinkedHashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
 
         TreeMap treeMap = new TreeMap();
@@ -39,7 +38,7 @@ public class CollectionDemo {
         Vector vector = new Vector();
 
         PriorityQueue priorityQueue = new PriorityQueue();
-        ConcurrentLinkedQueue concurrentLinkedQueue=new ConcurrentLinkedQueue();
+        ConcurrentLinkedQueue concurrentLinkedQueue = new ConcurrentLinkedQueue();
 
 
         setNoSafe();
@@ -99,36 +98,36 @@ public class CollectionDemo {
     }
 
     public static void delHashMap() {
-        MyHashMap<String, Object> myHashMap = new MyHashMap();
-        myHashMap.put("1", "Object");
-        myHashMap.put("2", "Object");
-        myHashMap.put("3", "Object");
-        myHashMap.put("4", "Object");
-        myHashMap.put("5", "Object");
-        myHashMap.put("6", "Object");
-        myHashMap.put("7", "Object");
+        HashMap<String, Object> HashMap = new HashMap();
+        HashMap.put("1", "Object");
+        HashMap.put("2", "Object");
+        HashMap.put("3", "Object");
+        HashMap.put("4", "Object");
+        HashMap.put("5", "Object");
+        HashMap.put("6", "Object");
+        HashMap.put("7", "Object");
 
         try {
-            for (Map.Entry<String, Object> entry : myHashMap.entrySet()) {
+            for (Map.Entry<String, Object> entry : HashMap.entrySet()) {
                 String key = entry.getKey();
                 if (key.equals("3")) {
-                    myHashMap.remove(entry.getKey());
+                    HashMap.remove(entry.getKey());
                 }
-                System.out.println("1-当前HashMap是" + myHashMap + " 当前entry是" + entry);
+                System.out.println("1-当前HashMap是" + HashMap + " 当前entry是" + entry);
             }
         } catch (ConcurrentModificationException e) {
             e.printStackTrace();
         }
 
 
-        myHashMap.put("3", "Object");
-        Iterator<Map.Entry<String, Object>> iterator = myHashMap.entrySet().iterator();
+        HashMap.put("3", "Object");
+        Iterator<Map.Entry<String, Object>> iterator = HashMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Object> entry = iterator.next();
             if (entry.getKey().equals("3")) {
                 iterator.remove();
             }
-            System.out.println("2-当前HashMap是" + myHashMap + " 当前entry是" + entry);
+            System.out.println("2-当前HashMap是" + HashMap + " 当前entry是" + entry);
         }
 
 

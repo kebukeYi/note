@@ -8,6 +8,7 @@ import java.util.concurrent.SynchronousQueue;
  * @Description 同步队列 只能放一个 消费一个 ；
  */
 public class SynchronousQueueDemo {
+
     public static void main(String[] args) {
         SynchronousQueue synchronousQueue = new SynchronousQueue();
 

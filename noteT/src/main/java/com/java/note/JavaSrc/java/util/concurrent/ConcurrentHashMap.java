@@ -990,7 +990,6 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
      * {@code null}.  (There can be at most one such mapping.)
      *
      * @throws NullPointerException if the specified key is null
-     *
      */
     public V get(Object key) {
         //tab 引用map.table
@@ -1292,6 +1291,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                     if (tabAt(tab, i) == f) {
                         //条件成立：说明桶位 为 链表 或者 单个 node
                         if (fh >= 0) {
+                            //
                             validated = true;
                             //e 表示当前循环处理元素
                             //pred 表示当前循环节点的上一个节点
@@ -1306,7 +1306,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                                                 (ek != null && key.equals(ek)))) {
                                     V ev = e.val;
 
-                                    //条件一：cv == null  true->替换的值为null 那么就是一个删除操作
+                                    //条件一：cv == null  true->替换的值为 null 那么就是一个删除操作
                                     //条件二：cv == ev || (ev != null && cv.equals(ev))  那么是一个替换操作
                                     if (cv == null || cv == ev ||
                                             (ev != null && cv.equals(ev))) {
@@ -1314,6 +1314,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
                                         //将当前节点的值 赋值给 oldVal 后续返回会用到
                                         oldVal = ev;
+
                                         //条件成立：说明当前是一个替换操作
                                         if (value != null)
                                             //直接替换
@@ -1334,7 +1335,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                                     break;
                             }
                         }
-                        // 条件成立：TreeBin节点。
+                        // 此条件成立：TreeBin节点。
                         else if (f instanceof TreeBin) {
                             validated = true;
                             // 转换为实际类型 TreeBin t
@@ -1344,14 +1345,14 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                             TreeNode<K, V> r, p;
                             //条件一：(r = t.root) != null  理论上是成立
                             //条件二：TreeNode.findTreeNode 以当前节点为入口，向下查找key（包括本身节点）
-                            //      true->说明查找到相应key 对应的node节点。会赋值给p
+                            //              true->说明查找到相应key 对应的node节点。会赋值给p
                             if ((r = t.root) != null &&
                                     (p = r.findTreeNode(hash, key, null)) != null) {
                                 //找到了  进行赋值
                                 V pv = p.val;
 
-                                //条件一：cv == null  成立：不必对value，就做替换或者删除操作
-                                //条件二：cv == pv ||(pv != null && cv.equals(pv)) 成立：说明“对比值”与当前p节点的值 一致
+                                // 条件一：cv == null  成立：不必对 value，就做替换或者删除操作；
+                                // 条件二：cv == pv || (pv != null && cv.equals(pv)) 成立：说明“对比值”与当前p节点的值 一致；
                                 if (cv == null || cv == pv ||
                                         (pv != null && cv.equals(pv))) {
                                     //替换或者删除操作
@@ -1361,13 +1362,15 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                                         p.val = value;
                                         //删除操作
                                     else if (t.removeTreeNode(p))
-                                        //这里没做判断，直接搞了...很疑惑
+                                        //这里没做判断，直接搞了 进行转换了 ...很疑惑
+                                        //每次在红黑树上的进行删除很费性能 因此 采用 删除一次后 直接转为链表方式 进行删除
                                         setTabAt(tab, i, untreeify(t.first));
                                 }
                             }
                         }
                     }
                 }
+
                 //当其他线程修改过桶位 头结点时，当前线程 sync 头结点 锁错对象时，validated 为false，会进入下次for 自旋
                 if (validated) {
                     if (oldVal != null) {
@@ -1378,7 +1381,6 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                     }
                     break;
                 }
-
             }
         }
         return null;
@@ -2674,7 +2676,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             try {
                 @SuppressWarnings("unchecked")
                 //扩大1倍
-                Node<K, V>[] nt = (Node<K, V>[]) new Node<?, ?>[n << 1];
+                        Node<K, V>[] nt = (Node<K, V>[]) new Node<?, ?>[n << 1];
                 //第一步为了避免oom
                 nextTab = nt;
             } catch (Throwable ex) {      // try to cope with OOME
@@ -2864,7 +2866,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                                     //条件成立：说明当前低位链表 还没有数据
                                     if ((p.prev = loTail) == null)
                                         lo = p;
-                                    //说明 低位链表已经有数据了，此时当前元素 追加到 低位链表的末尾就行了
+                                        //说明 低位链表已经有数据了，此时当前元素 追加到 低位链表的末尾就行了
                                     else
                                         loTail.next = p;
                                     loTail = p;
@@ -3135,7 +3137,9 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
      * not) to complete before tree restructuring operations.
      */
     static final class TreeBin<K, V> extends Node<K, V> {
+        //一种是红黑树 结构
         TreeNode<K, V> root;
+        //一种是 链表 结构
         volatile TreeNode<K, V> first;
         volatile Thread waiter;
         volatile int lockState;

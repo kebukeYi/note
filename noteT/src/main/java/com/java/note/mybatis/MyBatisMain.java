@@ -23,12 +23,13 @@ public class MyBatisMain {
         InputStream inputStream = Resources.getResourceAsStream(resource);
 
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
         SqlSession session = sqlSessionFactory.openSession();
 
         System.out.println(session);
         try {
             //第一种方法
-//            User user = session.selectOne("com.java.note.mapper.UserMapper.getUserByAge", 19);
+            User user = session.selectOne("com.java.note.mapper.UserMapper.getUserByAge", 19);
 //            System.out.println(user);
 
             //第二种

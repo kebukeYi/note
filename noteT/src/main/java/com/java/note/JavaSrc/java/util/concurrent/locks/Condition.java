@@ -34,6 +34,7 @@
  */
 
 package java.util.concurrent.locks;
+
 import java.util.concurrent.TimeUnit;
 import java.util.Date;
 
@@ -110,7 +111,7 @@ import java.util.Date;
  *   }
  * }
  * </pre>
- *
+ * <p>
  * (The {@link java.util.concurrent.ArrayBlockingQueue} class provides
  * this functionality, so there is no reason to implement this
  * sample usage class.)
@@ -173,8 +174,8 @@ import java.util.Date;
  * shown that the interrupt occurred after another action that may have
  * unblocked the thread. An implementation should document this behavior.
  *
- * @since 1.5
  * @author Doug Lea
+ * @since 1.5
  */
 public interface Condition {
 
@@ -226,8 +227,9 @@ public interface Condition {
      * there is one.
      *
      * @throws InterruptedException if the current thread is interrupted
-     *         (and interruption of thread suspension is supported)
+     *                              (and interruption of thread suspension is supported)
      */
+    //响应中断
     void await() throws InterruptedException;
 
     /**
@@ -264,7 +266,9 @@ public interface Condition {
      * thrown (such as {@link IllegalMonitorStateException}) and the
      * implementation must document that fact.
      */
+    //不响应中断
     void awaitUninterruptibly();
+
 
     /**
      * Causes the current thread to wait until it is signalled or interrupted,
@@ -347,13 +351,13 @@ public interface Condition {
      *
      * @param nanosTimeout the maximum time to wait, in nanoseconds
      * @return an estimate of the {@code nanosTimeout} value minus
-     *         the time spent waiting upon return from this method.
-     *         A positive value may be used as the argument to a
-     *         subsequent call to this method to finish waiting out
-     *         the desired time.  A value less than or equal to zero
-     *         indicates that no time remains.
+     * the time spent waiting upon return from this method.
+     * A positive value may be used as the argument to a
+     * subsequent call to this method to finish waiting out
+     * the desired time.  A value less than or equal to zero
+     * indicates that no time remains.
      * @throws InterruptedException if the current thread is interrupted
-     *         (and interruption of thread suspension is supported)
+     *                              (and interruption of thread suspension is supported)
      */
     long awaitNanos(long nanosTimeout) throws InterruptedException;
 
@@ -361,14 +365,14 @@ public interface Condition {
      * Causes the current thread to wait until it is signalled or interrupted,
      * or the specified waiting time elapses. This method is behaviorally
      * equivalent to:
-     *  <pre> {@code awaitNanos(unit.toNanos(time)) > 0}</pre>
+     * <pre> {@code awaitNanos(unit.toNanos(time)) > 0}</pre>
      *
      * @param time the maximum time to wait
      * @param unit the time unit of the {@code time} argument
      * @return {@code false} if the waiting time detectably elapsed
-     *         before return from the method, else {@code true}
+     * before return from the method, else {@code true}
      * @throws InterruptedException if the current thread is interrupted
-     *         (and interruption of thread suspension is supported)
+     *                              (and interruption of thread suspension is supported)
      */
     boolean await(long time, TimeUnit unit) throws InterruptedException;
 
@@ -443,9 +447,9 @@ public interface Condition {
      *
      * @param deadline the absolute time to wait until
      * @return {@code false} if the deadline has elapsed upon return, else
-     *         {@code true}
+     * {@code true}
      * @throws InterruptedException if the current thread is interrupted
-     *         (and interruption of thread suspension is supported)
+     *                              (and interruption of thread suspension is supported)
      */
     boolean awaitUntil(Date deadline) throws InterruptedException;
 
@@ -465,6 +469,7 @@ public interface Condition {
      * not held. Typically, an exception such as {@link
      * IllegalMonitorStateException} will be thrown.
      */
+    //一次迁移一个
     void signal();
 
     /**
@@ -483,5 +488,6 @@ public interface Condition {
      * not held. Typically, an exception such as {@link
      * IllegalMonitorStateException} will be thrown.
      */
+    //一次迁移所有
     void signalAll();
 }
