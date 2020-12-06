@@ -48,7 +48,7 @@ public class MyJvm {
 
 
     public static void newLocalMemory() {
-        System.out.println("maxDirectMemory is:" + sun.misc.VM.maxDirectMemory() / 1024 / 1024 + "MB");
+//        System.out.println("maxDirectMemory is:" + sun.misc.VM.maxDirectMemory() / 1024 / 1024 + "MB");
         //ByteBuffer.allocate(capability) 是分配 JVM 堆内存，属于 GC 管辖范围，需要内存拷贝所以速度相对较慢
         //ByteBuffer buffer = ByteBuffer.allocate(6*1024*1024);
 

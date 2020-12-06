@@ -1,6 +1,5 @@
 package com.java.note.Jdk.queue;
 
-import com.java.note.JavaSrc.java.util.concurrent.locks.ReentrantLock;
 import lombok.SneakyThrows;
 
 import java.util.Collection;
@@ -9,6 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Author : mmy
@@ -51,7 +51,7 @@ public class MiNiArrayBlockingQueue implements BlockingQueue {
 
     @SneakyThrows
     @Override
-    public boolean add( Object element) {
+    public boolean add(Object element) {
         lock.lock();
         try {
             //第一件事？ 判断一下当前queues是否已经满了...

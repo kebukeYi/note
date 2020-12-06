@@ -2,7 +2,6 @@ package com.java.note.Jdk.thread.demo;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.smartcardio.Card;
 import java.util.concurrent.*;
 
 /**
