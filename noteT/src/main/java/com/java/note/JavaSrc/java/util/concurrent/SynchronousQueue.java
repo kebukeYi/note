@@ -35,6 +35,7 @@
  */
 
 package java.util.concurrent;
+
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.*;
@@ -77,12 +78,12 @@ import java.util.Spliterators;
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @since 1.5
- * @author Doug Lea and Bill Scherer and Michael Scott
  * @param <E> the type of elements held in this collection
+ * @author Doug Lea and Bill Scherer and Michael Scott
+ * @since 1.5
  */
 public class SynchronousQueue<E> extends AbstractQueue<E>
-    implements BlockingQueue<E>, java.io.Serializable {
+        implements BlockingQueue<E>, java.io.Serializable {
     private static final long serialVersionUID = -3223113410248163686L;
 
     /*
@@ -169,20 +170,35 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
         /**
          * Performs a put or take.
          *
-         * @param e if non-null, the item to be handed to a consumer;
-         *          if null, requests that transfer return an item
-         *          offered by producer.
+         * @param e     if non-null, the item to be handed to a consumer;
+         *              if null, requests that transfer return an item
+         *              offered by producer.
          * @param timed if this operation should timeout
          * @param nanos the timeout, in nanoseconds
-         * @return if non-null, the item provided or received; if null,
-         *         the operation failed due to timeout or interrupt --
-         *         the caller can distinguish which of these occurred
-         *         by checking Thread.interrupted.
+         * @param e     可以为null，null时表示这个请求是一个 REQUEST 类型的请求   (消费)
+         *              如果不是null，说明这个请求是一个 DATA 类型的请求。（入队）
+         * @param timed 如果为true 表示指定了超时时间 ,如果为false 表示不支持超时，表示当前请求一直等待到匹配为止，或者被中断。
+         * @param nanos 超时时间限制 单位 纳秒
+         * @return E 如果当前请求是一个 REQUEST类型的请求，返回值如果不为 null 表示 匹配成功；
+         * 如果返回null，表示REQUEST类型的请求超时 或 被中断。
+         * 如果当前请求是一个 DATA 类型的请求，返回值如果不为 null 表示 匹配成功，返回当前线程put的数据。
+         * 如果返回值为null 表示，DATA类型的请求超时 或者 被中断..都会返回Null
          */
         abstract E transfer(E e, boolean timed, long nanos);
     }
 
-    /** The number of CPUs, for spin control */
+
+    //为什么需要自旋这个操作？
+    //因为线程 挂起 唤醒站在cpu角度去看的话，是非常耗费资源的，涉及到用户态和内核态的切换...
+    //自旋的好处，自旋期间线程会一直检查自己的状态是否被匹配到，如果自旋期间被匹配到，那么直接就返回了
+    //如果自旋期间未被匹配到，自旋次数达到某个指标后，还是会将当前线程挂起的...
+    //NCPUS：当一个平台只有一个CPU时，你觉得还需要自旋么？
+    //答：肯定不需要自旋了，因为一个cpu同一时刻只能执行一个线程，自旋没有意义了...而且你还站着cpu 其它线程没办法执行..这个
+    //栈的状态更不会改变了.. 当只有一个cpu时 会直接选择 LockSupport.park() 挂起等待者线程。
+
+    /**
+     * The number of CPUs, for spin control
+     */
     static final int NCPUS = Runtime.getRuntime().availableProcessors();
 
     /**
@@ -191,6 +207,10 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      * variety of processors and OSes. Empirically, the best value
      * seems not to vary with number of CPUs (beyond 2) so is just
      * a constant.
+     * //表示指定超时时间的话，当前线程最大自旋次数。
+     * //只有一个cpu 自旋次数为0
+     * //当cpu大于1时，说明当前平台是多核平台，那么指定超时时间的请求的最大自旋次数是 32 次。
+     * //32是一个经验值。
      */
     static final int maxTimedSpins = (NCPUS < 2) ? 0 : 32;
 
@@ -198,16 +218,23 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      * The number of times to spin before blocking in untimed waits.
      * This is greater than timed value because untimed waits spin
      * faster since they don't need to check times on each spin.
+     * //表示未指定超时限制的话，线程等待匹配时，自旋次数。
+     * //是指定超时限制的请求的自旋次数的16倍.
      */
     static final int maxUntimedSpins = maxTimedSpins * 16;
 
     /**
      * The number of nanoseconds for which it is faster to spin
      * rather than to use timed park. A rough estimate suffices.
+     * //如果请求是指定超时限制的话，如果超时nanos参数是< 1000 纳秒时，
+     * //禁止挂起。挂起再唤醒的成本太高了..还不如选择自旋空转呢...
      */
     static final long spinForTimeoutThreshold = 1000L;
 
-    /** Dual stack */
+    /**
+     * Dual stack
+     * 非公平模式实现的同步队列，内部数据结构是 “栈”
+     */
     static final class TransferStack<E> extends Transferer<E> {
         /*
          * This extends Scherer-Scott dual stack algorithm, differing,
@@ -218,22 +245,46 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
          */
 
         /* Modes for SNodes, ORed together in node fields */
-        /** Node represents an unfulfilled consumer */
-        static final int REQUEST    = 0;
-        /** Node represents an unfulfilled producer */
-        static final int DATA       = 1;
-        /** Node is fulfilling another unfulfilled DATA or REQUEST */
+        /**
+         * Node represents an unfulfilled consumer
+         * 表示Node类型为 请求类型
+         */
+        static final int REQUEST = 0;
+        /**
+         * Node represents an unfulfilled producer
+         * 表示Node类型为 数据类型
+         */
+        static final int DATA = 1;
+        /**
+         * Node is fulfilling another unfulfilled DATA or REQUEST
+         * 表示Node类型为 匹配中类型
+         * 假设栈顶元素为 REQUEST-NODE，当前请求类型为 DATA的话，入栈会修改类型为 FULFILLING 【栈顶 & 栈顶之下的一个node】
+         * 假设栈顶元素为 DATA-NODE，当前请求类型为 REQUEST的话，入栈会修改类型为 FULFILLING 【栈顶 & 栈顶之下的一个node】
+         */
         static final int FULFILLING = 2;
 
-        /** Returns true if m has fulfilling bit set. */
-        static boolean isFulfilling(int m) { return (m & FULFILLING) != 0; }
+        /**
+         * Returns true if m has fulfilling bit set.
+         * 判断当前模式是否为 匹配中状态。
+         */
+        static boolean isFulfilling(int m) {
+            return (m & FULFILLING) != 0;
+        }
 
-        /** Node class for TransferStacks. */
+        /**
+         * Node class for TransferStacks.
+         */
         static final class SNode {
+            //指向下一个栈帧
             volatile SNode next;        // next node in stack
+            //与当前node匹配的节点
             volatile SNode match;       // the node matched to this
+            //假设当前node对应的线程 自旋期间未被匹配成功，那么node对应的线程需要挂起，挂起前 waiter 保存对应的线程引用，
+            //方便 匹配成功后，被唤醒。
             volatile Thread waiter;     // to control park/unpark
+            //数据域，data不为空 表示当前Node对应的请求类型为 DATA类型。 反之则表示Node为 REQUEST类型。
             Object item;                // data; or null for REQUESTs
+            //表示当前Node的模式 【DATA/REQUEST/FULFILLING】
             int mode;
             // Note: item and mode fields don't need to be volatile
             // since they are always written before, and read after,
@@ -243,9 +294,12 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
                 this.item = item;
             }
 
+            //CAS方式设置Node对象的next字段。
             boolean casNext(SNode cmp, SNode val) {
-                return cmp == next &&
-                    UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
+                //优化：cmp == next  为什么要判断？
+                //因为cas指令 在平台执行时，同一时刻只能有一个cas指令被执行。（重点）
+                //有了java层面的这一次判断，可以提升一部分性能。 cmp == next 不相等，就没必要走 cas指令。
+                return cmp == next && UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
             }
 
             /**
@@ -254,14 +308,18 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
              * Waiters block until they have been matched.
              *
              * @param s the node to match
-             * @return true if successfully matched to s
+             * @return ture 匹配成功。 否则匹配失败..
              */
             boolean tryMatch(SNode s) {
-                if (match == null &&
-                    UNSAFE.compareAndSwapObject(this, matchOffset, null, s)) {
+                //条件一：match == null 成立，说明当前Node尚未与任何节点发生过匹配...
+                //条件二 成立：使用CAS方式 设置match字段，表示当前Node已经被匹配了
+                if (match == null && UNSAFE.compareAndSwapObject(this, matchOffset, null, s)) {
+                    //当前Node如果自旋结束，那么会使用LockSupport.park 方法挂起，挂起之前会将Node对应的Thread 保留到 waiter字段。
                     Thread w = waiter;
+                    //条件成立：说明Node对应的Thread已经挂起了...
                     if (w != null) {    // waiters need at most one unpark
                         waiter = null;
+                        //使用unpark方式唤醒。
                         LockSupport.unpark(w);
                     }
                     return true;
@@ -271,11 +329,14 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
 
             /**
              * Tries to cancel a wait by matching node to itself.
+             * 尝试取消..
              */
             void tryCancel() {
+                //match字段 保留当前Node对象本身，表示这个Node是取消状态，取消状态的Node，最终会被 强制 移除出栈。
                 UNSAFE.compareAndSwapObject(this, matchOffset, null, this);
             }
 
+            //如果match保留的是当前Node本身，那表示当前Node是取消状态，反之 则 非取消状态。
             boolean isCancelled() {
                 return match == this;
             }
@@ -290,21 +351,25 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
                     UNSAFE = sun.misc.Unsafe.getUnsafe();
                     Class<?> k = SNode.class;
                     matchOffset = UNSAFE.objectFieldOffset
-                        (k.getDeclaredField("match"));
+                            (k.getDeclaredField("match"));
                     nextOffset = UNSAFE.objectFieldOffset
-                        (k.getDeclaredField("next"));
+                            (k.getDeclaredField("next"));
                 } catch (Exception e) {
                     throw new Error(e);
                 }
             }
         }
 
-        /** The head (top) of the stack */
+        /**
+         * The head (top) of the stack
+         * //表示栈顶指针
+         */
         volatile SNode head;
 
+        //设置栈顶元素
+        //h 旧头节点
         boolean casHead(SNode h, SNode nh) {
-            return h == head &&
-                UNSAFE.compareAndSwapObject(this, headOffset, h, nh);
+            return h == head && UNSAFE.compareAndSwapObject(this, headOffset, h, nh);
         }
 
         /**
@@ -313,6 +378,11 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
          * reused when possible to help reduce intervals between reads
          * and CASes of head and to avoid surges of garbage when CASes
          * to push nodes fail due to contention.
+         *
+         * @param s    SNode引用，当这个引用指向空时，snode 方法会创建一个SNode对象 并且赋值给这个引用
+         * @param e    SNode对象的item字段
+         * @param next 指向当前栈帧的下一个栈帧
+         * @param mode REQUEST/DATA/FULFILLING
          */
         static SNode snode(SNode s, Object e, SNode next, int mode) {
             if (s == null) s = new SNode(e);
@@ -347,55 +417,133 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
              *    that it doesn't return the item.
              */
 
+            //包装当前线程的Node
             SNode s = null; // constructed/reused as needed
+            //e == null 条件成立：当前线程是一个 REQUEST 线程。
+            //否则 e!=null 说明 当前线程是一个 DATA 线程，提交数据的线程。
             int mode = (e == null) ? REQUEST : DATA;
 
-            for (;;) {
+            //自旋
+            for (; ; ) {
+                // h 表示栈顶指针
                 SNode h = head;
+
+                //CASE1：当前栈内为空 或者 栈顶Node模式与当前请求模式一致，都是需要做入栈操作。
                 if (h == null || h.mode == mode) {  // empty or same-mode
+                    //条件一：成立，说明当前请求是 指定了 超时限制的
+                    //条件二：nanos <= 0 , nanos == 0. 表示这个请求 不支持 “阻塞等待”。比如： queue.offer();
                     if (timed && nanos <= 0) {      // can't wait
+                        //条件成立：栈顶不为空，说明栈顶已经取消状态了，协助栈顶出栈。
                         if (h != null && h.isCancelled())
+                            //更新栈顶next指针  指向 下一个元素
                             casHead(h, h.next);     // pop cancelled node
                         else
+                            //大部分情况从这里返回。
                             return null;
-                    } else if (casHead(h, s = snode(s, e, h, mode))) {
+                    }
+                    //什么时候执行else if 呢？
+                    //当前栈顶为空 或者 模式与当前请求一致，且当前请求允许 阻塞等待
+                    //casHead(h, s = snode(s, e, h, mode))  入栈操作
+                    else if (casHead(h, s = snode(s, e, h, mode))) {
+                        //执行到这里，说明 当前请求入栈成功。
+                        //入栈成功之后要做什么呢？
+                        //在栈内等待一个好消息，等待被匹配！
+
+                        //awaitFulfill  在栈内等待被匹配的逻辑...
+                        //1.正常情况：返回匹配的节点
+                        //2.取消情况：返回当前节点  s节点进去，返回s节点...
                         SNode m = awaitFulfill(s, timed, nanos);
+                        //条件成立：说明当前Node状态是 取消状态...
                         if (m == s) {               // wait was cancelled
+                            //将取消状态的节点 出栈...
                             clean(s);
+                            //取消状态 最终返回null
                             return null;
                         }
+
+                        //执行到这里 说明当前Node已经被匹配了...
+
+                        //条件一：成立，说明栈顶是有Node
+                        //条件二：成立，说明 Fulfill 和 当前Node 还未出栈，需要协助出栈。
                         if ((h = head) != null && h.next == s)
+                            //将fulfill 和 当前Node 结对 出栈
                             casHead(h, s.next);     // help s's fulfiller
+
+                        // 当前NODE模式为REQUEST类型：返回匹配节点的m.item 数据域
+                        //当前NODE模式为DATA类型：返回Node.item 数据域，当前请求提交的 数据e
                         return (E) ((mode == REQUEST) ? m.item : s.item);
                     }
-                } else if (!isFulfilling(h.mode)) { // try to fulfill
+                }
+
+                //什么时候来到这？？
+                //栈顶Node的模式与当前请求的模式不一致，会执行else if 的条件。
+                //栈顶是 (DATA  Reqeust)    (Request   DATA)   (FULFILLING  REQUEST/DATA)
+                //CASE2：当前栈顶元素模式与请求元素模式不一致，且栈顶不是FULFILLING
+                else if (!isFulfilling(h.mode)) { // try to fulfill
                     if (h.isCancelled())            // already cancelled
                         casHead(h, h.next);         // pop and retry
-                    else if (casHead(h, s=snode(s, e, h, FULFILLING|mode))) {
-                        for (;;) { // loop until matched or waiters disappear
+
+                        //条件成立：说明压栈节点成功，入栈一个 FULFILLING | mode  NODE
+                    else if (casHead(h, s = snode(s, e, h, FULFILLING | mode))) {
+                        //当前请求入栈成功
+
+                        //自旋，fulfill 节点 和 fulfill.next 节点进行匹配工作...
+                        for (; ; ) { // loop until matched or waiters disappear
+                            // m 与当前s 匹配节点。
                             SNode m = s.next;       // m is s's match
+                            //m == null 什么时候可能成立呢？
+                            //当s.next节点 超时或者被外部线程中断唤醒后，会执行 clean 操作 将 自己清理出栈，此时
+                            //站在匹配者线程 来看，真有可能拿到一个null。
                             if (m == null) {        // all waiters are gone
+                                //将整个栈清空。
                                 casHead(s, null);   // pop fulfill node
                                 s = null;           // use new node next time
-                                break;              // restart main loop
+                                //回到外层大的 自旋中，再重新选择路径执行，此时有可能 插入一个节点。
+                                break;                     // restart main loop
                             }
+                            //什么时候会执行到这里呢？
+                            //fulfilling 匹配节点不为null，进行真正的匹配工作。
+
+                            //获取 匹配节点的 下一个节点。
                             SNode mn = m.next;
+                            //尝试匹配，匹配成功，则将fulfilling 和 m 一起出栈。
                             if (m.tryMatch(s)) {
+                                //结对出栈
                                 casHead(s, mn);     // pop both s and m
+
+                                //当前NODE模式为REQUEST类型：返回匹配节点的m.item 数据域
+                                //当前NODE模式为DATA类型：返回Node.item 数据域，当前请求提交的 数据e
                                 return (E) ((mode == REQUEST) ? m.item : s.item);
                             } else                  // lost match
+                                //强制出栈
                                 s.casNext(m, mn);   // help unlink
                         }
                     }
-                } else {                            // help a fulfiller
+                }
+
+                //CASE3：什么时候会执行？
+                //栈顶模式为 FULFILLING模式，表示栈顶和栈顶下面的栈帧正在发生匹配...
+                //当前请求需要做 协助 工作。
+                else {                            // help a fulfiller
+                    //h 表示的是 fulfilling节点,m fulfilling匹配的节点。
                     SNode m = h.next;               // m is h's match
+                    //m == null 什么时候可能成立呢？
+                    //当s.next节点 超时或者被外部线程中断唤醒后，会执行 clean 操作 将 自己清理出栈，此时
+                    //站在匹配者线程 来看，真有可能拿到一个null。
                     if (m == null)                  // waiter is gone
+                        //清空栈
                         casHead(h, null);           // pop fulfilling node
+
+                        //大部分情况：走else分支。
                     else {
+                        //获取栈顶匹配节点的 下一个节点
                         SNode mn = m.next;
+                        //条件成立：说明 m 和 栈顶 匹配成功
                         if (m.tryMatch(h))          // help match
+                            //双双出栈，让栈顶指针指向 匹配节点的下一个节点。
                             casHead(h, mn);         // pop both h and m
                         else                        // lost match
+                            //强制出栈
                             h.casNext(m, mn);       // help unlink
                     }
                 }
@@ -405,57 +553,75 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
         /**
          * Spins/blocks until node s is matched by a fulfill operation.
          *
-         * @param s the waiting node
+         * @param s     the waiting node
          * @param timed true if timed wait
          * @param nanos timeout value
          * @return matched node, or s if cancelled
+         * * @param s 当前请求Node
+         * * @param timed 当前请求是否支持 超时限制
+         * * @param nanos 如果请求支持超时限制，nanos 表示超时等待时长。
          */
         SNode awaitFulfill(SNode s, boolean timed, long nanos) {
-            /*
-             * When a node/thread is about to block, it sets its waiter
-             * field and then rechecks state at least one more time
-             * before actually parking, thus covering race vs
-             * fulfiller noticing that waiter is non-null so should be
-             * woken.
-             *
-             * When invoked by nodes that appear at the point of call
-             * to be at the head of the stack, calls to park are
-             * preceded by spins to avoid blocking when producers and
-             * consumers are arriving very close in time.  This can
-             * happen enough to bother only on multiprocessors.
-             *
-             * The order of checks for returning out of main loop
-             * reflects fact that interrupts have precedence over
-             * normal returns, which have precedence over
-             * timeouts. (So, on timeout, one last check for match is
-             * done before giving up.) Except that calls from untimed
-             * SynchronousQueue.{poll/offer} don't check interrupts
-             * and don't wait at all, so are trapped in transfer
-             * method rather than calling awaitFulfill.
-             */
+
+            //等待的截止时间。  timed == true  =>  System.nanoTime() + nanos
             final long deadline = timed ? System.nanoTime() + nanos : 0L;
+
+            //获取当前请求线程..
             Thread w = Thread.currentThread();
+
+            //spins 表示当前请求线程 在 下面的 for(;;) 自旋检查中，自旋次数。 如果达到spins自旋次数时，当前线程对应的Node 仍然未被匹配成功，
+            //那么再选择 挂起 当前请求线程
             int spins = (shouldSpin(s) ?
-                         (timed ? maxTimedSpins : maxUntimedSpins) : 0);
-            for (;;) {
+                    //timed == true 指定了超时限制的，这个时候采用 maxTimedSpins == 32 ,否则采用 32 * 16
+                    (timed ? maxTimedSpins : maxUntimedSpins) : 0);
+
+            //自旋检查逻辑：1.是否匹配  2.是否超时  3.是否被中断..
+            for (; ; ) {
+
+                //条件成立：说明当前线程收到中断信号，需要设置Node状态为 取消状态。
                 if (w.isInterrupted())
+                    //Node对象的 match 指向 当前Node 说明该Node状态就是 取消状态。
                     s.tryCancel();
+
+                //m 表示与当前Node匹配的节点。
+                //1.正常情况：有一个请求 与 当前Node 匹配成功，这个时候 s.match 指向 匹配节点。
+                //2.取消情况：当前match 指向 当前Node...
                 SNode m = s.match;
+
                 if (m != null)
+                    //可能正常 也可能是 取消...
                     return m;
+
+                //条件成立：说明指定了超时限制..
                 if (timed) {
+                    //nanos 表示距离超时 还有多少纳秒..
                     nanos = deadline - System.nanoTime();
+                    //条件成立：说明已经超时了...
                     if (nanos <= 0L) {
+                        // 设置当前Node状态为 取消状态.. match-->当前Node
                         s.tryCancel();
                         continue;
                     }
                 }
+
+                //条件成立：说明当前线程还可以进行自旋检查...
                 if (spins > 0)
-                    spins = shouldSpin(s) ? (spins-1) : 0;
+                    //自旋次数 累积 递减
+                    spins = shouldSpin(s) ? (spins - 1) : 0;
+
+                    //spins == 0 ，已经不允许再进行自旋检查了
                 else if (s.waiter == null)
+                    //把当前Node对应的Thread 保存到 Node.waiter字段中..
                     s.waiter = w; // establish waiter so can park next iter
+
+                    //条件成立：说明当前Node对应的请求  未指定超时限制。
                 else if (!timed)
+                    //使用不指定超时限制的park方法 挂起当前线程，直到 当前线程被外部线程 使用unpark唤醒。
                     LockSupport.park(this);
+
+                    //什么时候执行到这里？ timed == true 设置了 超时限制..
+                    //条件成立：nanos > 1000 纳秒的值，只有这种情况下，才允许挂起当前线程..
+                    // 否则 说明 超时给的太少了...挂起和唤醒的成本 远大于 空转自旋...
                 else if (nanos > spinForTimeoutThreshold)
                     LockSupport.parkNanos(this, nanos);
             }
@@ -466,7 +632,11 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
          * fulfiller.
          */
         boolean shouldSpin(SNode s) {
+            //获取栈顶
             SNode h = head;
+            //条件一 h == s ：条件成立 说明当前 s 就是栈顶，允许自旋检查...
+            //条件二 h == null : 什么时候成立？ 当前 s节点 自旋检查期间，又来了一个 与当前 s 节点匹配的请求，双双出栈了...条件会成立。
+            //条件三 isFulfilling(h.mode) ： 前提 当前 s 不是 栈顶元素；并且当前栈顶正在匹配中，这种状态 栈顶下面的元素，都允许自旋检查。
             return (h == s || h == null || isFulfilling(h.mode));
         }
 
@@ -510,19 +680,22 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
         // Unsafe mechanics
         private static final sun.misc.Unsafe UNSAFE;
         private static final long headOffset;
+
         static {
             try {
                 UNSAFE = sun.misc.Unsafe.getUnsafe();
                 Class<?> k = TransferStack.class;
                 headOffset = UNSAFE.objectFieldOffset
-                    (k.getDeclaredField("head"));
+                        (k.getDeclaredField("head"));
             } catch (Exception e) {
                 throw new Error(e);
             }
         }
     }
 
-    /** Dual Queue */
+    /**
+     * Dual Queue
+     */
     static final class TransferQueue<E> extends Transferer<E> {
         /*
          * This extends Scherer-Scott dual queue algorithm, differing,
@@ -533,7 +706,9 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
          * from non-null to null (for put) or vice versa (for take).
          */
 
-        /** Node class for TransferQueue. */
+        /**
+         * Node class for TransferQueue.
+         */
         static final class QNode {
             volatile QNode next;          // next node in queue
             volatile Object item;         // CAS'ed to or from null
@@ -547,12 +722,12 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
 
             boolean casNext(QNode cmp, QNode val) {
                 return next == cmp &&
-                    UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
+                        UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
             }
 
             boolean casItem(Object cmp, Object val) {
                 return item == cmp &&
-                    UNSAFE.compareAndSwapObject(this, itemOffset, cmp, val);
+                        UNSAFE.compareAndSwapObject(this, itemOffset, cmp, val);
             }
 
             /**
@@ -585,18 +760,22 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
                     UNSAFE = sun.misc.Unsafe.getUnsafe();
                     Class<?> k = QNode.class;
                     itemOffset = UNSAFE.objectFieldOffset
-                        (k.getDeclaredField("item"));
+                            (k.getDeclaredField("item"));
                     nextOffset = UNSAFE.objectFieldOffset
-                        (k.getDeclaredField("next"));
+                            (k.getDeclaredField("next"));
                 } catch (Exception e) {
                     throw new Error(e);
                 }
             }
         }
 
-        /** Head of queue */
+        /**
+         * Head of queue
+         */
         transient volatile QNode head;
-        /** Tail of queue */
+        /**
+         * Tail of queue
+         */
         transient volatile QNode tail;
         /**
          * Reference to a cancelled node that might not yet have been
@@ -617,7 +796,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
          */
         void advanceHead(QNode h, QNode nh) {
             if (h == head &&
-                UNSAFE.compareAndSwapObject(this, headOffset, h, nh))
+                    UNSAFE.compareAndSwapObject(this, headOffset, h, nh))
                 h.next = h; // forget old next
         }
 
@@ -634,7 +813,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
          */
         boolean casCleanMe(QNode cmp, QNode val) {
             return cleanMe == cmp &&
-                UNSAFE.compareAndSwapObject(this, cleanMeOffset, cmp, val);
+                    UNSAFE.compareAndSwapObject(this, cleanMeOffset, cmp, val);
         }
 
         /**
@@ -670,7 +849,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
             QNode s = null; // constructed/reused as needed
             boolean isData = (e != null);
 
-            for (;;) {
+            for (; ; ) {
                 QNode t = tail;
                 QNode h = head;
                 if (t == null || h == null)         // saw uninitialized value
@@ -704,7 +883,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
                             s.item = s;
                         s.waiter = null;
                     }
-                    return (x != null) ? (E)x : e;
+                    return (x != null) ? (E) x : e;
 
                 } else {                            // complementary-mode
                     QNode m = h.next;               // node to fulfill
@@ -713,15 +892,15 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
 
                     Object x = m.item;
                     if (isData == (x != null) ||    // m already fulfilled
-                        x == m ||                   // m cancelled
-                        !m.casItem(x, e)) {         // lost CAS
+                            x == m ||                   // m cancelled
+                            !m.casItem(x, e)) {         // lost CAS
                         advanceHead(h, m);          // dequeue and retry
                         continue;
                     }
 
                     advanceHead(h, m);              // successfully fulfilled
                     LockSupport.unpark(m.waiter);
-                    return (x != null) ? (E)x : e;
+                    return (x != null) ? (E) x : e;
                 }
             }
         }
@@ -729,8 +908,8 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
         /**
          * Spins/blocks until node s is fulfilled.
          *
-         * @param s the waiting node
-         * @param e the comparison value for checking match
+         * @param s     the waiting node
+         * @param e     the comparison value for checking match
          * @param timed true if timed wait
          * @param nanos timeout value
          * @return matched item, or s if cancelled
@@ -740,8 +919,8 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
             final long deadline = timed ? System.nanoTime() + nanos : 0L;
             Thread w = Thread.currentThread();
             int spins = ((head.next == s) ?
-                         (timed ? maxTimedSpins : maxUntimedSpins) : 0);
-            for (;;) {
+                    (timed ? maxTimedSpins : maxUntimedSpins) : 0);
+            for (; ; ) {
                 if (w.isInterrupted())
                     s.tryCancel(e);
                 Object x = s.item;
@@ -805,12 +984,12 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
                     QNode d = dp.next;
                     QNode dn;
                     if (d == null ||               // d is gone or
-                        d == dp ||                 // d is off list or
-                        !d.isCancelled() ||        // d not cancelled or
-                        (d != t &&                 // d not tail and
-                         (dn = d.next) != null &&  //   has successor
-                         dn != d &&                //   that is on list
-                         dp.casNext(d, dn)))       // d unspliced
+                            d == dp ||                 // d is off list or
+                            !d.isCancelled() ||        // d not cancelled or
+                            (d != t &&                 // d not tail and
+                                    (dn = d.next) != null &&  //   has successor
+                                    dn != d &&                //   that is on list
+                                    dp.casNext(d, dn)))       // d unspliced
                         casCleanMe(dp, null);
                     if (dp == pred)
                         return;      // s is already saved node
@@ -823,16 +1002,17 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
         private static final long headOffset;
         private static final long tailOffset;
         private static final long cleanMeOffset;
+
         static {
             try {
                 UNSAFE = sun.misc.Unsafe.getUnsafe();
                 Class<?> k = TransferQueue.class;
                 headOffset = UNSAFE.objectFieldOffset
-                    (k.getDeclaredField("head"));
+                        (k.getDeclaredField("head"));
                 tailOffset = UNSAFE.objectFieldOffset
-                    (k.getDeclaredField("tail"));
+                        (k.getDeclaredField("tail"));
                 cleanMeOffset = UNSAFE.objectFieldOffset
-                    (k.getDeclaredField("cleanMe"));
+                        (k.getDeclaredField("cleanMe"));
             } catch (Exception e) {
                 throw new Error(e);
             }
@@ -859,7 +1039,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      * Creates a {@code SynchronousQueue} with the specified fairness policy.
      *
      * @param fair if true, waiting threads contend in FIFO order for
-     *        access; otherwise the order is unspecified.
+     *             access; otherwise the order is unspecified.
      */
     public SynchronousQueue(boolean fair) {
         transferer = fair ? new TransferQueue<E>() : new TransferStack<E>();
@@ -885,12 +1065,12 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      * up to the specified wait time for another thread to receive it.
      *
      * @return {@code true} if successful, or {@code false} if the
-     *         specified waiting time elapses before a consumer appears
+     * specified waiting time elapses before a consumer appears
      * @throws InterruptedException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
     public boolean offer(E e, long timeout, TimeUnit unit)
-        throws InterruptedException {
+            throws InterruptedException {
         if (e == null) throw new NullPointerException();
         if (transferer.transfer(e, true, unit.toNanos(timeout)) != null)
             return true;
@@ -905,7 +1085,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      *
      * @param e the element to add
      * @return {@code true} if the element was added to this queue, else
-     *         {@code false}
+     * {@code false}
      * @throws NullPointerException if the specified element is null
      */
     public boolean offer(E e) {
@@ -934,7 +1114,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      * to insert it.
      *
      * @return the head of this queue, or {@code null} if the
-     *         specified waiting time elapses before an element is present
+     * specified waiting time elapses before an element is present
      * @throws InterruptedException {@inheritDoc}
      */
     public E poll(long timeout, TimeUnit unit) throws InterruptedException {
@@ -949,7 +1129,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      * is currently making an element available.
      *
      * @return the head of this queue, or {@code null} if no
-     *         element is available
+     * element is available
      */
     public E poll() {
         return transferer.transfer(null, true, 0);
@@ -1081,6 +1261,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
 
     /**
      * Returns a zero-length array.
+     *
      * @return a zero-length array
      */
     public Object[] toArray() {
@@ -1113,7 +1294,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
         if (c == this)
             throw new IllegalArgumentException();
         int n = 0;
-        for (E e; (e = poll()) != null;) {
+        for (E e; (e = poll()) != null; ) {
             c.add(e);
             ++n;
         }
@@ -1132,7 +1313,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
         if (c == this)
             throw new IllegalArgumentException();
         int n = 0;
-        for (E e; n < maxElements && (e = poll()) != null;) {
+        for (E e; n < maxElements && (e = poll()) != null; ) {
             c.add(e);
             ++n;
         }
@@ -1148,31 +1329,35 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      */
 
     @SuppressWarnings("serial")
-    static class WaitQueue implements java.io.Serializable { }
+    static class WaitQueue implements java.io.Serializable {
+    }
+
     static class LifoWaitQueue extends WaitQueue {
         private static final long serialVersionUID = -3633113410248163686L;
     }
+
     static class FifoWaitQueue extends WaitQueue {
         private static final long serialVersionUID = -3623113410248163686L;
     }
+
     private ReentrantLock qlock;
     private WaitQueue waitingProducers;
     private WaitQueue waitingConsumers;
 
     /**
      * Saves this queue to a stream (that is, serializes it).
+     *
      * @param s the stream
      * @throws java.io.IOException if an I/O error occurs
      */
     private void writeObject(java.io.ObjectOutputStream s)
-        throws java.io.IOException {
+            throws java.io.IOException {
         boolean fair = transferer instanceof TransferQueue;
         if (fair) {
             qlock = new ReentrantLock(true);
             waitingProducers = new FifoWaitQueue();
             waitingConsumers = new FifoWaitQueue();
-        }
-        else {
+        } else {
             qlock = new ReentrantLock();
             waitingProducers = new LifoWaitQueue();
             waitingConsumers = new LifoWaitQueue();
@@ -1182,13 +1367,14 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
 
     /**
      * Reconstitutes this queue from a stream (that is, deserializes it).
+     *
      * @param s the stream
      * @throws ClassNotFoundException if the class of a serialized object
-     *         could not be found
-     * @throws java.io.IOException if an I/O error occurs
+     *                                could not be found
+     * @throws java.io.IOException    if an I/O error occurs
      */
     private void readObject(java.io.ObjectInputStream s)
-        throws java.io.IOException, ClassNotFoundException {
+            throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
         if (waitingProducers instanceof FifoWaitQueue)
             transferer = new TransferQueue<E>();

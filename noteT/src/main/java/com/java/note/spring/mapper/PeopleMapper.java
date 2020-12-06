@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface PeopleMapper {
 
+
+
     @Select("select * from user  where age=19")
     String selectById(Integer id);
 

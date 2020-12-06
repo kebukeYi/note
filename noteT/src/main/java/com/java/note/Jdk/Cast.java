@@ -5,7 +5,7 @@ package com.java.note.Jdk;
  * @Creat Time : 2020/7/13  22:55
  * @Description
  */
-public class cast {
+public class Cast {
 
     public static void main(String[] args) {
 

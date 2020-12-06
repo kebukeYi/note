@@ -2,6 +2,7 @@ package com.java.note.redis;
 
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 
@@ -81,7 +82,8 @@ public class RedisLockController {
      * 第二种解法
      */
 //    @GetMapping("/redisson")
-    public String redisson() {
+    public static String redisson2() {
+        Redisson redisson = redisson();
         RLock rLock = redisson.getLock(LOCK_KEY);
         try {
             //加锁 -> 默认设置一个key 超时30秒
@@ -98,5 +100,16 @@ public class RedisLockController {
             rLock.unlock();
         }
         return "OK";
+    }
+
+    public static Redisson redisson() {
+        //单机模式
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://localhost:6379").setDatabase(1);
+        return (Redisson) Redisson.create(config);
+    }
+
+    public static void main(String[] args) {
+        redisson();
     }
 }

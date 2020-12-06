@@ -1,2 +1,8 @@
-
+spring:
+  cache:
+    #ehcache配置文件路径
+    ehcache:
+      config: classpath:ehcache.xml
+    #指定缓存类型，可加可不加
+    type: ehcache
 

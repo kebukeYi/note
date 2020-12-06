@@ -1934,7 +1934,7 @@ public abstract class AbstractQueuedSynchronizer
      * @return true if cancelled before the node was signalled
      */
     final boolean transferAfterCancelledWait(Node node) {
-        //条件成立：说明当前node一定是在 条件队列内(被唤醒的)，因为signal 迁移节点到阻塞队列时，会将节点的状态修改为0
+        //条件成立：说明当前node一定是在 条件队列内(被唤醒的)，因为 signal 迁移节点到阻塞队列时，会将节点的状态修改为0
         if (compareAndSetWaitStatus(node, Node.CONDITION, 0)) {
             // 中断唤醒的 node 也会被加入到 阻塞队列中！！
             // 而且并没有执行 断链操作
@@ -2333,6 +2333,7 @@ public abstract class AbstractQueuedSynchronizer
             //Thread.interrupted() 返回当前线程中断标记位，并且重置当前标记位 为 false
             return Thread.interrupted() ?
                     //TransferAfterCancelledWait 这个方法只有在线程是 被 中断唤醒时 才会调用！
+                    // transferAfterCancelledWait 判断节点是否在 条件队列 中被中断的，若是 则返回 true 否则 返回false；
                     (transferAfterCancelledWait(node) ? THROW_IE : REINTERRUPT) : 0;
         }
 
@@ -2434,25 +2435,26 @@ public abstract class AbstractQueuedSynchronizer
          * <li> If interrupted while blocked in step 4, throw InterruptedException.
          * </ol>
          */
-        public final long awaitNanos(long nanosTimeout)
-                throws InterruptedException {
-            if (Thread.interrupted())
-                throw new InterruptedException();
+        public final long awaitNanos(long nanosTimeout) throws InterruptedException {
+            if (Thread.interrupted()) throw new InterruptedException();
             Node node = addConditionWaiter();
             int savedState = fullyRelease(node);
             final long deadline = System.nanoTime() + nanosTimeout;
             int interruptMode = 0;
+
             while (!isOnSyncQueue(node)) {
                 if (nanosTimeout <= 0L) {
                     transferAfterCancelledWait(node);
                     break;
                 }
                 if (nanosTimeout >= spinForTimeoutThreshold)
+                    //挂起
                     LockSupport.parkNanos(this, nanosTimeout);
                 if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
                     break;
                 nanosTimeout = deadline - System.nanoTime();
             }
+
             if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
                 interruptMode = REINTERRUPT;
             if (node.nextWaiter != null)

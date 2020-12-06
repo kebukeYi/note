@@ -12,6 +12,10 @@ public class DemoTest {
 
 
     public static void test01() throws InterruptedException {
+        ThreadDemo threadDemo = new ThreadDemo();
+        threadDemo.start();
+        threadDemo.wait();
+
         CountDownLatch cdl = new CountDownLatch(count);
         for (int i = 0; i < count; i++) {
             new Thread(() -> {
@@ -36,5 +40,14 @@ public class DemoTest {
     public static void main(String[] args) throws InterruptedException {
         test01();
     }
+
+    static class ThreadDemo extends Thread {
+
+        @Override
+        public void run() {
+            super.run();
+        }
+    }
+
 
 }

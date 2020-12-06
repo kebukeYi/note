@@ -17,6 +17,7 @@ import java.util.Date;
 @Service
 public class LogService {
 
+
 //    @Autowired
 //    LogDao logDao;
 

@@ -1766,8 +1766,7 @@ public abstract class AbstractQueuedLongSynchronizer
          *                                      returns {@code false}
          */
         public final void signalAll() {
-            if (!isHeldExclusively())
-                throw new IllegalMonitorStateException();
+            if (!isHeldExclusively()) throw new IllegalMonitorStateException();
             Node first = firstWaiter;
             if (first != null)
                 doSignalAll(first);

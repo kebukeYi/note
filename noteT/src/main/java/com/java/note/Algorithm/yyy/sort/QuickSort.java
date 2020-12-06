@@ -27,7 +27,7 @@ public class QuickSort {
         int i = left;
         int j = right;
         int mid = (i + j) / 2;
-        //目标元素
+        //中间元素
         int privot = array[mid];
 
         while (i <= j) {
@@ -63,6 +63,7 @@ public class QuickSort {
     public static void quickTwo(int[] array, int left, int right) {
         if (array == null || array.length == 0) return;
         if (left > right) return;
+
         int key = array[left];
         int l = left;
         int r = right;
@@ -84,6 +85,7 @@ public class QuickSort {
                 array[r] = temp;
             }
         }
+
         //这时 l==r  需要交换
         array[left] = array[l];
         array[l] = key;

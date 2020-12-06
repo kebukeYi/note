@@ -2,6 +2,7 @@ package com.java.note.Algorithm.other;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -15,6 +16,7 @@ public class BST {
 
     private Node root;
     public static final int[] TREE_VALUE = new int[]{6, 2, 3, 1, 4, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 9, 10, 11, 12, 0};
+    private static ArrayList arrayList = new ArrayList<>();
     public static int HGIH = 0;
 
     @Data
@@ -74,8 +76,11 @@ public class BST {
 //        printLevelOrder(root);
 //        System.out.println();
 //        System.out.println(hight(root));
+        inCureNode(root);
+        System.out.println();
+        System.out.println(arrayList);
 
-        preCureNode(root);
+//        preCureNode(root);
     }
 
     //递归遍历  前序  二叉树
@@ -208,6 +213,7 @@ public class BST {
         if (node == null) {
             System.out.print("*");
         } else {
+            arrayList.add(node.val);
             System.out.print(node.val + "-");
         }
     }
