@@ -5,10 +5,69 @@
 
 <mapper namespace="com.java.note.spring.mapper.UserMapper">
 
-    <select id="getUserByAge" parameterType="int" resultType="com.java.note.redis.bean.User">
 
-       select  *   from  people where age=#{age}
-
+    <select id="getUserByAge" parameterType="int" resultType="com.java.note.mybatis.MyUser">
+       select  *   from  my_user  where age=#{age}
     </select>
+
+    <select id="selectAll" resultType="com.java.note.mybatis.MyUser">
+        select  *   from  my_user
+    </select>
+
+    <update id="batchUpdateUser" parameterType="java.util.List">
+        update user
+        <trim prefix="set" suffixOverrides=",">
+
+            <trim prefix="name =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.name!=null and i.name!='' ">
+                        when id=#{i.id} then #{i.name}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="age =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.age!=null and i.age!='' ">
+                        when id=#{i.id} then #{i.age}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="money =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.money!=null  and i.money!='' ">
+                        when id=#{i.id} then #{i.money}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="address =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.address!=null  and i.address!='' ">
+                        when id=#{i.id} then #{i.address}
+                    </if>
+                </foreach>
+            </trim>
+
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index">
+            id=#{i.id}
+        </foreach>
+    </update>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update my_user
+            <set>
+                name=#{item.name},
+                age=#{item.age},
+                address=#{item.address},
+                money=#{item.money}
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
 
 </mapper>

@@ -1,6 +1,10 @@
 package com.java.note.spring.mapper;
 
-import com.java.note.redis.bean.User;
+import com.java.note.mybatis.MyUser;
+
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author : mmy
@@ -9,6 +13,13 @@ import com.java.note.redis.bean.User;
  */
 public interface UserMapper {
 
-    User getUserByAge(int age);
+    MyUser getUserByAge(int age);
+
+    List<MyUser> selectAll();
+
+    Integer batchUpdateUser(@Param("list") List<MyUser> myUserList);
+
+    Integer updateBatch(@Param("list") List<MyUser> myUserList);
+
 
 }

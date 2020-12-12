@@ -11,8 +11,8 @@
     <!-- 引用db.properties配置文件 -->
     <properties resource="db.properties"/>
     <!--  development : 开发模式 work : 工作模式 -->
-    <environments default="development">
-        <environment id="development">
+    <environments default="work">
+        <environment id="work">
             <!--            使用JDBC 事务管理-->
             <transactionManager type="JDBC"/>
             <!--            数据库连接池-->

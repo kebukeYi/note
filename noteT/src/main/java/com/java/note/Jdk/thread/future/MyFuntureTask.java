@@ -15,11 +15,13 @@ public class MyFuntureTask {
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                return null;
+                Thread.sleep(3000);
+                return "OK";
             }
         };
         FutureTask futureTask = new FutureTask(callable);
         futureTask.run();
-        futureTask.get();
+        Object o = futureTask.get();
+        System.out.println("结果是：" + o);
     }
 }

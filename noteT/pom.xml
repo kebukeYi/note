@@ -13,7 +13,7 @@
     <groupId>com.example</groupId>
     <artifactId>note</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>note</name>
+    <name>noteT</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
