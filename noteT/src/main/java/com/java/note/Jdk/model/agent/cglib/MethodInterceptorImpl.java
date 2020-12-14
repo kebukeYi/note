@@ -15,9 +15,18 @@ public class MethodInterceptorImpl implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+        System.out.println("CGlib 开始");
+//        System.out.println("obj:" + obj);
+        System.out.println("obj:" + obj.getClass());
+        System.out.println(method.getName());
+        System.out.println("method:" + method);
+        System.out.println(args[0]);
+        System.out.println("MethodProxy:" + proxy);
+        System.out.println("MethodProxy:" + proxy.getClass());
         System.out.println("before calling method:" + method.getName());
-        proxy.invokeSuper(obj, args);
+        Object result = proxy.invokeSuper(obj, args);
         System.out.println("after calling method:" + method.getName());
-        return null;
+        System.out.println("CGlib 结束");
+        return result;
     }
 }

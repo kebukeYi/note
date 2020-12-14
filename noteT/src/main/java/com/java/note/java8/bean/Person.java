@@ -1,12 +1,9 @@
 package com.java.note.java8.bean;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.math.RoundingMode;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * @Author : mmy
@@ -14,7 +11,8 @@ import java.util.Random;
  * @Description
  */
 @Data
-public class Person  {
+@Builder
+public class Person {
 
     private String name;
     private int age;

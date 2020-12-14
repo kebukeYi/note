@@ -6,9 +6,57 @@
 <mapper namespace="com.java.note.spring.mapper.UserMapper">
 
     <select id="getUserByAge" parameterType="int" resultType="com.java.note.redis.bean.User">
-
-       select  *   from  people where age=#{age}
-
+        select * from people where age=#{age}
     </select>
+
+
+    <sql id="where_statistical_brand">
+        <where>
+            <choose>
+                <when test="districtList!=null  and districtList.size()>0 ">
+                    district in
+                    <foreach collection="districtList" item="district" open="(" separator="," close=")">
+                        #{district}
+                    </foreach>
+                    and
+                </when>
+                <otherwise>
+                    district='' and
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="comareaList!=null and comareaList.size()>0">
+                    comarea in
+                    <foreach collection="comareaList" item="comarea" open="(" separator="," close=")">
+                        #{comarea}
+                    </foreach>
+                    and
+                </when>
+                <otherwise>
+                    comarea='' and
+                </otherwise>
+            </choose>
+
+            <if test="cityName!='' and cityName!=null ">
+                city=#{cityName}
+            </if>
+
+            <if test="brandNameChar!='' and brandNameChar!=null ">
+                and get_first_pinyin_char('brand_name')=#{brandNameChar}
+            </if>
+
+        </where>
+    </sql>
+
+
+    <select id="getStatisticalBrandList" resultType="com.java.note.mybatis.vo.StatisticalBrandVo">
+        select city as cityName,district,comarea,brand_id as brandId,brand_name as brandName
+        from brand_collect
+        <include refid="where_statistical_brand"></include>
+        and pt_day=(SELECT max(pt_day) FROM brand_collect)
+        limit #{offset},#{pagesize}
+    </select>
+
 
 </mapper>

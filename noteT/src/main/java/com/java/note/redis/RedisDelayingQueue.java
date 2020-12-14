@@ -10,16 +10,15 @@ import java.util.UUID;
 
 /**
  * @Author : mmy
- * @Creat Time : 2020/6/3  17:10
- * @Description
- * 下⾯的算法中同⼀个任务可能会被多个进程取到之后再使⽤ zrem
+ * @CreatTime : 2020/6/3  17:10
+ * @Description 下⾯的算法中同⼀个任务可能会被多个进程取到之后再使⽤ zrem 删除操作
  * 进⾏争抢，那些没抢到的进程都是⽩取了⼀次任务，这是浪费。可以
  * 考虑使⽤ Lua scripting 来优化⼀下这个逻辑，将 zrangebyscore
  * 和 zrem ⼀同挪到服务器端进⾏原⼦化操作，这样多个进程之间争
  * 抢任务时就不会出现这种浪费了。
- *
+ * <p>
  * 1. Redis 作为消息队列为什么不能保证 100% 的可靠性？
- * 2. 使⽤ Lua Scripting 来优化延时队列的逻辑。
+ * 2. 使⽤ Lua Scripting 来优化延时队列的逻辑
  */
 public class RedisDelayingQueue<T> {
 
@@ -28,7 +27,7 @@ public class RedisDelayingQueue<T> {
         public T msg;
     }
 
-    // fastjson 序列化对象中存在 generic 类型时，需要使⽤TypeReference
+    // fastjson 序列化对象中存在 generic 类型时，需要使⽤ TypeReference
     private Type TaskType = new TypeReference<TaskItem<T>>() {
     }.getType();
 
@@ -49,6 +48,7 @@ public class RedisDelayingQueue<T> {
     }
 
     public void loop() {
+        //循环查询取出
         while (!Thread.interrupted()) {
             // 只取⼀条
             Set<String> values = jedis.zrangeByScore(queueKey, 0, System.currentTimeMillis(), 0, 1);
@@ -61,25 +61,42 @@ public class RedisDelayingQueue<T> {
                 continue;
             }
             String s = values.iterator().next();
+            //   被成功删除的成员数量
             if (jedis.zrem(queueKey, s) > 0) { // 抢到了
                 TaskItem<T> task = JSON.parseObject(s, TaskType); // fastjson 反序列化
                 this.handleMsg(task.msg);
             }
+
+            String luaScript = "local resultArray = redis.call('zrangebyscore', KEYS[1], 0, ARGV[1], 'limit' , 0, 1)\n" +
+                    "if #resultArray > 0 then\n" +
+                    "    if redis.call('zrem', KEYS[1], resultArray[1]) > 0 then\n" +
+                    "        return resultArray[1]\n" +
+                    "    else\n" +
+                    "        return ''\n" +
+                    "    end\n" +
+                    "else\n" +
+                    "    return ''\n" +
+                    "end";
+
+            jedis.eval(luaScript, 0, queueKey, String.valueOf(System.currentTimeMillis()));
+
+
         }
     }
 
+
     public void handleMsg(T msg) {
-        System.out.println(msg);
+        System.out.println("延迟处理任务：" + msg);
     }
 
     public static void main(String[] args) {
-        Jedis jedis = new Jedis();
-        RedisDelayingQueue<String> queue = new RedisDelayingQueue<String>(jedis, "q-demo");
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        RedisDelayingQueue<String> queue = new RedisDelayingQueue<>(jedis, "q-demo");
 
         Thread producer = new Thread() {
             public void run() {
                 for (int i = 0; i < 10; i++) {
-                    queue.delay("codehole" + i);
+                    queue.delay("codehole : " + i);
                 }
             }
         };
@@ -89,6 +106,7 @@ public class RedisDelayingQueue<T> {
                 queue.loop();
             }
         };
+
         producer.start();
         consumer.start();
         try {

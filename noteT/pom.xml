@@ -11,9 +11,9 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>note</artifactId>
+    <artifactId>noteT</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>note</name>
+    <name>noteT</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -73,6 +73,13 @@
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
             <version>5.7.3</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>3.6.5</version>
         </dependency>
 
 

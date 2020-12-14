@@ -1,6 +1,8 @@
 package com.java.note.Jdk.Ato;
 
 import com.java.note.redis.bean.User;
+import lombok.val;
+import sun.misc.Unsafe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -17,7 +19,7 @@ public class MyAtomic {
     static AtomicStampedReference<Integer> stampedReference = new AtomicStampedReference<>(100, 1);
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
 
         new Thread(() -> {
             reference.compareAndSet(100, 101);
@@ -61,7 +63,7 @@ public class MyAtomic {
             }
         }, "t4").start();
 
-
+        getUnsafe();
     }
 
     //利用版本号 来完成ABA 问题
@@ -69,6 +71,12 @@ public class MyAtomic {
 
     }
 
+    public static void getUnsafe() throws NoSuchFieldException, IllegalAccessException {
+        val fields = Unsafe.class.getDeclaredField("theUnsafe");
+        fields.setAccessible(true);
+        val o = fields.get(null);
+        System.out.println(o);
+    }
 
     public static void atomicDemo() {
         Object o = new Object();

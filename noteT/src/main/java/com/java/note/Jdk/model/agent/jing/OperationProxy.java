@@ -10,28 +10,36 @@ import com.java.note.Jdk.model.agent.Operator;
  */
 public class OperationProxy implements Operate {
 
+    //被代理对象
     private Operator operator = null;
 
     @Override
-    public void doSomething() {
+    public String doSomething(String name) {
+        System.out.println("静态代理 开始");
         beforeDoSomething();
         if (operator == null) {
             operator = new Operator();
         }
-        operator.doSomething();
+        operator.doSomething(name);
         afterDoSomething();
+        System.out.println("静态代理 结束");
+        return "自己方法的返回值：success-4";
     }
 
+    //加强方法前
     private void beforeDoSomething() {
         System.out.println("before doing something");
     }
 
+    //加强方法后
     private void afterDoSomething() {
         System.out.println("after doing something");
     }
 
     public static void main(String[] args) {
-        Operate operate = new OperationProxy();//使用OperationProxy代替Operator
-        operate.doSomething();  //代理者代替真实者做事情
+        //使用OperationProxy代替Operator
+        Operate operate = new OperationProxy();
+        //代理者代替真实者做事情
+        operate.doSomething("name");
     }
 }

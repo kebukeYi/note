@@ -19,14 +19,29 @@ public class InvocationHandlerImpl implements InvocationHandler {
         this.operate = operate;
     }
 
+    public InvocationHandlerImpl() {
+    }
 
+
+    /***
+     * @param proxy 生成的代理对象
+     * @param method 代理对象中要执行的方法
+     * @param args 方法参数
+     */
     @Override
-    public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("动态代理 开始");
         System.out.println("before calling method: " + method.getName());
         //调用操纵者的具体操作方法
-        method.invoke(operate, objects);
+//        Object result = method.invoke(operate, args);
+        String result = "调用其他接口的返回值";
+        System.out.println("result : " + result);
         System.out.println("after calling method: " + method.getName());
-        return null;
+        System.out.println("动态代理 结束");
+
+//        return proxy;
+        return result;
+//        return null;
     }
 
 
