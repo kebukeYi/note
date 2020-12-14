@@ -1,8 +1,10 @@
 package com.java.note.Jdk.thread.future;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import lombok.SneakyThrows;
+
+import java.util.concurrent.*;
+
+import static java.lang.Thread.sleep;
 
 /**
  * @Author : mmy
@@ -11,17 +13,50 @@ import java.util.concurrent.FutureTask;
  */
 public class MyFuntureTask {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+    public static void main(String[] args) throws Exception {
+
+        Runnable runnable = new Runnable() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                System.out.println("开始睡眠5秒" + System.currentTimeMillis() / 1000);
+                sleep(5000);
+                System.out.println("5秒睡眠完毕" + System.currentTimeMillis() / 1000);
+            }
+        };
+
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                Thread.sleep(3000);
+                System.out.println("开始睡眠5秒" + System.currentTimeMillis() / 1000);
+                sleep(5000);
+                System.out.println("5秒睡眠完毕" + System.currentTimeMillis() / 1000);
                 return "OK";
             }
         };
+
+        //callable.call();//也等待了5秒
+
+        Future<?> future = executorService.submit(runnable);
+        // Object o1 = future.get();
+        // System.out.println(o1);
+
         FutureTask futureTask = new FutureTask(callable);
-        futureTask.run();
-        Object o = futureTask.get();
+        //futureTask.run();//等待了5秒
+
+        Future<?> submit = executorService.submit(futureTask);
+        //  Object o2 = submit.get();
+        // System.out.println("o2:" + o2);
+
+        //new Thread(futureTask).start();
+
+        System.out.println("开始睡眠3秒" + System.currentTimeMillis() / 1000);
+        sleep(3000);
+        System.out.println("3秒睡眠完毕" + System.currentTimeMillis() / 1000);
+        Object o = futureTask.get();//等待5秒
         System.out.println("结果是：" + o);
+        executorService.shutdown();
     }
 }
