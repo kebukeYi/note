@@ -1,8 +1,8 @@
 package com.java.note.spring.mapper;
 
-import com.java.note.mybatis.dto.StatisticalBrandDto;
-import com.java.note.mybatis.vo.StatisticalBrandVo;
-import com.java.note.redis.bean.User;
+import com.java.note.mybatis.MyUser;
+
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,7 +13,13 @@ import java.util.List;
  */
 public interface UserMapper {
 
-    User getUserByAge(int age);
+    MyUser getUserByAge(int age);
 
-    List<StatisticalBrandVo> getStatisticalBrandList(StatisticalBrandDto statisticalBrandDto);
+    List<MyUser> selectAll();
+
+    Integer batchUpdateUser(@Param("list") List<MyUser> myUserList);
+
+    Integer updateBatch(@Param("list") List<MyUser> myUserList);
+
+
 }
