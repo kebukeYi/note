@@ -13,7 +13,7 @@ import java.util.concurrent.FutureTask;
 /**
  * @Author : fang.com
  * @CreatTime : 2020-12-14 09:51
- * @Description :
+ * @Description : 没看懂
  * @Version :  0.0.1
  */
 public class FutureTaskTest {
@@ -32,7 +32,7 @@ public class FutureTaskTest {
             new Thread() {
                 public void run() {
                     try {
-                        System.out.println(executionTask("mythread" + System.currentTimeMillis()));
+                        System.out.println(executionTask("mythread" + System.currentTimeMillis() / 1000));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -46,10 +46,11 @@ public class FutureTaskTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        //打印任务
         for (Entry<Object, Future<String>> en : taskCache.entrySet()) {
             System.out.println(en.getKey() + "===" + en.getValue());
         }
+
     }
 
 
@@ -57,19 +58,21 @@ public class FutureTaskTest {
         while (true) {
             // 1.1,2.1
             Future<String> future = taskCache.get(taskName);
-
+            //刚开始为空
             if (future == null) {
                 Callable<String> task = new Callable<String>() {
                     @Override
                     public String call() throws InterruptedException {
-                        return taskName;
+                        return "taskName : " + taskName;
                     }
                 };
                 // 1.3
                 FutureTask<String> futureTask = new FutureTask<String>(task);
+                //返回new
                 future = taskCache.putIfAbsent(taskName, futureTask);
                 if (future == null) {
                     future = futureTask;
+                    System.out.println("run ");
                     futureTask.run();
                     // 1.4执行任务
                 }
@@ -77,6 +80,7 @@ public class FutureTaskTest {
 
             try {
                 // 1.5,
+                System.out.println("get ");
                 return future.get();
             } catch (CancellationException e) {
                 taskCache.remove(taskName, future);

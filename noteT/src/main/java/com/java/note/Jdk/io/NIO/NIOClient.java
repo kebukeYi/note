@@ -30,7 +30,7 @@ public class NIOClient {
         SocketChannel channel = SocketChannel.open();
         //设置为非阻塞
         channel.configureBlocking(false);
-        //h获得一个通道管理器
+        //获得一个通道管理器
         this.selector = selector.open();
         //客户端连接服务器，其方法执行并没有实现连接，需要listen()方法中调用Channel.finshConection();才算完成连接
         channel.connect(new InetSocketAddress(ip, port));
@@ -83,7 +83,6 @@ public class NIOClient {
      * @throws IOException
      */
     public void read(SelectionKey key) throws IOException {
-
         // 服务器可读取消息:得到事件发生的Socket通道
         SocketChannel channel = (SocketChannel) key.channel();
         // 创建读取的缓冲区
@@ -107,7 +106,7 @@ public class NIOClient {
 
     public static void main(String args[]) throws IOException {
         NIOClient client = new NIOClient();
-        client.initClient("localhost", 8000);
+        client.initClient("127.0.0.1", 8000);
         client.connect();
     }
 }

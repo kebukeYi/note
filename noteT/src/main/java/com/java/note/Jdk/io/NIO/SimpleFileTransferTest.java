@@ -7,7 +7,7 @@ import java.nio.channels.FileChannel;
 /**
  * @Author : mmy
  * @Creat Time : 2020/4/18  22:59
- * @Description 测试NIO 用来复制数据文件
+ * @Description 测试 NIO 用来复制数据文件
  */
 public class SimpleFileTransferTest {
 

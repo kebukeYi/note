@@ -37,6 +37,8 @@ public class MyFuntureTask {
             }
         };
 
+        CompletableFuture completableFuture = new CompletableFuture<>();
+
         //callable.call();//也等待了5秒
 
         Future<?> future = executorService.submit(runnable);
