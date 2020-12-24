@@ -23,11 +23,14 @@ public class NIOServer2 {
 
         new Thread(() -> {
             try {
+                //服务端启动
                 SocketChannel socketChannel = SocketChannel.open();
                 socketChannel.socket().bind(new InetSocketAddress(8000));
                 socketChannel.configureBlocking(false);
+                //连接注册
                 socketChannel.register(serverSelector, SelectionKey.OP_ACCEPT);
                 while (true) {
+                    // 监测是否有新的连接，这里的1指的是阻塞的时间为 1ms
                     if (serverSelector.select(1) > 0) {
                         Set<SelectionKey> selectionKeys = serverSelector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectionKeys.iterator();
@@ -35,6 +38,7 @@ public class NIOServer2 {
                             SelectionKey key = keyIterator.next();
                             if (key.isAcceptable()) {
                                 try {
+                                    // (1) 每来一个新连接，不需要创建一个线程，而是直接 注册到clientSelector
                                     SocketChannel clientChannel = ((ServerSocketChannel) key.channel()).accept();
                                     clientChannel.configureBlocking(false);
                                     clientChannel.register(clientSelector, SelectionKey.OP_READ);
@@ -53,6 +57,7 @@ public class NIOServer2 {
         new Thread(() -> {
             try {
                 while (true) {
+                    // 监测是否有新的连接，这里的1指的是阻塞的时间为 1ms
                     if (clientSelector.select(1) > 0) {
                         Set<SelectionKey> selectionKeys = clientSelector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectionKeys.iterator();
@@ -61,13 +66,15 @@ public class NIOServer2 {
                             if (key.isReadable()) {
                                 try {
                                     SocketChannel clientChannel = (SocketChannel) key.channel();
+                                    // (3) 面向 Buffer
                                     ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
                                     clientChannel.read(byteBuffer);
-                                    byteBuffer.flip();
                                     System.out.println(Charset.defaultCharset().newDecoder().decode(byteBuffer).toString());
+                                    byteBuffer.flip();
                                     String text = "服务器：我收到了";
                                     ByteBuffer outBuffer = ByteBuffer.wrap(text.getBytes());
-                                    clientChannel.write(outBuffer);// 将消息回送给客户端
+                                    // 将消息回送给客户端
+                                    clientChannel.write(outBuffer);
                                 } catch (Exception e) {
                                 } finally {
                                     keyIterator.remove();

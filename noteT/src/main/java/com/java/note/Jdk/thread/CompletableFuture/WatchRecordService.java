@@ -1,0 +1,15 @@
+package com.java.note.Jdk.thread.CompletableFuture;
+
+/**
+ * @Author : fang.com
+ * @CreatTime : 2020-12-24 09:58
+ * @Description :
+ * @Version :  0.0.1
+ */
+public class WatchRecordService implements RemoteLoader {
+    @Override
+    public String load() {
+        this.delay();
+        return "观看记录";
+    }
+}
