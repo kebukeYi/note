@@ -1,7 +1,6 @@
 package com.java.note.Jdk.thread.CompletableFuture;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -14,6 +13,10 @@ import java.util.stream.Collectors;
  * @Version :  0.0.1
  */
 public class CompletableFutureTest {
+    /*
+    如果任务是计算密集型的，并且没有I/O操作的话，那么推荐你选择Stream的并行流，实现简单并行效率也是最高的
+    如果任务是有频繁的I/O或者网络连接等操作，那么推荐使用CompletableFuture，采用自定义线程池的方式，根据服务器的情况设置线程池的大小，尽可能的让CPU忙碌起来
+     */
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 //        runWithSync();
