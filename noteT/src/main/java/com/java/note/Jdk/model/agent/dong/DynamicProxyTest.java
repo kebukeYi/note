@@ -2,7 +2,6 @@ package com.java.note.Jdk.model.agent.dong;
 
 import com.java.note.Jdk.model.agent.Operate;
 import com.java.note.Jdk.model.agent.Operator;
-import sun.misc.ProxyGenerator;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +9,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import com.java.note.Jdk.utils.MyProxyGenerator;
 
 /**
  * @Author : mmy
@@ -37,9 +38,9 @@ public class DynamicProxyTest {
 
         //生成代理类字节码
         String proxyName = "OperateService5";
-        // byte[] bytes4 = ProxyGenerator.generateProxyClass(proxyName, new Class<?>[]{operationProxy.getClass()});
-        byte[] bytes4 = ProxyGenerator.generateProxyClass(proxyName, new Class<?>[]{Operate.class});
-        Path path4 = new File("F:\\" + proxyName + "$proxy.class").toPath();
+        //byte[] bytes4 = ProxyGenerator.generateProxyClass(proxyName, new Class<?>[]{operaionProxy.getClass()});
+        byte[] bytes4 = MyProxyGenerator.generateProxyClass(proxyName, new Class<?>[]{Operate.class});
+        Path path4 = new File("F:\\" + proxyName + "$myproxy1.class").toPath();
         Files.write(path4, bytes4);
 
         operate.doSomething("【operate】 deal with ");

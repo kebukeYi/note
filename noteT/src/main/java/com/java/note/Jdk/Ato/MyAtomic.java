@@ -1,8 +1,6 @@
 package com.java.note.Jdk.Ato;
 
 import com.java.note.redis.bean.User;
-import lombok.val;
-import sun.misc.Unsafe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -72,10 +70,10 @@ public class MyAtomic {
     }
 
     public static void getUnsafe() throws NoSuchFieldException, IllegalAccessException {
-        val fields = Unsafe.class.getDeclaredField("theUnsafe");
-        fields.setAccessible(true);
-        val o = fields.get(null);
-        System.out.println(o);
+//        val fields = Unsafe.class.getDeclaredField("theUnsafe");
+//        fields.setAccessible(true);
+//        val o = fields.get(null);
+//        System.out.println(o);
     }
 
     public static void atomicDemo() {
