@@ -1,4 +1,4 @@
-package com.java.note.Jdk.thread.CompletableFuture;
+package com.java.note.Jdk.thread.completableFuture;
 
 public interface RemoteLoader {
 
