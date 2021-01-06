@@ -1,4 +1,4 @@
-package com.java.note.Jdk.reflaft.one;
+package com.java.note.Jdk.reflect.one;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -38,10 +38,13 @@ public class CompareObjectPropertyUtil {
                     return Collections.emptyList();
                 }
             }
+            //获取old实体类的键值对
             List<PropertyModelInfo> oldObjectPropertyValue = getObjectPropertyValue(oldObj, ignoreProperties);
+            //如果不为空
             if (!CollectionUtils.isEmpty(oldObjectPropertyValue)) {
+                //记录两个实体发生变化属性的list
                 List<ModifiedPropertyInfo> modifiedPropertyInfos = new ArrayList<>(oldObjectPropertyValue.size());
-
+                //获取new实体类的键值对
                 List<PropertyModelInfo> newObjectPropertyValue = getObjectPropertyValue(newObj, ignoreProperties);
                 Map<String, Object> objectMap = new HashMap<>(newObjectPropertyValue.size());
 
@@ -52,29 +55,36 @@ public class CompareObjectPropertyUtil {
                     objectMap.put(propertyName, value);
                 }
 
+                //遍历旧属性键值对
                 for (PropertyModelInfo propertyModelInfo : oldObjectPropertyValue) {
                     String propertyName = propertyModelInfo.getPropertyName();
                     String propertyComment = propertyModelInfo.getPropertyComment();
-                    Object value = propertyModelInfo.getValue();
+                    Object oldValue = propertyModelInfo.getValue();
+
+                    //newMap是否存在
                     if (objectMap.containsKey(propertyName)) {
                         Object newValue = objectMap.get(propertyName);
                         ModifiedPropertyInfo modifiedPropertyInfo = new ModifiedPropertyInfo();
-                        if (value != null && newValue != null) {
-                            if (!value.equals(newValue)) {
-                                modifiedPropertyInfo.setPropertyName(propertyName);
-                                modifiedPropertyInfo.setPropertyComment(propertyComment);
-                                modifiedPropertyInfo.setOldValue(value);
-                                modifiedPropertyInfo.setNewValue(newValue);
-                                modifiedPropertyInfos.add(modifiedPropertyInfo);
-                            }
-                        } else if ((newValue == null && value != null && !StringUtils.isBlank(value.toString()))
-                                || (value == null && newValue != null && !StringUtils.isBlank(newValue.toString()))) {
+                        //两值都存在变化的话
+//                        if (oldValue != null && newValue != null) {
+                        //两值是否一样
+                        if (!oldValue.equals(newValue)) {
+                            //记录对应的属性
                             modifiedPropertyInfo.setPropertyName(propertyName);
                             modifiedPropertyInfo.setPropertyComment(propertyComment);
-                            modifiedPropertyInfo.setOldValue(value);
+                            modifiedPropertyInfo.setOldValue(oldValue);
                             modifiedPropertyInfo.setNewValue(newValue);
                             modifiedPropertyInfos.add(modifiedPropertyInfo);
                         }
+//                        }
+                        //当其中一个从有值变为了null 或者反之
+//                        else if ((newValue == null && oldValue != null && !StringUtils.isBlank(oldValue.toString())) || (oldValue == null && newValue != null && !StringUtils.isBlank(newValue.toString()))) {
+//                            modifiedPropertyInfo.setPropertyName(propertyName);
+//                            modifiedPropertyInfo.setPropertyComment(propertyComment);
+//                            modifiedPropertyInfo.setOldValue(oldValue);
+//                            modifiedPropertyInfo.setNewValue(newValue);
+//                            modifiedPropertyInfos.add(modifiedPropertyInfo);
+//                        }
                     }
                 }
                 return modifiedPropertyInfos;
@@ -93,22 +103,33 @@ public class CompareObjectPropertyUtil {
      */
     public static <T> List<PropertyModelInfo> getObjectPropertyValue(T obj, String... ignoreProperties) {
         if (obj != null) {
+            //获得类结构
             Class<?> objClass = obj.getClass();
+            //获得此类的各个属性的多个描述
             PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(objClass);
+            //自定义各个属性值的实体类
             List<PropertyModelInfo> modelInfos = new ArrayList<>(propertyDescriptors.length);
+            //各个属性数组
             Field[] fields = objClass.getDeclaredFields();
+            //忽视属性的集合
             List<String> ignoreList = (ignoreProperties != null ? Arrays.asList(ignoreProperties) : null);
+            //开始遍历
             for (Field field : fields) {
+                //设置可编辑
                 field.setAccessible(true);
                 String fieldName = field.getName();
+                //如果此属性没有被忽视
                 if (ignoreList == null || !ignoreList.contains(fieldName)) {
+                    //新建自己的属性实体类
                     PropertyModelInfo propertyModelInfo = new PropertyModelInfo();
                     propertyModelInfo.setPropertyName(fieldName);
                     propertyModelInfo.setReturnType(field.getType());
+                    //得到属性值
                     Object fieldValue = getFieldValueByName(fieldName, obj);
                     // 通过自定义注解拿到属性注释
                     if (field.isAnnotationPresent(PropertyName.class)) {
                         PropertyName annotation = field.getAnnotation(PropertyName.class);
+                        //额外的形容词
                         propertyModelInfo.setPropertyComment(annotation.name());
                         // 如果是字典项，则将code转换成name
                         // 注意：获取字典项这部分代码需要结合自己的业务实现，我这里是从静态文件加载进来的
@@ -123,7 +144,9 @@ public class CompareObjectPropertyUtil {
                             }
                         }
                     }
+                    //开始保存字典值
                     propertyModelInfo.setValue(fieldValue == null ? "" : fieldValue);
+                    //一一保存实体类的数值
                     modelInfos.add(propertyModelInfo);
                 }
             }
@@ -134,8 +157,10 @@ public class CompareObjectPropertyUtil {
 
     private static Object getFieldValueByName(String fieldName, Object o) {
         try {
+            //id中的 i 大写 Id
             String firstLetter = fieldName.substring(0, 1).toUpperCase();
             String getter = "get" + firstLetter + fieldName.substring(1);
+            //getId();
             Method method = o.getClass().getMethod(getter, new Class[]{});
             Object value = method.invoke(o, new Object[]{});
             return value;
@@ -144,6 +169,7 @@ public class CompareObjectPropertyUtil {
             return null;
         }
     }
+
 
     public static void main(String[] args) {
         // 修改前数据
@@ -157,16 +183,17 @@ public class CompareObjectPropertyUtil {
         // 修改后数据
         StaffBaseInfo newStaff = new StaffBaseInfo();
         newStaff.setName("张三");
+        newStaff.setId("22");
         newStaff.setBirthday("1987-01-02");
         newStaff.setBirthPlace("山东济南");
-        oldStaff.setHighestDegree("博士");
+        newStaff.setHighestDegree("博士");
         newStaff.setHighestDegree("308");
         long start = System.currentTimeMillis();
         List<ModifiedPropertyInfo> differentProperty = CompareObjectPropertyUtil.getDifferentProperty(oldStaff, newStaff);
         long end = System.currentTimeMillis();
         System.out.println("本次修改共计发生" + differentProperty.size() + "处变化，共花费 ：" + (end - start) + " ，具体如下所示：");
         differentProperty.forEach(diff -> {
-            System.out.println(diff.getPropertyComment() + "：" + "修改前为【" + diff.getOldValue() + "】，修改后变为【" + diff.getNewValue() + "】");
+            System.out.println(diff.getPropertyName() + "：" + "修改前为【" + diff.getOldValue() + "】，修改后变为【" + diff.getNewValue() + "】");
         });
 
     }

@@ -1,4 +1,4 @@
-package com.java.note.Jdk.reflaft.one;
+package com.java.note.Jdk.reflect.one;
 
 import lombok.Data;
 
