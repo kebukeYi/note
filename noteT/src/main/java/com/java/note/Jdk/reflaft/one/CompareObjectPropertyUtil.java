@@ -44,6 +44,7 @@ public class CompareObjectPropertyUtil {
 
                 List<PropertyModelInfo> newObjectPropertyValue = getObjectPropertyValue(newObj, ignoreProperties);
                 Map<String, Object> objectMap = new HashMap<>(newObjectPropertyValue.size());
+
                 // 获取新对象所有属性值
                 for (PropertyModelInfo propertyModelInfo : newObjectPropertyValue) {
                     String propertyName = propertyModelInfo.getPropertyName();
@@ -150,6 +151,7 @@ public class CompareObjectPropertyUtil {
         oldStaff.setName("张三");
         oldStaff.setBirthday("1987-01-02");
         oldStaff.setBirthPlace("北京市");
+        oldStaff.setHighestDegree("本科");
         // 最高学位为字典项
         oldStaff.setHighestDegree("408");
         // 修改后数据
@@ -157,10 +159,12 @@ public class CompareObjectPropertyUtil {
         newStaff.setName("张三");
         newStaff.setBirthday("1987-01-02");
         newStaff.setBirthPlace("山东济南");
+        oldStaff.setHighestDegree("博士");
         newStaff.setHighestDegree("308");
-
+        long start = System.currentTimeMillis();
         List<ModifiedPropertyInfo> differentProperty = CompareObjectPropertyUtil.getDifferentProperty(oldStaff, newStaff);
-        System.out.println("本次修改共计发生" + differentProperty.size() + "处变化，具体如下所示：");
+        long end = System.currentTimeMillis();
+        System.out.println("本次修改共计发生" + differentProperty.size() + "处变化，共花费 ：" + (end - start) + " ，具体如下所示：");
         differentProperty.forEach(diff -> {
             System.out.println(diff.getPropertyComment() + "：" + "修改前为【" + diff.getOldValue() + "】，修改后变为【" + diff.getNewValue() + "】");
         });

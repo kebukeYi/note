@@ -90,6 +90,6 @@ public class StaffBaseInfo implements Serializable {
     /**
      * 最高学位
      */
-    @PropertyName(name = "最高学位", isDict = false)
+//    @PropertyName(name = "最高学位", isDict = false)
     private String highestDegree;
 }

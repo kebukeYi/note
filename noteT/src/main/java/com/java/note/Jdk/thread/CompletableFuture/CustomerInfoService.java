@@ -1,4 +1,4 @@
-package com.java.note.Jdk.thread.completableFuture;
+package com.java.note.Jdk.thread.CompletableFuture;
 
 /**
  * @Author : fang.com
@@ -6,7 +6,7 @@ package com.java.note.Jdk.thread.completableFuture;
  * @Description :
  * @Version :  0.0.1
  */
-public class CustomerInfoService  implements RemoteLoader {
+public class CustomerInfoService  implements com.java.note.Jdk.thread.completableFuture.RemoteLoader {
     @Override
     public String load() {
         this.delay();
