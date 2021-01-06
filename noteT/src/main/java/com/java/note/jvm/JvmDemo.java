@@ -56,8 +56,8 @@ public class JvmDemo {
         JvmDemo jvmDemo = new JvmDemo();
         JvmDemo jvmDemo_1 = new JvmDemo();
         //不允许使用this 代表当前对象 访问静态代码
-//        int add = this.add();
-        int add = jvmDemo.add();
+        //  int add = this.add();
+        int add = JvmDemo.add();
         System.out.println(add);
     }
 }
