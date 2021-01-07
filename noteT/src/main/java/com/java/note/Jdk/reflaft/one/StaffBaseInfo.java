@@ -3,7 +3,9 @@ package com.java.note.Jdk.reflaft.one;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NonNull;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -34,11 +36,12 @@ public class StaffBaseInfo implements Serializable {
      * 姓名
      */
     @PropertyName(name = "姓名")
+    @Size
     private String name;
     /**
      * 性别
      */
-    @PropertyName(name = "性别", isDict = true)
+    @PropertyName(name = "性别")
     private String gender;
     /**
      * 出生日期
@@ -48,7 +51,7 @@ public class StaffBaseInfo implements Serializable {
     /**
      * 身份证件类型
      */
-    @PropertyName(name = "身份证件类型", isDict = true)
+    @PropertyName(name = "身份证件类型")
     private String idType;
     /**
      * 身份证件号码
@@ -58,18 +61,19 @@ public class StaffBaseInfo implements Serializable {
     /**
      * 民族
      */
-    @PropertyName(name = "民族", isDict = false)
+    @PropertyName(name = "民族")
     private String nation;
     /**
      * 政治面貌
      */
-    @PropertyName(name = "政治面貌", isDict = false)
+    @PropertyName(name = "政治面貌")
     private String politicsStatus;
 
     /**
      * 出生地
      */
-    @PropertyName(name = "出生地", isDict = false)
+    @PropertyName(name = "出生地")
+    @NonNull
     private String BirthPlace;
 
     /**
@@ -85,11 +89,11 @@ public class StaffBaseInfo implements Serializable {
     /**
      * 最高学历
      */
-    @PropertyName(name = "最高学历", isDict = false)
+    @PropertyName(name = "最高学历")
     private String highestEducation;
     /**
      * 最高学位
      */
-//    @PropertyName(name = "最高学位", isDict = false)
+    @PropertyName(name = "最高学位")
     private String highestDegree;
 }

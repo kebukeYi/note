@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 public @interface PropertyName {
 
     //name代表的是属性的中文注释，isDict代表该属性是否为字典项，默认为false；如果设置为true，则代表该属性存储的是字典代码，需要将字典项代码翻译成对应的字典项名称
+
     // 字段属性中文注释
     String name() default "";
 
