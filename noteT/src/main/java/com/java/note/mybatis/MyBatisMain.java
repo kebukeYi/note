@@ -38,14 +38,19 @@ public class MyBatisMain {
             // 获取mapper接口的代理对象
             UserMapper userMapper = session.getMapper(UserMapper.class);
 
-//            MyUser user1 = userMapper.getUserByAge(23);
+            List<MyUser> userList = userMapper.getUserByAge(24);
+            for (int i = 0; i < userList.size(); i++) {
+                System.out.println(userList.get(i));
+            }
+
+
             List<MyUser> myUserList = new ArrayList<>();
             myUserList.add(new MyUser(1, "张思", "西门胡同23号", 24, 456.123d));
             myUserList.add(new MyUser(2, "范县", "儋州23号", 23, 456.123d));
             myUserList.add(new MyUser(3, "三台子", "陈唐关23号", 26, 456.123d));
 //            Integer rows = userMapper.batchUpdateUser(myUserList);
-            Integer rows = userMapper.updateBatch(myUserList);
-            System.out.println(rows);
+//            Integer rows = userMapper.updateBatch(myUserList);
+//            System.out.println(rows);
             System.out.println("===========================================");
             List<MyUser> myUserList1 = userMapper.selectAll();
             System.out.println(myUserList1);

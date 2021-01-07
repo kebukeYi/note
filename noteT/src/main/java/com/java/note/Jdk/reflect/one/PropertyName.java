@@ -1,4 +1,4 @@
-package com.java.note.Jdk.reflaft.one;
+package com.java.note.Jdk.reflect.one;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

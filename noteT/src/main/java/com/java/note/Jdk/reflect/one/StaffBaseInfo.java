@@ -1,4 +1,4 @@
-package com.java.note.Jdk.reflaft.one;
+package com.java.note.Jdk.reflect.one;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -94,6 +94,6 @@ public class StaffBaseInfo implements Serializable {
     /**
      * 最高学位
      */
-    @PropertyName(name = "最高学位")
+    @PropertyName(name = "最高学位", isDict = false)
     private String highestDegree;
 }
