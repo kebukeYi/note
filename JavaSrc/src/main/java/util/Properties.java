@@ -1,29 +1,4 @@
-/*
- * Copyright (c) 1995, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-package JavaSrc.java.util;
+package util;
 
 import sun.util.spi.XmlPropertiesProvider;
 
@@ -32,8 +7,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.*;
 
-public
-class Properties extends Hashtable<Object, Object> {
+public class Properties extends Hashtable<Object, Object> {
     /**
      * use serialVersionUID from JDK 1.1.X for interoperability
      */
@@ -79,7 +53,6 @@ class Properties extends Hashtable<Object, Object> {
     public synchronized Object setProperty(String key, String value) {
         return put(key, value);
     }
-
 
 
     public synchronized void load(Reader reader) throws IOException {
@@ -816,32 +789,7 @@ class Properties extends Hashtable<Object, Object> {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
 
-    /**
-     * Supporting class for loading/storing properties in XML format.
-     *
-     * <p> The {@code load} and {@code store} methods defined here delegate to a
-     * system-wide {@code XmlPropertiesProvider}. On first invocation of either
-     * method then the system-wide provider is located as follows: </p>
-     *
-     * <ol>
-     *   <li> If the system property {@code sun.util.spi.XmlPropertiesProvider}
-     *   is defined then it is taken to be the full-qualified name of a concrete
-     *   provider class. The class is loaded with the system class loader as the
-     *   initiating loader. If it cannot be loaded or instantiated using a zero
-     *   argument constructor then an unspecified error is thrown. </li>
-     *
-     *   <li> If the system property is not defined then the service-provider
-     *   loading facility defined by the {@link ServiceLoader} class is used to
-     *   locate a provider with the system class loader as the initiating
-     *   loader and {@code sun.util.spi.XmlPropertiesProvider} as the service
-     *   type. If this process fails then an unspecified error is thrown. If
-     *   there is more than one service provider installed then it is
-     *   not specified as to which provider will be used. </li>
-     *
-     *   <li> If the provider is not found by the above means then a system
-     *   default provider will be instantiated and used. </li>
-     * </ol>
-     */
+
     private static class XmlSupport {
 
         private static XmlPropertiesProvider loadProviderFromProperty(ClassLoader cl) {
@@ -884,13 +832,13 @@ class Properties extends Hashtable<Object, Object> {
 
         static void load(Properties props, InputStream in)
                 throws IOException, InvalidPropertiesFormatException {
-            PROVIDER.load(props, in);
+//            PROVIDER.load(props, in);
         }
 
         static void save(Properties props, OutputStream os, String comment,
                          String encoding)
                 throws IOException {
-            PROVIDER.store(props, os, comment, encoding);
+//            PROVIDER.store(props, os, comment, encoding);
         }
     }
 }
