@@ -1,6 +1,6 @@
-package com.java.note.Jdk.reflaft.one;
+package com.java.note.Jdk.reflect.one;
 
-import org.apache.commons.lang3.StringUtils;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -170,7 +170,7 @@ public class CompareObjectPropertyUtil {
 
     public static void main(String[] args) {
         // 修改前数据
-        StaffBaseInfo oldStaff = new StaffBaseInfo();
+        StaffBaseInfo oldStaff = new StaffBaseInfo("");
         oldStaff.setName("张三");
         oldStaff.setBirthday("1987-01-02");
         oldStaff.setBirthPlace("北京市");
@@ -178,7 +178,7 @@ public class CompareObjectPropertyUtil {
         // 最高学位为字典项
         oldStaff.setHighestDegree("408");
         // 修改后数据
-        StaffBaseInfo newStaff = new StaffBaseInfo();
+        StaffBaseInfo newStaff = new StaffBaseInfo("");
         newStaff.setName("张三");
         newStaff.setId("22");
         newStaff.setBirthday("1987-01-02");
