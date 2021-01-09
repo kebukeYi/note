@@ -1,13 +1,23 @@
 package com.mmy.webflux.webclient;
 
+import com.mmy.webflux.config.GreetingConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 public class GreetingWebClient {
 
-    private WebClient client = WebClient.create("http://localhost:8080");
+    @Value("${server.port}")
+    public Integer port;
+
+    private WebClient client = WebClient.create("http://localhost:" + Optional.ofNullable(port).orElse(8082));
+
     private Mono<ClientResponse> result = client.get().uri("/hello").accept(MediaType.TEXT_PLAIN).exchange();
 
     public String getResult() {
