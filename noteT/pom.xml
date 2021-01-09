@@ -21,7 +21,7 @@
     </properties>
 
     <dependencies>
-
+        <!-- 打印对象头工具-->
         <dependency>
             <groupId>org.openjdk.jol</groupId>
             <artifactId>jol-core</artifactId>
@@ -60,8 +60,6 @@
             <artifactId>spring-data-redis</artifactId>
             <version>2.3.4.RELEASE</version>
         </dependency>
-
-
 
 
         <dependency>
