@@ -11,6 +11,7 @@ public class GreetingWebClient {
     private Mono<ClientResponse> result = client.get().uri("/hello").accept(MediaType.TEXT_PLAIN).exchange();
 
     public String getResult() {
+        //主动阻塞等待结果
         return ">> result = " + result.flatMap(res -> res.bodyToMono(String.class)).block();
 //        return ">> result = " + result.flatMap(res -> res.bodyToMono(String.class));
 //        return ">> result = " + result.flatMap(res -> res.bodyToMono(String.class)).flux();
