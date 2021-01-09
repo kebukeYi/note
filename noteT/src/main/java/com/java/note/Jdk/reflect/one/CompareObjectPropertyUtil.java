@@ -1,7 +1,6 @@
 package com.java.note.Jdk.reflect.one;
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +14,7 @@ import java.util.*;
 /**
  * @Author : fang.com
  * @CreatTime : 2021-01-06 12:46
- * @Description : 用了比较两个实体对象的属性是否发生变化
+ * @Description : 使用反射比较两个实体对象的属性是否发生变化
  * @Version :  0.0.1
  */
 public class CompareObjectPropertyUtil {
@@ -25,9 +24,8 @@ public class CompareObjectPropertyUtil {
     /**
      * 比较两个对象不同的属性并记录返回
      *
-     * @param oldObj           旧对象
-     * @param newObj           新对象
-     * @param ignoreProperties 可忽略对比的属性
+     * @param oldObj 旧对象
+     * @param newObj 新对象
      * @return java.util.List<com.sdyy.staff.utils.ModifiedPropertyInfo>
      */
     public static <T> List<ModifiedPropertyInfo> getDifferentProperty(T oldObj, T newObj, String... ignoreProperties) {
@@ -103,7 +101,6 @@ public class CompareObjectPropertyUtil {
      */
     public static <T> List<PropertyModelInfo> getObjectPropertyValue(T obj, String... ignoreProperties) {
         if (obj != null) {
-            //获得类结构
             Class<?> objClass = obj.getClass();
             //获得此类的各个属性的多个描述
             PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(objClass);
@@ -173,7 +170,7 @@ public class CompareObjectPropertyUtil {
 
     public static void main(String[] args) {
         // 修改前数据
-        StaffBaseInfo oldStaff = new StaffBaseInfo();
+        StaffBaseInfo oldStaff = new StaffBaseInfo("");
         oldStaff.setName("张三");
         oldStaff.setBirthday("1987-01-02");
         oldStaff.setBirthPlace("北京市");
@@ -181,7 +178,7 @@ public class CompareObjectPropertyUtil {
         // 最高学位为字典项
         oldStaff.setHighestDegree("408");
         // 修改后数据
-        StaffBaseInfo newStaff = new StaffBaseInfo();
+        StaffBaseInfo newStaff = new StaffBaseInfo("");
         newStaff.setName("张三");
         newStaff.setId("22");
         newStaff.setBirthday("1987-01-02");

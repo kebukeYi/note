@@ -14,5 +14,5 @@ import java.util.Map;
 @Data
 public class DictionaryConstant {
 
-    static Map<String, DictDTO> dictionaryMap = new HashMap();
+    public static Map<String, DictDTO> dictionaryMap = new HashMap();
 }
