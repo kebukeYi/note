@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.CharsetUtil;
 
 import java.net.InetSocketAddress;
+import java.util.Random;
 
 /**
  * @Author : mmy
@@ -29,7 +30,8 @@ public class UDPProverbClient {
                     .handler(new UDPProverbClientHandler());
             Channel ch = b.bind(0).sync().channel();
             //向网段内的所有机器广播
-            ch.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("谚语字典查询?", CharsetUtil.UTF_8), new InetSocketAddress("127.0.0.1", port))).sync();
+            ch.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("汽车人上报的信号值：" + new Random().nextInt(100), CharsetUtil.UTF_8),
+                    new InetSocketAddress("127.0.0.1", port))).sync();
 
             //客户端等待15s用于接收服务端的应答消息，然后退出并释放资源
             if (!ch.closeFuture().await(15000)) {
@@ -43,7 +45,7 @@ public class UDPProverbClient {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 8888;
+        int port = 18888;
         if (args != null && args.length > 0) {
             port = Integer.valueOf(args[0]);
         }

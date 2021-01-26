@@ -5,7 +5,7 @@ package com.java.note.Jdk;
  * @Creat Time : 2020/7/13  22:55
  * @Description
  */
-public class Cast {
+public class StringCast {
 
     public static void main(String[] args) {
 
@@ -13,7 +13,11 @@ public class Cast {
          * JVM 首先会检查该对象是否在字符串常量池中，如果在，就返回该对象引用，否则新的字符串将在常量池中被创建。
          * 这种方式可以减少同一个值的字符串对象的重复创建，节约内存。
          */
+
         String str1 = "abc";
+        String str4 = "个";
+        String str5 = "积分";
+        String str6 = str1 + str4 + str5;
 
         /**
          *String str = new String(“abc”) 这种方式，首先在编译类文件时，"abc"常量字符串将会放入到常量结构中，在类加载时，
@@ -28,7 +32,7 @@ public class Cast {
         String str3 = str2.intern();
 
         System.out.println(str1 == str2);//false
-        System.out.println(str2 == str3);//
+        System.out.println(str2 == str3);//false
         System.out.println(str1 == str3);//true
 
         int i = 1;

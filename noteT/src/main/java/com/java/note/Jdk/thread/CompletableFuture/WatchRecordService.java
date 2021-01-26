@@ -1,7 +1,5 @@
 package com.java.note.Jdk.thread.CompletableFuture;
 
-import com.java.note.Jdk.thread.completableFuture.RemoteLoader;
-
 /**
  * @Author : fang.com
  * @CreatTime : 2020-12-24 09:58

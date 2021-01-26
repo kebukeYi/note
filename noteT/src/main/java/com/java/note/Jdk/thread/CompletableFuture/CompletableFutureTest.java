@@ -30,9 +30,9 @@ public class CompletableFutureTest {
 
     public static void runWithSync() {
         long start = System.currentTimeMillis();
-        List<com.java.note.Jdk.thread.completableFuture.RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(),
-                new com.java.note.Jdk.thread.CompletableFuture.LearnRecordService());
-        List<String> collect = remoteLoaders.stream().map(com.java.note.Jdk.thread.completableFuture.RemoteLoader::load).collect(Collectors.toList());
+        List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(),
+                new LearnRecordService());
+        List<String> collect = remoteLoaders.stream().map(RemoteLoader::load).collect(Collectors.toList());
         System.out.println(collect);
         long end = System.currentTimeMillis();
         System.out.println("总共花费时间:" + (end - start));
@@ -41,7 +41,7 @@ public class CompletableFutureTest {
     public static void runWithFuture() {
         long start = System.currentTimeMillis();
         ExecutorService executorService = Executors.newFixedThreadPool(2);
-        List<com.java.note.Jdk.thread.completableFuture.RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new com.java.note.Jdk.thread.CompletableFuture.LearnRecordService());
+        List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new LearnRecordService());
         List<Future<String>> futures = remoteLoaders.stream().map(remoteLoader -> executorService.submit(remoteLoader::load)).collect(Collectors.toList());
         List<String> list = futures.stream().map(future -> {
             try {
@@ -59,8 +59,8 @@ public class CompletableFutureTest {
 
     public static void runWithParalleStream() {
         long start = System.currentTimeMillis();
-        List<com.java.note.Jdk.thread.completableFuture.RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new com.java.note.Jdk.thread.CompletableFuture.LearnRecordService(), new com.java.note.Jdk.thread.CompletableFuture.WatchRecordService(), new com.java.note.Jdk.thread.CompletableFuture.LabelService(), new com.java.note.Jdk.thread.CompletableFuture.LabelService());
-        List<String> collect = remoteLoaders.parallelStream().map(com.java.note.Jdk.thread.completableFuture.RemoteLoader::load).collect(Collectors.toList());
+        List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new LearnRecordService(), new WatchRecordService(), new LabelService(), new LabelService());
+        List<String> collect = remoteLoaders.parallelStream().map(RemoteLoader::load).collect(Collectors.toList());
         System.out.println(collect);
         long end = System.currentTimeMillis();
         System.out.println("总共花费时间:" + (end - start));
@@ -99,7 +99,7 @@ public class CompletableFutureTest {
     //依然是采用的两个Stream来完成的,并行流的结果差不多，消耗时间
     public static void runWithCompletableFuture3() {
         long start = System.currentTimeMillis();
-        List<com.java.note.Jdk.thread.completableFuture.RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new com.java.note.Jdk.thread.CompletableFuture.LearnRecordService(), new com.java.note.Jdk.thread.CompletableFuture.LabelService(), new com.java.note.Jdk.thread.CompletableFuture.OrderService(), new com.java.note.Jdk.thread.CompletableFuture.WatchRecordService());
+        List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new LearnRecordService(), new LabelService(), new OrderService(), new WatchRecordService());
         List<CompletableFuture<String>> completableFutures = remoteLoaders.stream().map(loader -> CompletableFuture.supplyAsync(loader::load)).collect(Collectors.toList());
 //        List<CompletableFuture<String>> completableFutures2 = remoteLoaders.parallelStream().map(loader -> CompletableFuture.supplyAsync(loader::load)).collect(Collectors.toList());
         List<String> customerDetail = completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
@@ -115,7 +115,7 @@ public class CompletableFutureTest {
     //使用并行流无法自定义线程池，但是CompletableFuture可以
     public static void runWithCompletableFuture4() {
         long start = System.currentTimeMillis();
-        List<com.java.note.Jdk.thread.completableFuture.RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new com.java.note.Jdk.thread.CompletableFuture.LearnRecordService(), new com.java.note.Jdk.thread.CompletableFuture.LabelService(), new com.java.note.Jdk.thread.CompletableFuture.OrderService(), new com.java.note.Jdk.thread.CompletableFuture.WatchRecordService());
+        List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new LearnRecordService(), new LabelService(), new OrderService(), new WatchRecordService());
 
         ExecutorService executorService = Executors.newFixedThreadPool(Math.min(remoteLoaders.size(), 50));
 

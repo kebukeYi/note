@@ -1,5 +1,8 @@
-package com.java.note.Jdk.thread.completableFuture;
+package com.java.note.Jdk.thread.CompletableFuture;
 
+/**
+ * @author fang.com
+ */
 public interface RemoteLoader {
 
     String load();

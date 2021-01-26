@@ -11,14 +11,13 @@ import java.util.concurrent.Executors;
 
 /**
  * @Author : mmy
- * @Creat Time : //  :
+ * @Creat Time :
  * @Description
  */
 public class BIOServer {
 
     static final String HOST_NAME = "127.0.0.1";
     static int PORT = 32222;
-
 
     public static void main(String[] args) throws Exception {
         ServerSocket socket = new ServerSocket(PORT);
@@ -80,6 +79,5 @@ public class BIOServer {
             }
         }
     }
-
 
 }
