@@ -12,7 +12,7 @@ import lombok.Data;
 public class TransactionLogDTO {
 
     //事务ID
-    private Long Id;
+    private String id;
 
     //业务标识
     private String business;

@@ -36,6 +36,7 @@ public class NIOClient {
         channel.connect(new InetSocketAddress(ip, port));
         //将通道管理器和该通道绑定，并为该通道注册SelectionKey.OP_CONNECT事件。
         channel.register(selector, SelectionKey.OP_CONNECT);
+//        channel.register(selector, SelectionKey.OP_READ);
     }
 
     /**
@@ -47,7 +48,7 @@ public class NIOClient {
         //轮询访问Selector
         while (true) {
             //选择一组可以进行I/O的操作的事件，放在selector中，客户端的该方法不会阻塞
-            System.out.println(selector.select());
+            System.out.println("selector.select() : " + selector.select());
             //获得selector中选中的项的迭代器
             Iterator<SelectionKey> ite = this.selector.selectedKeys().iterator();
             while (ite.hasNext()) {

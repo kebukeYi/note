@@ -1,5 +1,6 @@
 package com.mmy.webflux.webclient;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -12,6 +13,8 @@ public class GreetingWebClient {
 
     @Value("${server.port}")
     public Integer port;
+
+
 
     private WebClient client = WebClient.create("http://localhost:" + Optional.ofNullable(port).orElse(8082));
 

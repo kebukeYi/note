@@ -1,22 +1,12 @@
-package com.rocketmq.producer.dto;
+package com.rocketmq.customter.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-/**
- * @Author : fang.com
- * @CreatTime : 2021-01-27 13:01
- * @Description :
- * @Version :  0.0.1
- */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class OrderDTO {
-
     //主键id
     private Long id;
+    //用户id
     private Long userid;
     //订单code
     private Integer commodityCode;
@@ -26,6 +16,4 @@ public class OrderDTO {
     private String orderNo;
     //订单金额
     private Double amount;
-
-
 }

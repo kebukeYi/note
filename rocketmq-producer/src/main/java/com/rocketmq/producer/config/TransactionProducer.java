@@ -1,4 +1,4 @@
-package com.rocketmq.producer;
+package com.rocketmq.producer.config;
 
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
@@ -20,11 +20,15 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class TransactionProducer {
+
     private String producerGroup = "ordertransgroup";
+
     private TransactionMQProducer producer;
     //用于执行本地事务和事务状态回查的监听器
     @Autowired
+
     OrderTransactionListener orderTransactionListener;
+
     //执行任务的线程池
     ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 60,
             TimeUnit.SECONDS, new ArrayBlockingQueue<>(50));
@@ -32,7 +36,7 @@ public class TransactionProducer {
     @PostConstruct
     public void init() {
         producer = new TransactionMQProducer(producerGroup);
-        producer.setNamesrvAddr("127.0.0.1:9876");
+        producer.setNamesrvAddr("39.96.63.187:9876");
         producer.setSendMsgTimeout(Integer.MAX_VALUE);
         producer.setExecutorService(executor);
         producer.setTransactionListener(orderTransactionListener);

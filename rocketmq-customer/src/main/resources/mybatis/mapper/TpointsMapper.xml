@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rocketmq.customter.mapper.TpointsMapper">
+
+    <insert id="insert">
+        INSERT INTO tpoints(userid,orderno, points, remarks)
+        VALUES (#{userid},#{orderno}, #{points}, #{remarks});
+    </insert>
+
+    <select id="getByOrderNo" resultType="java.lang.Integer">
+select count(1) from tpoints  where  orderno=#{orderno}
+    </select>
+
+
+</mapper>

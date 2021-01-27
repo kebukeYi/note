@@ -15,7 +15,9 @@ import javax.annotation.PostConstruct;
  */
 @Component
 public class Consumer {
+
     String consumerGroup = "consumer-group";
+
     DefaultMQPushConsumer consumer;
 
     @Autowired
@@ -24,7 +26,7 @@ public class Consumer {
     @PostConstruct
     public void init() throws MQClientException {
         consumer = new DefaultMQPushConsumer(consumerGroup);
-        consumer.setNamesrvAddr("127.0.0.1:9876");
+        consumer.setNamesrvAddr("39.96.63.187:9876");
         consumer.subscribe("order", "*");
         consumer.registerMessageListener(orderListener);
         consumer.start();

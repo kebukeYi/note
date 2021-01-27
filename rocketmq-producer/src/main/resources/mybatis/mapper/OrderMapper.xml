@@ -4,8 +4,11 @@
 
 
     <insert id="createOrder">
-        insert  into order (id,commodity_code,transaction_id,business,order_no,foreign_key)
-        values (#{id},#{commodityCode},#{transactionId},#{business},#{orderNo},#{foreignKey});
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into ac_order (commodity_code,transaction_id,order_no)
+        values (#{commodityCode},#{transactionId},#{orderNo});
     </insert>
 
 

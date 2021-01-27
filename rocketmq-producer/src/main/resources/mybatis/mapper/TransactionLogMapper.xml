@@ -4,8 +4,8 @@
 
 
     <insert id="insert">
-        insert  into transactionlog  (id,business ,foreignkey)
-        values (#{id},#{business},#{foreignkey});
+        insert  into transactionlog(id,business ,foreignkey)
+        values (#{id},#{business},#{foreignKey});
     </insert>
 
 </mapper>

@@ -20,19 +20,17 @@ public class PhantomReferenceDemo {
         Object o = new Object();
         PhantomReferenceDemo phantomReferenceDemo = new PhantomReferenceDemo();
         ReferenceQueue<PhantomReferenceDemo> referenceQueue = new ReferenceQueue<>();
-        PhantomReference<PhantomReferenceDemo> phantomReference = new PhantomReference<PhantomReferenceDemo>(phantomReferenceDemo, referenceQueue);
+        PhantomReference<PhantomReferenceDemo> phantomReference = new PhantomReference<>(phantomReferenceDemo, referenceQueue);
         //java.lang.Object@21b8d17c
         System.out.println(phantomReferenceDemo);
         //null
         System.out.println(phantomReference.get());
         //null
         System.out.println(referenceQueue.poll());
-
         System.out.println("========================");
         o = null;
         System.gc();
         Thread.sleep(500);
-
         //null
         System.out.println(phantomReferenceDemo);
         //null

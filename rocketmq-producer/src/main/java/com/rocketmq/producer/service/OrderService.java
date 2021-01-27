@@ -5,7 +5,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 
 public interface OrderService {
 
-    Integer createOrder(OrderDTO order, Long transactionId);
+    Integer createOrder(OrderDTO order, String transactionId);
 
     void createOrder(OrderDTO order) throws MQClientException;
 }

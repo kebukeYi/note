@@ -53,10 +53,13 @@ public class ThreadLocalDemo {
                 System.out.println("after remove : " + localVar_3.get());
             }
         });
+
+        localVar_1.set("线程1 localVar1_1");
         t1.start();
         Thread.sleep(2000);
-        localVar_1 = null;
+        localVar_1.set("线程1 localVar1_2");
+        //localVar_1 = null;
         t2.start();
-
+        System.out.println("main : " + localVar_1.get());
     }
 }

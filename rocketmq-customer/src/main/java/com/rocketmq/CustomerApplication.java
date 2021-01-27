@@ -3,6 +3,7 @@ package com.rocketmq;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
  * @author fang.com
  */
 @SpringBootApplication
+@MapperScan("com.rocketmq.customter.mapper")
 public class CustomerApplication {
 
     public static void main(String[] args) {

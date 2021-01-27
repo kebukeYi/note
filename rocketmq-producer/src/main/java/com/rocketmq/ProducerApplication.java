@@ -27,7 +27,7 @@ public class ProducerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        //rocketMQTemplate.convertAndSend("test-topic-1", "Hello, World!");
-        //rocketMQTemplate.send("test-topic-1", MessageBuilder.withPayload("Hello, World! I'm from spring message").build());
+        rocketMQTemplate.convertAndSend("test-topic-1", "Hello, World!");
+        rocketMQTemplate.send("test-topic-1", MessageBuilder.withPayload("Hello, World! I'm from spring message of producer").build());
     }
 }

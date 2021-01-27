@@ -2,7 +2,7 @@ package com.rocketmq.producer.service.lmpl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.alibaba.fastjson.JSON;
-import com.rocketmq.producer.TransactionProducer;
+import com.rocketmq.producer.config.TransactionProducer;
 import com.rocketmq.producer.dto.OrderDTO;
 import com.rocketmq.producer.dto.TransactionLogDTO;
 import com.rocketmq.producer.mapper.OrderMapper;
@@ -34,22 +34,20 @@ public class OrderServicelmpl implements OrderService {
     private TransactionProducer producer;
 
     Snowflake snowflake = new Snowflake(1, 1);
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     //执行本地事务时调用，将订单数据和事务日志写入本地数据库
     @Transactional
     @Override
-    public Integer createOrder(OrderDTO orderDTO, Long transactionId) {
+    public Integer createOrder(OrderDTO orderDTO, String transactionId) {
         //1.创建订单
-        Order order = new Order();
-        BeanUtils.copyProperties(orderDTO, order);
-
         orderMapper.createOrder(orderDTO);
         //2.写入事务日志
         TransactionLogDTO log = new TransactionLogDTO();
         log.setId(transactionId);
         log.setBusiness("order");
-        log.setForeignKey(String.valueOf(orderDTO.getTransactionId()));
+        log.setForeignKey(String.valueOf(orderDTO.getId()));
         transactionLogMapper.insert(log);
         logger.info("订单创建完成。{}", orderDTO);
         return 1;
@@ -58,8 +56,12 @@ public class OrderServicelmpl implements OrderService {
     //前端调用，只用于向RocketMQ发送事务消息
     @Override
     public void createOrder(OrderDTO order) throws MQClientException {
+        //雪花算法生成事务id
         order.setTransactionId(snowflake.nextId());
+        //雪花生成订单号码
         order.setOrderNo(snowflake.nextIdStr());
+        //单价
+        order.setAmount(23.4);
         TransactionSendResult sendResult = producer.send(JSON.toJSONString(order), "order");
     }
 }

@@ -12,7 +12,7 @@ import lombok.Data;
 public class TpointsDTO {
     private Long id;
     private Long userid;
-    private Long orderno;
+    private String orderno;
     private Long points;
     private String remarks;
 }

@@ -1,4 +1,4 @@
-package com.rocketmq.producer;
+package com.rocketmq.producer.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rocketmq.producer.dto.OrderDTO;
@@ -24,6 +24,7 @@ public class OrderTransactionListener implements TransactionListener {
 
     @Autowired
     OrderService orderService;
+
     @Autowired
     TransactionLogService transactionLogService;
 
@@ -37,7 +38,7 @@ public class OrderTransactionListener implements TransactionListener {
         try {
             String body = new String(message.getBody());
             OrderDTO order = JSONObject.parseObject(body, OrderDTO.class);
-            orderService.createOrder(order, Long.valueOf(message.getTransactionId()));
+            orderService.createOrder(order, (message.getTransactionId()));
             state = LocalTransactionState.COMMIT_MESSAGE;
             logger.info("本地事务已提交。{}", message.getTransactionId());
         } catch (Exception e) {

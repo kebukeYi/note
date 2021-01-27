@@ -19,6 +19,7 @@ public class WeakReferenceDemo {
         System.gc();
         System.out.println("======================");
         System.out.println(o);
+        //null 会被回收掉
         System.out.println(weakReference.get());
     }
 }

@@ -5,7 +5,7 @@ import java.lang.ref.SoftReference;
 /**
  * @Author : mmy
  * @Creat Time : 2020/7/27  10:56
- * @Description 有内存 就不回收 没有内存就 回收
+ * @Description 软引用有内存 就不回收 没有内存就 回收
  */
 public class SoftReferenceDemo {
 
@@ -43,7 +43,7 @@ public class SoftReferenceDemo {
 
 
     public static void main(String[] args) {
-//        softMemoryEnough();
-        softMemoryNotEnough();
+        softMemoryEnough();
+//        softMemoryNotEnough();
     }
 }

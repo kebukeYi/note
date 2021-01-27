@@ -28,7 +28,8 @@ public class BIOServer {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         while (flag) {
             try {
-                client = socket.accept();//底层硬件 阻塞
+                //底层硬件 阻塞
+                client = socket.accept();
             } catch (SocketTimeoutException e) {
                 System.out.println("做其他事 " + System.currentTimeMillis());
                 continue;
@@ -66,7 +67,10 @@ public class BIOServer {
                         this.out.print("");
                         this.flag = false;
                     } else {
+                        //也会由于socket写缓冲区满了而阻塞
                         out.println("我是Server " + var);
+                        //out 在Java堆中也是会有一个缓冲区 等待满了就会复制到 内核态的socket缓冲区去
+                        //out.write();
                     }
                 }
             }
