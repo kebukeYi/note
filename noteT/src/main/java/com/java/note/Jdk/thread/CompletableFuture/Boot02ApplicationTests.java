@@ -67,6 +67,7 @@ public class Boot02ApplicationTests {
             }
             return callableNum;
         }, executorService);
+
         Instant endCompletableFuture = Instant.now();
         CompletableFuture.allOf(longCompletableFuture1, longCompletableFuture2).join();
         System.out.println(longCompletableFuture1.get() + longCompletableFuture2.get() + "CompletableFuture多线程耗时:" + (endCompletableFuture.getNano() - startCompletableFuture.getNano()));

@@ -10,6 +10,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,8 +23,11 @@ import java.util.List;
  */
 @Component
 public class OrderListener implements MessageListenerConcurrently {
+
     @Autowired
+    @Qualifier(value = "TpointsServcicelmpl")
     TpointsService pointsService;
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
