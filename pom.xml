@@ -6,6 +6,7 @@
 
     <modules>
         <module>JavaSrc</module>
+        <module>guice</module>
     </modules>
 
     <parent>

@@ -1,5 +1,8 @@
 package com.java.note.Jdk;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author : mmy
  * @Creat Time : 2020/7/13  22:55
@@ -58,7 +61,24 @@ public class StringCast {
         String[] h = new String[2];
         Object[] g = h;
         h[0] = "ff";
-        g[1] = new Integer(2);
+        // g[1] = new Integer(2);
 
+        Object[] obj = new Object[]{"1", "2", "3"};
+        obj = new Integer[]{123};
+        Integer[] integers = new Integer[]{122334, 2323};
+        // integers[0] = (Integer) new Object();
+        Map<Object, Object> map = new HashMap<>();
+        map.put("21", 21);
+        map.put(22, "22");
+
+        print((String) map.get(22));
+        print((String) map.get(21));
+        while (true) {
+
+        }
+    }
+
+    public static void print(String a) {
+        System.out.println(a);
     }
 }
