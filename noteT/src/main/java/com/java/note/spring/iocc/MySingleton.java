@@ -8,11 +8,12 @@ import java.util.Map;
 /**
  * @Author : fang.com
  * @CreatTime : 2020-12-25 17:54
- * @Description :
+ * @Description : 简版 Spring 循环依赖
  * @Version :  0.0.1
  */
 public class MySingleton {
 
+    //一级缓存
     private static Map<String, Object> cacheMap = new HashMap<>(2);
 
     public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -23,8 +24,8 @@ public class MySingleton {
             getBean(aClass);
         }
         // check
-        System.out.println(getBean(B.class).getA() == getBean(A.class));
         System.out.println(getBean(A.class).getB() == getBean(B.class));
+        System.out.println(getBean(B.class).getA() == getBean(A.class));
     }
 
     private static <T> T getBean(Class<T> beanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -51,7 +52,6 @@ public class MySingleton {
         }
         // 属性填充完成，返回
         return (T) newInstance;
-
     }
 
 

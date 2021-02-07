@@ -32,9 +32,9 @@ public class DynamicProxyTest {
         //一个InvocationHandler对象，表示的是当我这个动态代理对象在调用方法的时候，会关联到哪一个InvocationHandler对象上
         //那么我这个代理对象就会实现了这组接口
         //原生实现类的类加载器  将要实现的接口    完成实现的实体
-        Operate operationProxy1 = (Operate) Proxy.newProxyInstance(operate.getClass().getClassLoader(), operate.getClass().getInterfaces(), handler);
+        Operate operationProxy = (Operate) Proxy.newProxyInstance(operate.getClass().getClassLoader(), operate.getClass().getInterfaces(), handler);
 
-        Operate operationProxy = (Operate) Proxy.newProxyInstance(Operate.class.getClassLoader(), new Class<?>[]{Operate.class}, handler1);
+      //  Operate operationProxy = (Operate) Proxy.newProxyInstance(Operate.class.getClassLoader(), new Class<?>[]{Operate.class}, handler1);
 
         //生成代理类字节码
         String proxyName = "OperateService5";
