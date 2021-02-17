@@ -33,8 +33,8 @@ public class InvocationHandlerImpl implements InvocationHandler {
         System.out.println("动态代理 开始");
         System.out.println("before calling method: " + method.getName());
         //调用操纵者的具体操作方法
-//        Object result = method.invoke(operate, args);
-        String result = "调用其他接口的返回值";
+        Object result = method.invoke(operate, args);
+//        String result = "调用其他接口的返回值";
         System.out.println("result : " + result);
         System.out.println("after calling method: " + method.getName());
         System.out.println("动态代理 结束");

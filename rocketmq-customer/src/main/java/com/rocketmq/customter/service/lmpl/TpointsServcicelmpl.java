@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @Description :
  * @Version :  0.0.1
  */
-@Service
+@Service(value = "TpointsServcicelmpl")
 public class TpointsServcicelmpl implements TpointsService {
 
     @Autowired
