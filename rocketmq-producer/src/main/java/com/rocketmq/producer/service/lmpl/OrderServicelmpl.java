@@ -54,6 +54,8 @@ public class OrderServicelmpl implements OrderService {
     }
 
     //前端调用，只用于向RocketMQ发送事务消息
+    //当 Producer端对它二次确认后，也就是 Commit之后，Consumer端才可以消费到；那么如果是Rollback，该消息则会被删除，永远不会被消费到。
+    //相当于 半消息
     @Override
     public void createOrder(OrderDTO order) throws MQClientException {
         //雪花算法生成事务id

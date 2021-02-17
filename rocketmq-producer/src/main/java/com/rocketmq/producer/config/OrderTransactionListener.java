@@ -50,7 +50,7 @@ public class OrderTransactionListener implements TransactionListener {
 
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt messageExt) {
-        logger.info("开始回查本地事务状态。{}", messageExt.getTransactionId());
+        logger.info("开始回调查寻本地事务状态。{}", messageExt.getTransactionId());
         LocalTransactionState state;
         String transactionId = messageExt.getTransactionId();
         if (transactionLogService.get(transactionId) > 0) {

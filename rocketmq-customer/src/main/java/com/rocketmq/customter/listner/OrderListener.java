@@ -41,4 +41,28 @@ public class OrderListener implements MessageListenerConcurrently {
             return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         }
     }
+
+    /*
+      消息处理，第3次处理失败后，发送邮件通知人工介入
+      @param message
+      @return
+     */
+    private boolean processor(MessageExt message) {
+        String body = new String(message.getBody());
+        try {
+            logger.info("消息处理....{}", body);
+            int k = 1 / 0;
+            return true;
+        } catch (Exception e) {
+            if (message.getReconsumeTimes() >= 3) {
+                logger.error("消息重试已达最大次数，将通知业务人员排查问题。{}", message.getMsgId());
+                sendMail(message);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    private void sendMail(MessageExt message) {
+    }
 }

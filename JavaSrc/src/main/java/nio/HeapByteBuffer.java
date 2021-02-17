@@ -29,19 +29,11 @@ package java.nio;
 
 
 /**
-
  * A read/write HeapByteBuffer.
-
-
-
-
-
-
  */
 
 class HeapByteBuffer
-    extends ByteBuffer
-{
+        extends ByteBuffer {
 
     // For speed these fields are actually declared in X-Buffer;
     // these declarations are here as documentation
@@ -61,8 +53,6 @@ class HeapByteBuffer
         */
 
 
-
-
     }
 
     HeapByteBuffer(byte[] buf, int off, int len) { // package-private
@@ -74,14 +64,11 @@ class HeapByteBuffer
         */
 
 
-
-
     }
 
     protected HeapByteBuffer(byte[] buf,
-                                   int mark, int pos, int lim, int cap,
-                                   int off)
-    {
+                             int mark, int pos, int lim, int cap,
+                             int off) {
 
         super(mark, pos, lim, cap, buf, off);
         /*
@@ -90,41 +77,37 @@ class HeapByteBuffer
         */
 
 
-
-
     }
 
     public ByteBuffer slice() {
         return new HeapByteBuffer(hb,
-                                        -1,
-                                        0,
-                                        this.remaining(),
-                                        this.remaining(),
-                                        this.position() + offset);
+                -1,
+                0,
+                this.remaining(),
+                this.remaining(),
+                this.position() + offset);
     }
 
     public ByteBuffer duplicate() {
         return new HeapByteBuffer(hb,
-                                        this.markValue(),
-                                        this.position(),
-                                        this.limit(),
-                                        this.capacity(),
-                                        offset);
+                this.markValue(),
+                this.position(),
+                this.limit(),
+                this.capacity(),
+                offset);
     }
 
     public ByteBuffer asReadOnlyBuffer() {
 
         return new HeapByteBufferR(hb,
-                                     this.markValue(),
-                                     this.position(),
-                                     this.limit(),
-                                     this.capacity(),
-                                     offset);
-
+                this.markValue(),
+                this.position(),
+                this.limit(),
+                this.capacity(),
+                offset);
 
 
     }
-
 
 
     protected int ix(int i) {
@@ -132,17 +115,13 @@ class HeapByteBuffer
     }
 
     public byte get() {
+        //
         return hb[ix(nextGetIndex())];
     }
 
     public byte get(int i) {
         return hb[ix(checkIndex(i))];
     }
-
-
-
-
-
 
 
     public ByteBuffer get(byte[] dst, int offset, int length) {
@@ -159,7 +138,6 @@ class HeapByteBuffer
     }
 
 
-
     public boolean isReadOnly() {
         return false;
     }
@@ -170,14 +148,12 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public ByteBuffer put(int i, byte x) {
 
         hb[ix(checkIndex(i))] = x;
         return this;
-
 
 
     }
@@ -192,7 +168,6 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public ByteBuffer put(ByteBuffer src) {
@@ -200,12 +175,12 @@ class HeapByteBuffer
         if (src instanceof HeapByteBuffer) {
             if (src == this)
                 throw new IllegalArgumentException();
-            HeapByteBuffer sb = (HeapByteBuffer)src;
+            HeapByteBuffer sb = (HeapByteBuffer) src;
             int n = sb.remaining();
             if (n > remaining())
                 throw new BufferOverflowException();
             System.arraycopy(sb.hb, sb.ix(sb.position()),
-                             hb, ix(position()), n);
+                    hb, ix(position()), n);
             sb.position(sb.position() + n);
             position(position() + n);
         } else if (src.isDirect()) {
@@ -220,7 +195,6 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public ByteBuffer compact() {
@@ -232,11 +206,7 @@ class HeapByteBuffer
         return this;
 
 
-
     }
-
-
-
 
 
     byte _get(int i) {                          // package-private
@@ -248,11 +218,9 @@ class HeapByteBuffer
         hb[i] = b;
 
 
-
     }
 
     // char
-
 
 
     public char getChar() {
@@ -264,12 +232,10 @@ class HeapByteBuffer
     }
 
 
-
     public ByteBuffer putChar(char x) {
 
         Bits.putChar(this, ix(nextPutIndex(2)), x, bigEndian);
         return this;
-
 
 
     }
@@ -280,30 +246,28 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public CharBuffer asCharBuffer() {
         int size = this.remaining() >> 1;
         int off = offset + position();
         return (bigEndian
-                ? (CharBuffer)(new ByteBufferAsCharBufferB(this,
-                                                               -1,
-                                                               0,
-                                                               size,
-                                                               size,
-                                                               off))
-                : (CharBuffer)(new ByteBufferAsCharBufferL(this,
-                                                               -1,
-                                                               0,
-                                                               size,
-                                                               size,
-                                                               off)));
+                ? (CharBuffer) (new ByteBufferAsCharBufferB(this,
+                -1,
+                0,
+                size,
+                size,
+                off))
+                : (CharBuffer) (new ByteBufferAsCharBufferL(this,
+                -1,
+                0,
+                size,
+                size,
+                off)));
     }
 
 
     // short
-
 
 
     public short getShort() {
@@ -315,12 +279,10 @@ class HeapByteBuffer
     }
 
 
-
     public ByteBuffer putShort(short x) {
 
         Bits.putShort(this, ix(nextPutIndex(2)), x, bigEndian);
         return this;
-
 
 
     }
@@ -331,30 +293,28 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public ShortBuffer asShortBuffer() {
         int size = this.remaining() >> 1;
         int off = offset + position();
         return (bigEndian
-                ? (ShortBuffer)(new ByteBufferAsShortBufferB(this,
-                                                                 -1,
-                                                                 0,
-                                                                 size,
-                                                                 size,
-                                                                 off))
-                : (ShortBuffer)(new ByteBufferAsShortBufferL(this,
-                                                                 -1,
-                                                                 0,
-                                                                 size,
-                                                                 size,
-                                                                 off)));
+                ? (ShortBuffer) (new ByteBufferAsShortBufferB(this,
+                -1,
+                0,
+                size,
+                size,
+                off))
+                : (ShortBuffer) (new ByteBufferAsShortBufferL(this,
+                -1,
+                0,
+                size,
+                size,
+                off)));
     }
 
 
     // int
-
 
 
     public int getInt() {
@@ -366,12 +326,10 @@ class HeapByteBuffer
     }
 
 
-
     public ByteBuffer putInt(int x) {
 
         Bits.putInt(this, ix(nextPutIndex(4)), x, bigEndian);
         return this;
-
 
 
     }
@@ -382,30 +340,28 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public IntBuffer asIntBuffer() {
         int size = this.remaining() >> 2;
         int off = offset + position();
         return (bigEndian
-                ? (IntBuffer)(new ByteBufferAsIntBufferB(this,
-                                                             -1,
-                                                             0,
-                                                             size,
-                                                             size,
-                                                             off))
-                : (IntBuffer)(new ByteBufferAsIntBufferL(this,
-                                                             -1,
-                                                             0,
-                                                             size,
-                                                             size,
-                                                             off)));
+                ? (IntBuffer) (new ByteBufferAsIntBufferB(this,
+                -1,
+                0,
+                size,
+                size,
+                off))
+                : (IntBuffer) (new ByteBufferAsIntBufferL(this,
+                -1,
+                0,
+                size,
+                size,
+                off)));
     }
 
 
     // long
-
 
 
     public long getLong() {
@@ -417,12 +373,10 @@ class HeapByteBuffer
     }
 
 
-
     public ByteBuffer putLong(long x) {
 
         Bits.putLong(this, ix(nextPutIndex(8)), x, bigEndian);
         return this;
-
 
 
     }
@@ -433,30 +387,28 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public LongBuffer asLongBuffer() {
         int size = this.remaining() >> 3;
         int off = offset + position();
         return (bigEndian
-                ? (LongBuffer)(new ByteBufferAsLongBufferB(this,
-                                                               -1,
-                                                               0,
-                                                               size,
-                                                               size,
-                                                               off))
-                : (LongBuffer)(new ByteBufferAsLongBufferL(this,
-                                                               -1,
-                                                               0,
-                                                               size,
-                                                               size,
-                                                               off)));
+                ? (LongBuffer) (new ByteBufferAsLongBufferB(this,
+                -1,
+                0,
+                size,
+                size,
+                off))
+                : (LongBuffer) (new ByteBufferAsLongBufferL(this,
+                -1,
+                0,
+                size,
+                size,
+                off)));
     }
 
 
     // float
-
 
 
     public float getFloat() {
@@ -468,12 +420,10 @@ class HeapByteBuffer
     }
 
 
-
     public ByteBuffer putFloat(float x) {
 
         Bits.putFloat(this, ix(nextPutIndex(4)), x, bigEndian);
         return this;
-
 
 
     }
@@ -484,30 +434,28 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public FloatBuffer asFloatBuffer() {
         int size = this.remaining() >> 2;
         int off = offset + position();
         return (bigEndian
-                ? (FloatBuffer)(new ByteBufferAsFloatBufferB(this,
-                                                                 -1,
-                                                                 0,
-                                                                 size,
-                                                                 size,
-                                                                 off))
-                : (FloatBuffer)(new ByteBufferAsFloatBufferL(this,
-                                                                 -1,
-                                                                 0,
-                                                                 size,
-                                                                 size,
-                                                                 off)));
+                ? (FloatBuffer) (new ByteBufferAsFloatBufferB(this,
+                -1,
+                0,
+                size,
+                size,
+                off))
+                : (FloatBuffer) (new ByteBufferAsFloatBufferL(this,
+                -1,
+                0,
+                size,
+                size,
+                off)));
     }
 
 
     // double
-
 
 
     public double getDouble() {
@@ -519,12 +467,10 @@ class HeapByteBuffer
     }
 
 
-
     public ByteBuffer putDouble(double x) {
 
         Bits.putDouble(this, ix(nextPutIndex(8)), x, bigEndian);
         return this;
-
 
 
     }
@@ -535,67 +481,25 @@ class HeapByteBuffer
         return this;
 
 
-
     }
 
     public DoubleBuffer asDoubleBuffer() {
         int size = this.remaining() >> 3;
         int off = offset + position();
         return (bigEndian
-                ? (DoubleBuffer)(new ByteBufferAsDoubleBufferB(this,
-                                                                   -1,
-                                                                   0,
-                                                                   size,
-                                                                   size,
-                                                                   off))
-                : (DoubleBuffer)(new ByteBufferAsDoubleBufferL(this,
-                                                                   -1,
-                                                                   0,
-                                                                   size,
-                                                                   size,
-                                                                   off)));
+                ? (DoubleBuffer) (new ByteBufferAsDoubleBufferB(this,
+                -1,
+                0,
+                size,
+                size,
+                off))
+                : (DoubleBuffer) (new ByteBufferAsDoubleBufferL(this,
+                -1,
+                0,
+                size,
+                size,
+                off)));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
