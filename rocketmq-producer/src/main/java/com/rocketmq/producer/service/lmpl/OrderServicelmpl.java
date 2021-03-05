@@ -53,7 +53,7 @@ public class OrderServicelmpl implements OrderService {
         return 1;
     }
 
-    //前端调用，只用于向RocketMQ发送事务消息
+    //前端调用，只用于向RocketMQ发送事务消息的 half 半消息
     @Override
     public void createOrder(OrderDTO order) throws MQClientException {
         //雪花算法生成事务id
@@ -62,6 +62,7 @@ public class OrderServicelmpl implements OrderService {
         order.setOrderNo(snowflake.nextIdStr());
         //单价
         order.setAmount(23.4);
+        //发送half 消息
         TransactionSendResult sendResult = producer.send(JSON.toJSONString(order), "order");
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @Author : fang.com
  * @CreatTime : 2021-01-27 13:47
- * @Description :
+ * @Description : 但是现在我们接着来思考，如果我们在生产消息的时候用了事务消息之后，就真的可以保证数据就不会丢失了吗？
  * @Version :  0.0.1
  */
 @RestController
