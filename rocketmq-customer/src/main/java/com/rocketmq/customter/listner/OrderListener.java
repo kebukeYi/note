@@ -5,6 +5,7 @@ import com.rocketmq.customter.dto.OrderDTO;
 import com.rocketmq.customter.service.TpointsService;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
@@ -41,10 +42,43 @@ public class OrderListener implements MessageListenerConcurrently {
             }
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         } catch (Exception e) {
-            logger.error("处理消费者数据发生异常。{}", e);
+            logger.error("处理消费者数据发生异常 {}", e);
             return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         }
     }
+
+    public ConsumeOrderlyStatus consumeOrderlyMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
+        logger.info("消费者线程监听到消息。");
+        try {
+            for (MessageExt message : list) {
+                logger.info("开始对一些顺序消息进行处理");
+                OrderDTO order = JSONObject.parseObject(message.getBody(), OrderDTO.class);
+                pointsService.increasePoints(order);
+            }
+            return ConsumeOrderlyStatus.SUCCESS;
+        } catch (Exception e) {
+            logger.error("处理消费者数据发生异常 {}", e);
+            //稍微等待一会再发送数据
+            return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
+        }
+    }
+
+
+    public ConsumeConcurrentlyStatus consumeTagMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
+        logger.info("消费者线程监听到消息");
+        try {
+            for (MessageExt message : list) {
+                logger.info("开始处理订单数据，准备增加积分....");
+                OrderDTO order = JSONObject.parseObject(message.getBody(), OrderDTO.class);
+                pointsService.increasePoints(order);
+            }
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+        } catch (Exception e) {
+            logger.error("处理消费者数据发生异常 {}", e);
+            return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+        }
+    }
+
 
     /*
       消息处理，第3次处理失败后，发送邮件通知人工介入

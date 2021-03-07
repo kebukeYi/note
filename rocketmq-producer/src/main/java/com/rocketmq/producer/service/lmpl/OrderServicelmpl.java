@@ -28,8 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServicelmpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
+
     @Autowired
     private TransactionLogMapper transactionLogMapper;
+
     @Autowired
     private TransactionProducer producer;
 
@@ -65,5 +67,6 @@ public class OrderServicelmpl implements OrderService {
         //单价
         order.setAmount(23.4);
         TransactionSendResult sendResult = producer.send(JSON.toJSONString(order), "order");
+
     }
 }
