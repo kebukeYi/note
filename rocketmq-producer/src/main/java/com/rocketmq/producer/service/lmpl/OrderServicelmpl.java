@@ -66,6 +66,7 @@ public class OrderServicelmpl implements OrderService {
         order.setOrderNo(snowflake.nextIdStr());
         //单价
         order.setAmount(23.4);
+        //发送half 消息
         TransactionSendResult sendResult = producer.send(JSON.toJSONString(order), "order");
 
     }

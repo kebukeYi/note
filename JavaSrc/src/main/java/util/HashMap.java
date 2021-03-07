@@ -70,9 +70,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     static class Node<K, V> implements Map.Entry<K, V> {
         //每个元素的加工后的hash值
         final int hash;
-        //
         final K key;
-        //
         V value;
         //下一个元素指针
         Node<K, V> next;
@@ -497,8 +495,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                         break;
                     }
                     // 判断链表中结点的key值与插入的元素的key值是否相等
-                    if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k)))) {
-                        //找到了相同key的元素；相同就需要执行替换过程了
+                    if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
                         break;
                     }
                     // 用于遍历桶中的链表，与前面的e = p.next组合，可以遍历链表

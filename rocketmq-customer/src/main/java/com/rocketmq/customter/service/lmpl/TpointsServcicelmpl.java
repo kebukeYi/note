@@ -32,6 +32,7 @@ public class TpointsServcicelmpl implements TpointsService {
         if (pointsMapper.getByOrderNo(order.getOrderNo()) > 0) {
             logger.info("积分添加完成，订单已处理。{}", order.getOrderNo());
         } else {
+            //这里宕机怎么办？？？？
             TpointsDTO points = new TpointsDTO();
             points.setUserid(order.getUserid());
             points.setOrderno(order.getOrderNo());

@@ -15,7 +15,7 @@
     </select>
 
     <update id="batchUpdateUser" parameterType="java.util.List">
-        update user
+        update my_user
         <trim prefix="set" suffixOverrides=",">
 
             <trim prefix="name =case" suffix="end,">
