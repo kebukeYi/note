@@ -517,7 +517,6 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                 afterNodeAccess(e);
                 return oldValue;
             }
-        }
         //让HashMap的修改次数+1
         ++modCount;
         //判断当前Hash的键值对数量是否超过扩容阈值
@@ -1039,7 +1038,6 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     @Override
     public V replace(K key, V value) {
         Node<K, V> e;
-        //
         if ((e = getNode(hash(key), key)) != null) {
             V oldValue = e.value;
             e.value = value;
