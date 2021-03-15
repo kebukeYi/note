@@ -276,9 +276,7 @@ import sun.misc.Unsafe;
  * @author Doug Lea
  * @since 1.5
  */
-public abstract class AbstractQueuedSynchronizer
-        extends AbstractOwnableSynchronizer
-        implements java.io.Serializable {
+public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchronizer implements java.io.Serializable {
 
     private static final long serialVersionUID = 7373984972572414691L;
 
@@ -383,11 +381,13 @@ public abstract class AbstractQueuedSynchronizer
          * waitStatus的值，表示该结点（对应的线程）已被取消
          */
         static final int CANCELLED = 1;
+
         /**
          * waitStatus value to indicate successor's thread needs unparking
          * waitStatus的值，表示后继结点的状态（对应的线程）需要被唤醒
          */
         static final int SIGNAL = -1;
+
         /**
          * waitStatus value to indicate thread is waiting on condition
          * waitStatus的值，表示该结点（对应的线程）在等待某一条件
@@ -611,12 +611,12 @@ public abstract class AbstractQueuedSynchronizer
             if (t == null) {
                 //作为第一个后继节点  因为之前第一个获取锁的线程并没有设置节点 因此
                 // 1. 这里需要设计一个head 节点
-                // 2. 并且追加 node节点
+                // 2. 并且追加 node 节点
 
                 //cas成功说明成功设置head节点
-                if (compareAndSetHead(new Node()))
+                if (compareAndSetHead(new Node())) {
                     tail = head;
-
+                }
                 //注意：此时并没有返回 而是继续for循环 下一次将会执行 以下 普通入队 逻辑
             } else {
                 // 普通入队方式   只不过 会保证一定加入队列中
@@ -643,20 +643,21 @@ public abstract class AbstractQueuedSynchronizer
         //快速入队
         //获取队尾节点 尾插法
         Node pred = tail;
+
         //队列中存在节点  队列不为空
         if (pred != null) {
             //当前新节点指向 尾节点
             node.prev = pred;
             //使用CAS尝试把 tail 指向新节点  可能存在多个线程修改
             if (compareAndSetTail(pred, node)) {
-                //指向完成后 需要把之前的为尾节点 指向当前节点
-                //Todo 存在并发问题 ：CAS 成功了 下层代码还未进行赋值  其他地方就直接调用  node= pred.next  了
+                //指向完成后 需要把之前的尾节点 指向当前节点 双向链表么
+                //Todo 存在并发问题 ：CAS 成功了 下层代码还未进行赋值  其他地方就直接调用  pred.next = node 了
                 pred.next = node;
                 return node;
             }
         }
 
-        // 完整入队
+        // 完整入队方法
         // 1. 如果等待队列为空
         // 2. CAS失败
         enq(node);
@@ -696,9 +697,10 @@ public abstract class AbstractQueuedSynchronizer
         int ws = node.waitStatus;
 
         //当是 -1 状态时 需要唤醒后续节点
-        if (ws < 0)
+        if (ws < 0) {
             //设置成 0 状态 原因：当前当前节点已经完成喊后继节点的任务了
             compareAndSetWaitStatus(node, ws, 0);
+        }
 
         /*
          * Thread to unpark is held in successor, which is normally
@@ -709,21 +711,25 @@ public abstract class AbstractQueuedSynchronizer
         //获取后置节点的第一个节点
         Node s = node.next;
 
-        //1.后置节点为null ?   1. cas设置新节点为tail 调用此方法时 那么后继节点就是null   2. 入队逻辑中  pred.next = node 还未赋值 为null
+        //1.后置节点为null ?   1. cas 设置新节点为 tail 调用此方法时 那么后继节点就是null   2. 入队逻辑中  pred.next = node 还未赋值 为 null
         // 2.说明 node节点 为取消状态，得找一个合适的可以被唤醒的节点
         if (s == null || s.waitStatus > 0) {
             s = null;
-            //从尾部向前获取到一个 里 node最近的 并且 不为null 并且 状态不是取消的节点
-            for (Node t = tail; t != null && t != node; t = t.prev)
-                if (t.waitStatus <= 0)
+            //为何从尾部找？
+            //从尾部向前获取到一个 里 node 最近的 并且 不为 null 并且 状态不是取消的节点
+            for (Node t = tail; t != null && t != node; t = t.prev) {
+                if (t.waitStatus <= 0) {
                     s = t;
-
+                }
+            }
             //以上循环可能找不到 node 节点 node 可能是null
         }
 
         //如果找到可以唤醒的 节点
-        if (s != null)
+        //那么之前在 963行 parkAndCheckInterrupt 执行的 park 操作就会继续醒来自旋获取锁
+        if (s != null) {
             LockSupport.unpark(s.thread);
+        }
     }
 
     /**
@@ -931,15 +937,13 @@ public abstract class AbstractQueuedSynchronizer
                 node.prev = pred = pred.prev;
             } while (pred.waitStatus > 0);
             //找到好爸爸后，退出循环
-            //隐含着一种操作，CANCELED状态的节点会被出队。
+            //隐含着一种操作，CANCELED 状态的节点会被出队
             pred.next = node;
         } else {
-            //当前node前置节点的状态就是 0 的这一种情况。
-            //将当前线程node的前置node，状态强制设置为 SIGNAl，表示前置节点释放锁之后需要 喊醒我..
+            //当前 node 前置节点的状态就是 0 的这一种情况
+            //将当前线程 node 的前置 preNode，状态强制设置为 SIGNAl，表示前置节点释放锁之后需要 喊醒我...
             compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
         }
-
-
         return false;
     }
 
@@ -954,13 +958,15 @@ public abstract class AbstractQueuedSynchronizer
      * Convenience method to park and then check if interrupted
      *
      * @return {@code true} if interrupted
-     * 如果某线程A调用park，那么除非另外一个线程调用unpark(A)给A一个许可，否则线程A将阻塞在park操作上。
+     * 如果某线程 A 调用park，那么除非另外一个线程调用 unpark(A) 给A一个许可，否则线程 A 将阻塞在 park 操作上
      */
     private final boolean parkAndCheckInterrupt() {
         // 通过 LockSupport 类的 park 方法来阻塞当前线程
         // 阻塞中,等待被唤醒；
         LockSupport.park(this);
         // 被唤醒后，返回中断标志
+        //隐蔽点：由于此线程执行挂起 park 操作，当外部有线程想要中断这个线程时 并不会抛出中断异常，
+        //只会改变当前线程内部的中断状态值；就会返回true；
         return Thread.interrupted();
     }
 
@@ -974,8 +980,7 @@ public abstract class AbstractQueuedSynchronizer
      */
 
     /**
-     * Acquires in exclusive uninterruptible mode for thread already in
-     * queue. Used by condition wait methods as well as acquire.
+     * Acquires in exclusive uninterruptible mode for thread already in queue. Used by condition wait methods as well as acquire.
      *
      * @param node the node
      * @param arg  the acquire argument
@@ -996,35 +1001,40 @@ public abstract class AbstractQueuedSynchronizer
             // 自旋
             for (; ; ) {
                 //什么时候会执行到这里？
-                //1.进入for循环后 当前线程未被park 前h会执行这
+                //1.进入for循环后 当前线程未被 park 前会执行这
                 //2. 挂起线程 被唤醒后 会执行 这里
-
+                //获取 node 前置节点 p
                 final Node p = node.predecessor();
-                // 如果node的前驱结点p是head，表示 node是第二个结点，就可以尝试去获取资源了
-                // 成立：获得锁  执行逻辑
-                //不成立：说明head的线程还未释放锁 当前线程还需继续park
+                // 条件一 如果 node 的前驱结点 p 是 head，表示 node 是第二个结点，就可以尝试去获取资源了
+                // 条件二 成立：获得锁  执行逻辑
+                // 条件二  不成立：说明 head 的线程还未释放锁 当前线程还需继续 park
                 if (p == head && tryAcquire(arg)) {
-                    // 拿到资源后，将head指向当前 结点
-                    // 所以head所指的结点，就是当前获取到资源的那个结点
+                    // 拿到资源后，将 head 指向当前 结点
+                    // 所以 head 所指的结点，就是当前获取到资源的那个结点
                     setHead(node);
                     p.next = null; // help GC
                     //当前线程获取锁的过程中没有发生异常
                     failed = false;
+                    //记得执行 finally 代码
                     return interrupted;
                 }
 
-                //当前线程获取 锁资源 失败后 是否需要被挂起？
-                //如果shouldParkAfterFailedAcquire方法调用返回 true，则代表当前节点需要 进入阻塞/挂起  -> 进入parkAndCheckInterrupt方法；否则不需要挂起 继续自选
+                //当前线程获取 锁资源 失败后 是否需要被挂起？ 或者 前置节点不是 head 节点的情况；
+                //如果 shouldParkAfterFailedAcquire 方法调用返回 true，则代表当前节点需要 进入阻塞/挂起  -> 进入 parkAndCheckInterrupt 方法；否则不需要挂起 继续自旋；
                 //parkAndCheckInterrupt 作用: 挂起当前线程 并且线程被唤醒之后 返回当前线程的中断标记
-                // < 1. 正常唤醒  unpark()   2. 其他线程给 当前挂起的线程一个中断信号 目的：停止挂起>
-                if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt())
+                // < 1. 正常唤醒  unpark()   2. 其他线程给 当前挂起的线程一个中断信号 目的：停止挂起 >
+                if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt()) {
                     //设置中断标志位  而另外的 则是抛出中断异常
                     interrupted = true;
-            }
+                }
+
+            }//for结束
         } finally {
-            if (failed)
-                //
+            //只有在此程序抛出了异常 才会执行取消操作
+            if (failed) {
+                //取消指定线程参与竞争
                 cancelAcquire(node);
+            }
         }
     }
 
@@ -1242,7 +1252,8 @@ public abstract class AbstractQueuedSynchronizer
      *                                       thrown in a consistent fashion for synchronization to work
      *                                       correctly.
      * @throws UnsupportedOperationException if exclusive mode is not supported
-     *                                       首先调用tryAcquire(arg)尝试去获取资源。前面提到了这个方法是在子类具体实现的。
+     *                                       首先调用tryAcquire(arg)尝试去获取资源，立即返回，即便是没有获取到；
+     *                                       前面提到了这个方法是在子类具体实现的。
      */
     protected boolean tryAcquire(int arg) {
         throw new UnsupportedOperationException();
@@ -1376,12 +1387,11 @@ public abstract class AbstractQueuedSynchronizer
      *            lock获取锁过程中，忽略了中断，在成功获取锁之后，再根据中断标识处理中断;
      */
     public final void acquire(int arg) {
-
         //acquireQueued 挂起当前线程  和 唤醒之后的逻辑
         //返回 true 表示 挂起线程过程中 线程被中断处理过 否则表示未被中断过
         if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
 
-            // 若tryAcquire失败并且acquireQueued返回true中断标识的话，将会中断当前线程。
+            // 若tryAcquire 失败并且 acquireQueued 返回 true 中断标识的话，将会中断当前线程。
             selfInterrupt();
     }
 
@@ -1442,18 +1452,19 @@ public abstract class AbstractQueuedSynchronizer
      * 如果后继节点不为且不是作废状态,则唤醒这个后继节点,否则从tail节点向前寻找合适的节点,如果找到,则唤醒.
      */
     public final boolean release(int arg) {
-        //若返回true 表示当前线程已经完全释放锁
-        // 返回fasle 表示 尚未完全释放锁
+        // 若返回 true 表示当前线程已经完全释放锁
+        // 返回 false 表示 尚未完全释放锁
         if (tryRelease(arg)) {//子类实现
-            //head 什么时机会被创建出来？
-            // 当前线程 未释放锁 存在其他线程过来抢占锁  当获取不到时 将会创建 head点
+            // head 什么时机会被创建出来？
+            // 当前线程 未释放锁 存在其他线程过来抢占锁  当获取不到时 将会创建 head 点
             Node h = head;
-            //1.判断CLH队列的首节点是否为null   已经初始化过了 发生过多线程竞争了， 并且 head 节点的后一个节点 会把head 节点的状态设置成 -1 状态
+            //1.判断 CLH 队列的首节点是否为 null   已经初始化过了 发生过多线程竞争了  并且 head 节点的后一个节点 会把 head 节点的状态设置成 -1 状态
             //2.并判断等待状态是否正常 当不等于0 那么后面肯定插入过节点
             //3. 那么就得唤醒后继节点
-            if (h != null && h.waitStatus != 0)
+            if (h != null && h.waitStatus != 0) {
                 // 唤醒  下一个 阻塞/等待的节点
                 unparkSuccessor(h);
+            }
             return true;
         }
         return false;
@@ -2097,6 +2108,7 @@ public abstract class AbstractQueuedSynchronizer
      */
     //内部类是可以访问到外部域的
     public class ConditionObject implements Condition, java.io.Serializable {
+
         private static final long serialVersionUID = 1173984872572414699L;
         /**
          * First node of condition queue.
@@ -2478,11 +2490,9 @@ public abstract class AbstractQueuedSynchronizer
          * <li> If timed out while blocked in step 4, return false, else true.
          * </ol>
          */
-        public final boolean awaitUntil(Date deadline)
-                throws InterruptedException {
+        public final boolean awaitUntil(Date deadline) throws InterruptedException {
             long abstime = deadline.getTime();
-            if (Thread.interrupted())
-                throw new InterruptedException();
+            if (Thread.interrupted()) throw new InterruptedException();
             Node node = addConditionWaiter();
             int savedState = fullyRelease(node);
             boolean timedout = false;
@@ -2569,8 +2579,7 @@ public abstract class AbstractQueuedSynchronizer
          *                                      returns {@code false}
          */
         protected final boolean hasWaiters() {
-            if (!isHeldExclusively())
-                throw new IllegalMonitorStateException();
+            if (!isHeldExclusively()) throw new IllegalMonitorStateException();
             for (Node w = firstWaiter; w != null; w = w.nextWaiter) {
                 if (w.waitStatus == Node.CONDITION)
                     return true;
@@ -2588,8 +2597,7 @@ public abstract class AbstractQueuedSynchronizer
          *                                      returns {@code false}
          */
         protected final int getWaitQueueLength() {
-            if (!isHeldExclusively())
-                throw new IllegalMonitorStateException();
+            if (!isHeldExclusively()) throw new IllegalMonitorStateException();
             int n = 0;
             for (Node w = firstWaiter; w != null; w = w.nextWaiter) {
                 if (w.waitStatus == Node.CONDITION)
@@ -2639,17 +2647,11 @@ public abstract class AbstractQueuedSynchronizer
 
     static {
         try {
-            stateOffset = unsafe.objectFieldOffset
-                    (AbstractQueuedSynchronizer.class.getDeclaredField("state"));
-            headOffset = unsafe.objectFieldOffset
-                    (AbstractQueuedSynchronizer.class.getDeclaredField("head"));
-            tailOffset = unsafe.objectFieldOffset
-                    (AbstractQueuedSynchronizer.class.getDeclaredField("tail"));
-            waitStatusOffset = unsafe.objectFieldOffset
-                    (Node.class.getDeclaredField("waitStatus"));
-            nextOffset = unsafe.objectFieldOffset
-                    (Node.class.getDeclaredField("next"));
-
+            stateOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField("state"));
+            headOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField("head"));
+            tailOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField("tail"));
+            waitStatusOffset = unsafe.objectFieldOffset(Node.class.getDeclaredField("waitStatus"));
+            nextOffset = unsafe.objectFieldOffset(Node.class.getDeclaredField("next"));
         } catch (Exception ex) {
             throw new Error(ex);
         }
@@ -2672,9 +2674,7 @@ public abstract class AbstractQueuedSynchronizer
     /**
      * CAS waitStatus field of a node.
      */
-    private static final boolean compareAndSetWaitStatus(Node node,
-                                                         int expect,
-                                                         int update) {
+    private static final boolean compareAndSetWaitStatus(Node node, int expect, int update) {
         return unsafe.compareAndSwapInt(node, waitStatusOffset,
                 expect, update);
     }
@@ -2682,9 +2682,7 @@ public abstract class AbstractQueuedSynchronizer
     /**
      * CAS next field of a node.
      */
-    private static final boolean compareAndSetNext(Node node,
-                                                   Node expect,
-                                                   Node update) {
+    private static final boolean compareAndSetNext(Node node, Node expect, Node update) {
         return unsafe.compareAndSwapObject(node, nextOffset, expect, update);
     }
 }
