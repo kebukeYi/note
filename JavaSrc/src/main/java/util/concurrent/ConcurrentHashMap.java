@@ -2616,13 +2616,13 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             else if ((f = tabAt(tab, i)) == null) {
                 advance = casTabAt(tab, i, null, fwd);
             }
-                //CASE3:
-                // 条件成立：说明当前桶位已经迁移过了，当前线程不用再处理了，直接再次更新当前线程任务索引，再次处理下一个桶位 或者 其它操作
+            //CASE3:
+            // 条件成立：说明当前桶位已经迁移过了，当前线程不用再处理了，直接再次更新当前线程任务索引，再次处理下一个桶位 或者 其它操作
             else if ((fh = f.hash) == MOVED) {
                 advance = true; // already processed
             }
-                //CASE4:
-                //前置条件：当前桶位有数据，而且node节点 不是 fwd节点，说明这些数据需要迁移。
+            //CASE4:
+            //前置条件：当前桶位有数据，而且node节点 不是 fwd节点，说明这些数据需要迁移。
             else {
                 //sync 加锁当前桶位的头结点
                 synchronized (f) {
@@ -2703,7 +2703,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                                     if ((p.prev = loTail) == null) {
                                         lo = p;
                                     }
-                                        //说明 低位链表已经有数据了，此时当前元素 追加到 低位链表的末尾就行了
+                                    //说明 低位链表已经有数据了，此时当前元素 追加到 低位链表的末尾就行了
                                     else {
                                         loTail.next = p;
                                     }
