@@ -57,7 +57,7 @@ public class OrderTransactionListener implements TransactionListener {
     //因为各种原因没有进行commit和rollback；那么mq就会检查自身的half消息进行逐一回访
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt messageExt) {
-        logger.info("开始回查本地事务状态。{}", messageExt.getTransactionId());
+        logger.info("开始回调查寻本地事务状态。{}", messageExt.getTransactionId());
         LocalTransactionState state;
         String transactionId = messageExt.getTransactionId();
         //根据本地事务表查询消息的状态

@@ -35,7 +35,7 @@ public class MyThread05 extends Thread {
 
 
     public static void main(String[] args) throws Exception {
-        MyThread05 myThread05=new MyThread05();
+        MyThread05 myThread05 = new MyThread05();
         myThread05.test3();
     }
 }

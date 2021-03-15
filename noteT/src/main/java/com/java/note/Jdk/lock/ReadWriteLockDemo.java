@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 写 要原子性：
  */
 class MyCache {
+
     //共享变量
     private volatile Map<String, Object> map = new HashMap<>();
     private ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
@@ -22,7 +23,6 @@ class MyCache {
         Thread.sleep(300);
         map.put(key, value);
         System.out.println(Thread.currentThread().getName() + "\t" + "   写入成功  " + key);
-
         rwlock.writeLock().unlock();
     }
 
@@ -36,10 +36,7 @@ class MyCache {
             rwlock.readLock().unlock();
         }
         return map.get(key);
-
-
     }
-
 }
 
 public class ReadWriteLockDemo {
