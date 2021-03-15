@@ -11,11 +11,11 @@ public class ProviderApplication {
 
 
     public static void main(String[] args) throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-                new String[]{"classpath:dubbo-provider.xml"});
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"classpath:dubbo-provider.xml"});
         context.start();
         System.out.println("服务启动。。。");
-        System.in.read(); // 按任意键退出
+        // 按任意键退出
+        System.in.read();
     }
 
 }

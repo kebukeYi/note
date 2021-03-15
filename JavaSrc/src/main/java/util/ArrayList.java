@@ -105,7 +105,6 @@ import sun.misc.SharedSecrets;
  * @since 1.2
  * 查询效率⾼，增删效率低，线程不安全。使⽤频率很⾼
  */
-
 public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAccess, Cloneable, java.io.Serializable {
 
     private static final long serialVersionUID = 8683452581122892189L;
@@ -180,8 +179,9 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
         elementData = c.toArray();
         if ((size = elementData.length) != 0) {
             // c.toArray might (incorrectly) not return Object[] (see 6260652)
-            if (elementData.getClass() != Object[].class)
+            if (elementData.getClass() != Object[].class) {
                 elementData = Arrays.copyOf(elementData, size, Object[].class);
+            }
         } else {
             // replace with empty array.
             this.elementData = EMPTY_ELEMENTDATA;
@@ -196,9 +196,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
     public void trimToSize() {
         modCount++;
         if (size < elementData.length) {
-            elementData = (size == 0)
-                    ? EMPTY_ELEMENTDATA
-                    : Arrays.copyOf(elementData, size);
+            elementData = (size == 0) ? EMPTY_ELEMENTDATA : Arrays.copyOf(elementData, size);
         }
     }
 
@@ -235,10 +233,10 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
 
     private void ensureExplicitCapacity(int minCapacity) {
         modCount++;
-
         // overflow-conscious code
-        if (minCapacity - elementData.length > 0)
+        if (minCapacity - elementData.length > 0) {
             grow(minCapacity);
+        }
     }
 
     /**
@@ -260,20 +258,21 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
         int oldCapacity = elementData.length;
         //1.5 倍
         int newCapacity = oldCapacity + (oldCapacity >> 1);
-        if (newCapacity - minCapacity < 0)
+        if (newCapacity - minCapacity < 0) {
             newCapacity = minCapacity;
-        if (newCapacity - MAX_ARRAY_SIZE > 0)
+        }
+        if (newCapacity - MAX_ARRAY_SIZE > 0) {
             newCapacity = hugeCapacity(minCapacity);
+        }
         // minCapacity is usually close to size, so this is a win:
         elementData = Arrays.copyOf(elementData, newCapacity);
     }
 
     private static int hugeCapacity(int minCapacity) {
-        if (minCapacity < 0) // overflow
+        if (minCapacity < 0){ // overflow
             throw new OutOfMemoryError();
-        return (minCapacity > MAX_ARRAY_SIZE) ?
-                Integer.MAX_VALUE :
-                MAX_ARRAY_SIZE;
+        }
+        return (minCapacity > MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
     }
 
     /**
@@ -316,13 +315,17 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
      */
     public int indexOf(Object o) {
         if (o == null) {
-            for (int i = 0; i < size; i++)
-                if (elementData[i] == null)
+            for (int i = 0; i < size; i++) {
+                if (elementData[i] == null) {
                     return i;
+                }
+            }
         } else {
-            for (int i = 0; i < size; i++)
-                if (o.equals(elementData[i]))
+            for (int i = 0; i < size; i++) {
+                if (o.equals(elementData[i])) {
                     return i;
+                }
+            }
         }
         return -1;
     }
@@ -459,6 +462,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
      * @param e element to be appended to this list
      * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
+    @Override
     public boolean add(E e) {
         ensureCapacityInternal(size + 1);  // Increments modCount!!
         elementData[size++] = e;
@@ -1323,8 +1327,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
         /**
          * Create new spliterator covering the given  range
          */
-        ArrayListSpliterator(ArrayList<E> list, int origin, int fence,
-                             int expectedModCount) {
+        ArrayListSpliterator(ArrayList<E> list, int origin, int fence, int expectedModCount) {
             this.list = list; // OK if null unless traversed
             this.index = origin;
             this.fence = fence;

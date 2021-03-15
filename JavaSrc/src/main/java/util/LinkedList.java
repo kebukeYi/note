@@ -80,9 +80,9 @@ import java.util.function.Consumer;
  * @since 1.2
  */
 
-public class LinkedList<E>
-        extends AbstractSequentialList<E>
-        implements List<E>, Deque<E>, Cloneable, java.io.Serializable {
+public class LinkedList<E> extends AbstractSequentialList<E> implements List<E>, Deque<E>, Cloneable, java.io.Serializable {
+
+    //总长度
     transient int size = 0;
 
     /**
@@ -141,10 +141,11 @@ public class LinkedList<E>
         final Node<E> l = last;
         final Node<E> newNode = new Node<>(l, e, null);
         last = newNode;
-        if (l == null)
+        if (l == null) {
             first = newNode;
-        else
+        } else {
             l.next = newNode;
+        }
         size++;
         modCount++;
     }
@@ -157,10 +158,11 @@ public class LinkedList<E>
         final Node<E> pred = succ.prev;
         final Node<E> newNode = new Node<>(pred, e, succ);
         succ.prev = newNode;
-        if (pred == null)
+        if (pred == null) {
             first = newNode;
-        else
+        } else {
             pred.next = newNode;
+        }
         size++;
         modCount++;
     }
@@ -504,13 +506,15 @@ public class LinkedList<E>
      * @param element element to be inserted
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
+    @Override
     public void add(int index, E element) {
+        //检测索引是否越界
         checkPositionIndex(index);
-
-        if (index == size)
+        if (index == size) {
             linkLast(element);
-        else
+        } else {
             linkBefore(element, node(index));
+        }
     }
 
     /**
@@ -552,30 +556,34 @@ public class LinkedList<E>
     }
 
     private void checkElementIndex(int index) {
-        if (!isElementIndex(index))
+        if (!isElementIndex(index)) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+        }
     }
 
     private void checkPositionIndex(int index) {
-        if (!isPositionIndex(index))
+        if (!isPositionIndex(index)) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+        }
     }
 
     /**
      * Returns the (non-null) Node at the specified element index.
      */
     Node<E> node(int index) {
-        // assert isElementIndex(index);
-
+        assert isElementIndex(index);
+        //查看是大于中间的 还是小于中间的
         if (index < (size >> 1)) {
             Node<E> x = first;
-            for (int i = 0; i < index; i++)
+            for (int i = 0; i < index; i++) {
                 x = x.next;
+            }
             return x;
         } else {
             Node<E> x = last;
-            for (int i = size - 1; i > index; i--)
+            for (int i = size - 1; i > index; i--) {
                 x = x.prev;
+            }
             return x;
         }
     }
