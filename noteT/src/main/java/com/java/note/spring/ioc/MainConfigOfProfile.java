@@ -30,7 +30,7 @@ public class MainConfigOfProfile {
         return comboPooledDataSource;
     }
 
-    @Profile("test")
+    @Profile("dev")
 //    @Bean("dataSourceDev")
     public DataSource dataSourceDev() throws PropertyVetoException {
         ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();
@@ -41,7 +41,7 @@ public class MainConfigOfProfile {
         return comboPooledDataSource;
     }
 
-    @Profile("test")
+    @Profile("sim")
 //    @Bean("dataSourceProd")
     public DataSource dataSourceProd() throws PropertyVetoException {
         ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();

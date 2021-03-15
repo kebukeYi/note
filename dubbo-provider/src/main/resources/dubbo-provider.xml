@@ -4,20 +4,29 @@
        xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd        http://dubbo.apache.org/schema/dubbo        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
 
-    <!-- 提供方应用信息，用于计算依赖关系 -->
     <dubbo:application name="hello-world-app-provider"/>
 
-    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:application name="demo-provider" metadata-type="remote">
+        <dubbo:parameter key="mapping-type" value="metadata"/>
+    </dubbo:application>
+
+    <dubbo:config-center address="zookeeper://127.0.0.1:2181"/>
+    <dubbo:metadata-report address="zookeeper://127.0.0.1:2181"/>
+
+    <dubbo:registry id="registry2" address="zookeeper://127.0.0.1:2181"/>
+
+    <dubbo:registry id="registry1" address="zookeeper://127.0.0.1:2182"/>
+
+    <!-- 用 dubbo 协议在 20880 端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20880"/>
 
     <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <!--    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>-->
 
-    <!-- 和本地bean一样实现服务 -->
+    <!-- 注册本地 bean 实现服务 -->
     <bean id="demoService" class="com.dubbo.provider.lmpl.IUserServiceImpl"/>
 
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.dubbo.interfaces.DemoService" ref="demoService"/>
-
+    <dubbo:service registry="registry2,registry1" interface="com.dubbo.interfaces.DemoService" ref="demoService"/>
 
 </beans>
