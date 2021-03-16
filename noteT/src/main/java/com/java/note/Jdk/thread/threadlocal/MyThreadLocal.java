@@ -1,4 +1,4 @@
-package com.java.note.Jdk.thread.local;
+package com.java.note.Jdk.thread.threadlocal;
 
 
 import java.text.SimpleDateFormat;
