@@ -981,12 +981,12 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
 
     /**
      * Acquires in exclusive uninterruptible mode for thread already in queue. Used by condition wait methods as well as acquire.
-     *
+     * 队列中的节点尝试获取到锁
      * @param node the node
      * @param arg  the acquire argument
      * @return {@code true} if interrupted while waiting
      * 1. 当前节点是不是被park了尼？ 执行挂起操作
-     * 2.  节点被唤醒之后的逻辑？
+     * 2. 节点被唤醒之后的逻辑？
      * 参数一：当前线程包装出来的node节点  并且已经入队成功了的
      * 参数二：当先线程抢占资源成功后 设置 state 会用到
      * 竞争队列（都在自旋尝试获得锁）
