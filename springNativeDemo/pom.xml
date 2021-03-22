@@ -13,10 +13,13 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>springNativeDemo</name>
     <description>Demo project for Spring Boot</description>
+
     <properties>
         <java.version>11</java.version>
         <spring-native.version>0.9.1-SNAPSHOT</spring-native.version>
     </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,6 +46,7 @@
     <build>
         <plugins>
             <plugin>
+
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -60,10 +64,14 @@
                     </image>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.springframework.experimental</groupId>
                 <artifactId>spring-aot-maven-plugin</artifactId>
                 <version>${spring-native.version}</version>
+                <configuration>
+                    <removeSpelSupport>true</removeSpelSupport>
+                </configuration>
                 <executions>
                     <execution>
                         <id>test-generate</id>
@@ -79,8 +87,10 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
+
     <repositories>
         <repository>
             <id>spring-snapshots</id>
