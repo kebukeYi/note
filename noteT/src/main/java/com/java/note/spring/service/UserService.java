@@ -1,6 +1,6 @@
 package com.java.note.spring.service;
 
-import com.java.note.mybatis.MyUser;
+import com.java.note.mybatis.vo.MyUser;
 import com.java.note.spring.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -17,7 +17,6 @@ public class BeanLifeCycle {
         ApplicationContext factory = new ClassPathXmlApplicationContext("beans.xml");
         System.out.println("容器初始化成功");
 
-
         //得到User，并使用
         People people = (People) factory.getBean("people");
 

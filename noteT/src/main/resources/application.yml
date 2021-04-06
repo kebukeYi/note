@@ -6,3 +6,8 @@ spring:
     #指定缓存类型，可加可不加
     type: ehcache
 
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml
+  type-aliases-package: com.java.note.mybatis.vo
+
+

@@ -37,14 +37,14 @@ public class MyBeanDefinitionRegister implements ImportBeanDefinitionRegistrar {
         mappers.add(UserMapper.class);
 
         for (Class mapper : mappers) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
-            BeanDefinition beanDefinition = builder.getBeanDefinition();
-
-            beanDefinition.setBeanClassName(MyFactoryBean.class.getName());
-
-            //会调用 MyFactoryBean 的构造方法，然后生成 ****Mapper的代理对象
-            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(mapper);
-            registry.registerBeanDefinition(mapper.getName(), beanDefinition);
+//            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
+//            BeanDefinition beanDefinition = builder.getBeanDefinition();
+//
+//            beanDefinition.setBeanClassName(MyFactoryBean.class.getName());
+//
+//            //会调用 MyFactoryBean 的构造方法，然后生成 ****Mapper的代理对象
+//            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(mapper);
+//            registry.registerBeanDefinition(mapper.getName(), beanDefinition);
         }
 
     }

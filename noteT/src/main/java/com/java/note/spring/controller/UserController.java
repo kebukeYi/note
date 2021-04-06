@@ -1,6 +1,7 @@
 package com.java.note.spring.controller;
 
 import com.java.note.spring.service.PeopleService;
+import com.java.note.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,20 @@ public class UserController {
     @Autowired
     private PeopleService peopleService;
 
+    @Autowired
+    private UserService userService;
 
-    @GetMapping("/user/set")
+
+    @GetMapping("/people/set")
     public String setPeople(Integer id) {
         peopleService.selectPeopleById(id);
+        return "success";
+    }
+
+
+    @GetMapping("/user/set")
+    public String setUser() {
+        userService.insertUserTry();
         return "success";
     }
 

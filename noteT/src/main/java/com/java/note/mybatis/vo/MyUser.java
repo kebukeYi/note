@@ -1,4 +1,4 @@
-package com.java.note.mybatis;
+package com.java.note.mybatis.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

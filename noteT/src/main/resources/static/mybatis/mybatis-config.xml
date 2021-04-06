@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE configuration
-        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
     <!--    <settings>-->
@@ -9,27 +7,29 @@
     <!--    </settings>-->
 
     <!-- 引用db.properties配置文件 -->
-    <properties resource="db.properties"/>
+<!--    <properties resource="db.properties"/>-->
     <!--  development : 开发模式 work : 工作模式 -->
-    <environments default="work">
-        <environment id="work">
-            <!--            使用JDBC 事务管理-->
-            <transactionManager type="JDBC"/>
-            <!--            数据库连接池-->
-            <dataSource type="POOLED">
-                <!-- value属性值引用db.properties配置文件中配置的值 -->
-                <property name="driver" value="${driver}"/>
-                <property name="url" value="${url}"/>
-                <property name="username" value="${name}"/>
-                <property name="password" value="${password}"/>
+<!--    <environments default="work">-->
+<!--        <environment id="work">-->
+<!--            &lt;!&ndash;            使用JDBC 事务管理&ndash;&gt;-->
+<!--            <transactionManager type="JDBC"/>-->
+<!--            &lt;!&ndash;            数据库连接池&ndash;&gt;-->
+<!--            <dataSource type="POOLED">-->
+<!--                &lt;!&ndash; value属性值引用db.properties配置文件中配置的值 &ndash;&gt;-->
+<!--                <property name="driver" value="${driver}"/>-->
+<!--                <property name="url" value="${url}"/>-->
+<!--                <property name="username" value="${name}"/>-->
+<!--                <property name="password" value="${password}"/>-->
 
-            </dataSource>
-        </environment>
-    </environments>
+<!--            </dataSource>-->
+<!--        </environment>-->
+<!--    </environments>-->
 
     <mappers>
         <mapper resource="static/mybatis/mapper/UserMapper.xml"></mapper>
+        <mapper resource="static/mybatis/mapper/PeopleMapper.xml"></mapper>
     </mappers>
+
 </configuration>
 
 

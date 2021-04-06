@@ -1,6 +1,6 @@
 package com.java.note.spring.mapper;
 
-import com.java.note.mybatis.MyUser;
+import com.java.note.mybatis.vo.MyUser;
 
 import org.apache.ibatis.annotations.Param;
 

@@ -51,7 +51,6 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
                         return result;
                     }
                 });
-
         return bean;
     }
 

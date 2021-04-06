@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.java.note.spring.mapper.UserMapper">
 
-
-    <select id="getUserByAge" parameterType="int" resultType="com.java.note.mybatis.MyUser">
+    <select id="getUserByAge" parameterType="int" resultType="com.java.note.mybatis.vo.MyUser">
        select  *   from  my_user  where age=#{age}
     </select>
 
-    <select id="selectAll" resultType="com.java.note.mybatis.MyUser">
+    <select id="selectAll" resultType="com.java.note.mybatis.vo.MyUser">
         select  *   from  my_user
     </select>
 
