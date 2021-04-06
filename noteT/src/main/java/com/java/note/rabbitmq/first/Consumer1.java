@@ -1,9 +1,6 @@
 package com.java.note.rabbitmq.first;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.*;
 
 /**
  * @author fang.com
@@ -34,8 +31,9 @@ public class Consumer1 {
 
         // 定义队列的消费者
         QueueingConsumer consumer = new QueueingConsumer(channel);
+        DefaultConsumer defaultConsumer = new DefaultConsumer(channel);
         // 监听队列，手动返回完成 or  消费者不声明队列，直接从队列中消费
-        channel.basicConsume(QUEUE_NAME, false, consumer);
+        channel.basicConsume(QUEUE_NAME, false, defaultConsumer);
 
         // 获取消息
         while (true) {

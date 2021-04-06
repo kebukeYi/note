@@ -1,5 +1,6 @@
 package com.java.note.spring.service;
 
+import com.java.note.mybatis.MyUser;
 import com.java.note.spring.mapper.UserMapper;
 import com.java.note.spring.mapper.PeopleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author : mmy
@@ -17,15 +20,14 @@ import javax.annotation.PostConstruct;
 @Service
 public class PeopleService {
 
-    @Autowired
     private PeopleMapper peopleMapper;
 
     //如果只有一个 有参构造器 那么 构造器上不加@Autowried 也是可以的，一般都得加这个@Autowried注解。
-    //    @Autowired
-//    public PeopleService(PeopleMapper peopleMapper) {
-//        this.peopleMapper = peopleMapper;
-//        System.out.println("PeopleService 构造器 peopleMapper 注入" + peopleMapper);
-//    }
+    @Autowired
+    public PeopleService(PeopleMapper peopleMapper) {
+        this.peopleMapper = peopleMapper;
+        System.out.println("PeopleService 构造器 peopleMapper 注入" + peopleMapper);
+    }
 
 
     @Autowired
@@ -62,6 +64,17 @@ public class PeopleService {
         System.out.println(peopleMapper.selectById(1));
     }
 
+
+    public Integer insertUser() {
+        Integer integer = 0;
+        try {
+            List<MyUser> myUserList = new ArrayList<>();
+            integer = userMapper.batchUpdateUser(myUserList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return integer;
+    }
 
     public void printPeopleMapper() {
         //org.apache.ibatis.binding.MapperProxy@4efc180e

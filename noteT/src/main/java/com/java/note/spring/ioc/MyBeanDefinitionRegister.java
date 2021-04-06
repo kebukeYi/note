@@ -28,11 +28,9 @@ public class MyBeanDefinitionRegister implements ImportBeanDefinitionRegistrar {
      */
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
-
         System.out.println("MyBeanDefinitionRegister ");
         Map<String, Object> attributes = importingClassMetadata.getAnnotationAttributes(MyMapperScan.class.getName());
         System.out.println(attributes.get("value"));
-
         //扫描Mapper ，未完成
         List<Class> mappers = new ArrayList<>();
         mappers.add(PeopleMapper.class);

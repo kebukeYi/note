@@ -31,7 +31,6 @@ public class MyFactoryBean implements FactoryBean {
 //要获取工厂Bean本身,我们需要给Id前面加一个&     &color Factory Bean
     @Override
     public Object getObject() throws Exception {
-//        System.out.println("MyFactorBean getObject ");
         Object o = Proxy.newProxyInstance(MyFactoryBean.class.getClassLoader(), new Class[]{mapperInterface}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

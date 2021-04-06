@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface UserMapper {
 
+
+
     List<MyUser> getUserByAge(int age);
 
     List<MyUser> selectAll();

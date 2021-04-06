@@ -14,13 +14,11 @@ import org.springframework.context.annotation.Import;
  * @Description
  */
 @Configuration
-//@MapperScan("com.java.note.spring.mapper")
 @MyMapperScan("com.java.note.spring.mapper")
 @Import({MyBeanDefinitionRegister.class, MyImportSelector.class})
 @ComponentScan(value = "com.java.note.spring")
-//        ,
 //        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class}),
-//                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {UserService.class})}, useDefaultFilters = true)
+//       @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {UserService.class})}, useDefaultFilters = true)
 
 //excludeFilters =Filter[]  指定扫描的时候按照什么规则排除那些组件
 //includeFilters =Filter[]  指定扫描的时候只需要包含哪些组件
