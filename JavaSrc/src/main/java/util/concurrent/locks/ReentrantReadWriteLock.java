@@ -1,42 +1,10 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
-package java.util.concurrent.locks;
+package util.concurrent.locks;
 
 import java.util.concurrent.TimeUnit;
 import java.util.Collection;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
 
 /**
  * An implementation of {@link ReadWriteLock} supporting similar
@@ -225,8 +193,7 @@ import java.util.Collection;
  * ⼀般来说：我们⼤多数都是读取数据得多，修改数据得少。所以这个读写锁在这种场景下就很有⽤了！
  * @since 1.5
  */
-public class ReentrantReadWriteLock
-        implements ReadWriteLock, java.io.Serializable {
+public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializable {
     private static final long serialVersionUID = -6992448646407690164L;
     /**
      * Inner class providing readlock

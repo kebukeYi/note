@@ -982,6 +982,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     /**
      * Acquires in exclusive uninterruptible mode for thread already in queue. Used by condition wait methods as well as acquire.
      * 队列中的节点尝试获取到锁
+     *
      * @param node the node
      * @param arg  the acquire argument
      * @return {@code true} if interrupted while waiting
@@ -1389,10 +1390,10 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     public final void acquire(int arg) {
         //acquireQueued 挂起当前线程  和 唤醒之后的逻辑
         //返回 true 表示 挂起线程过程中 线程被中断处理过 否则表示未被中断过
-        if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
-
-            // 若tryAcquire 失败并且 acquireQueued 返回 true 中断标识的话，将会中断当前线程。
+        if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg)) {
+            //若tryAcquire 失败并且 acquireQueued 返回 true 中断标识的话，将会中断当前线程
             selfInterrupt();
+        }
     }
 
     /**

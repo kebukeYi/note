@@ -779,8 +779,7 @@ public abstract class AbstractQueuedLongSynchronizer
      *
      * @param arg the acquire argument
      */
-    private void doAcquireSharedInterruptibly(long arg)
-            throws InterruptedException {
+    private void doAcquireSharedInterruptibly(long arg) throws InterruptedException {
         final Node node = addWaiter(Node.SHARED);
         boolean failed = true;
         try {
@@ -795,9 +794,10 @@ public abstract class AbstractQueuedLongSynchronizer
                         return;
                     }
                 }
-                if (shouldParkAfterFailedAcquire(p, node) &&
-                        parkAndCheckInterrupt())
+                //直接抛出异常 而不是 返回异常标志位
+                if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt()) {
                     throw new InterruptedException();
+                }
             }
         } finally {
             if (failed)
@@ -1099,12 +1099,12 @@ public abstract class AbstractQueuedLongSynchronizer
      *            you like.
      * @throws InterruptedException if the current thread is interrupted
      */
-    public final void acquireSharedInterruptibly(long arg)
-            throws InterruptedException {
-        if (Thread.interrupted())
-            throw new InterruptedException();
-        if (tryAcquireShared(arg) < 0)
+    public final void acquireSharedInterruptibly(long arg) throws InterruptedException {
+        if (Thread.interrupted()) throw new InterruptedException();
+        if (tryAcquireShared(arg) < 0) {
+            //
             doAcquireSharedInterruptibly(arg);
+        }
     }
 
     /**
