@@ -70,4 +70,12 @@
         </foreach>
     </update>
 
+    <insert id="insertBatch">
+        insert into my_user (name,age, address,money)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},#{item.age},#{item.address},#{item.money})
+        </foreach>
+    </insert>
+
 </mapper>

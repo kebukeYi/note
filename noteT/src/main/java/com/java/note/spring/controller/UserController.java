@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-
     @Autowired
-    PeopleService peopleService;
+    private PeopleService peopleService;
 
 
     @GetMapping("/user/set")
-    public String setPeople() {
-        peopleService.add03();
+    public String setPeople(Integer id) {
+        peopleService.selectPeopleById(id);
         return "success";
     }
 

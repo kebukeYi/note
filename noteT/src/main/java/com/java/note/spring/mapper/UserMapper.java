@@ -13,8 +13,6 @@ import java.util.List;
  */
 public interface UserMapper {
 
-
-
     List<MyUser> getUserByAge(int age);
 
     List<MyUser> selectAll();
@@ -22,6 +20,8 @@ public interface UserMapper {
     Integer batchUpdateUser(@Param("list") List<MyUser> myUserList);
 
     Integer updateBatch(@Param("list") List<MyUser> myUserList);
+
+    Integer insertBatch(@Param("list") List<MyUser> myUserList);
 
 
 }
