@@ -54,7 +54,6 @@ public class EnumDemo {
         System.out.println("days[1].name():" + days[1].name());
         System.out.println("days[2].name():" + days[2].name());
         System.out.println("days[3].name():" + days[3].name());
-        System.out.println("days[3].name():" + days[3].values());
 
         System.out.println("-------------------------------------");
 

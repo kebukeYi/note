@@ -7,7 +7,6 @@ package com.java.note.Jdk.enums;
  */
 interface food {
     void eat();
-
 }
 
 interface sport {
@@ -16,7 +15,6 @@ interface sport {
 
 
 enum EnumDemo2 implements food, sport {
-
     FOOD,
     SPORT,
     ; //分号分隔
