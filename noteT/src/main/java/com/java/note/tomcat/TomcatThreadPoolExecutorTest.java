@@ -6,7 +6,6 @@ package com.java.note.tomcat;
  * @Description
  */
 public class TomcatThreadPoolExecutorTest {
-//
 //    public static void main(String[] args) throws InterruptedException {
 //        String namePrefix = "why不止技术-exec-";
 //        boolean daemon = true;

@@ -2,10 +2,7 @@ package com.java.note.spring.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 /**
  * @Author : mmy
@@ -13,11 +10,11 @@ import javax.persistence.Id;
  * @Description
  */
 @Data
-@Entity
+
 @AllArgsConstructor
 public class Log {
 
-    @Id
+
     int id;
     String time;
     String data;

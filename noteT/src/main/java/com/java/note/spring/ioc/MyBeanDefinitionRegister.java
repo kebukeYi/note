@@ -28,25 +28,23 @@ public class MyBeanDefinitionRegister implements ImportBeanDefinitionRegistrar {
      */
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
-
         System.out.println("MyBeanDefinitionRegister ");
         Map<String, Object> attributes = importingClassMetadata.getAnnotationAttributes(MyMapperScan.class.getName());
         System.out.println(attributes.get("value"));
-
         //扫描Mapper ，未完成
         List<Class> mappers = new ArrayList<>();
         mappers.add(PeopleMapper.class);
         mappers.add(UserMapper.class);
 
         for (Class mapper : mappers) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
-            BeanDefinition beanDefinition = builder.getBeanDefinition();
-
-            beanDefinition.setBeanClassName(MyFactoryBean.class.getName());
-
-            //会调用 MyFactoryBean 的构造方法，然后生成 ****Mapper的代理对象
-            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(mapper);
-            registry.registerBeanDefinition(mapper.getName(), beanDefinition);
+//            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
+//            BeanDefinition beanDefinition = builder.getBeanDefinition();
+//
+//            beanDefinition.setBeanClassName(MyFactoryBean.class.getName());
+//
+//            //会调用 MyFactoryBean 的构造方法，然后生成 ****Mapper的代理对象
+//            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(mapper);
+//            registry.registerBeanDefinition(mapper.getName(), beanDefinition);
         }
 
     }

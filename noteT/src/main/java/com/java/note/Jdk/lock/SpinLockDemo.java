@@ -14,10 +14,10 @@ public class SpinLockDemo {
 
     public void lock() {
         Thread thread = Thread.currentThread();
-        System.out.println(Thread.currentThread().getName() + "\t" + "进来了");
         while (!atomicReference.compareAndSet(null, thread)) {
-
+            System.out.println(Thread.currentThread().getName() + "\t" + "正在争抢资源");
         }
+        System.out.println(Thread.currentThread().getName() + "\t" + "进来了");
     }
 
     public void unLock() {
@@ -32,14 +32,12 @@ public class SpinLockDemo {
         new Thread(() -> {
             spinLockDemo.lock();
             try {
-                Thread.sleep(5000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             spinLockDemo.unLock();
         }, "AA").start();
-
-        Thread.sleep(1000);
 
         new Thread(() -> {
             spinLockDemo.lock();

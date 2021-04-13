@@ -7,9 +7,6 @@ import org.springframework.beans.factory.*;
 import org.springframework.context.EmbeddedValueResolverAware;
 import org.springframework.util.StringValueResolver;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 
 /**
  * @Author : mmy
@@ -18,16 +15,13 @@ import javax.persistence.Transient;
  */
 @Data
 @AllArgsConstructor
-@Entity
 public class People implements BeanFactoryAware, BeanNameAware, InitializingBean, DisposableBean, EmbeddedValueResolverAware {
 
-    @Id
     private int id;
 
     private String name;
     private String age;
 
-    @Transient
     private BeanFactory beanFactory;
 
     private String beanName;

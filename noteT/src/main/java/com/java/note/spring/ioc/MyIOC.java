@@ -28,7 +28,7 @@ public class MyIOC {
 //        bean.div(1, 2);
 
         PeopleService peopleService = ac.getBean(PeopleService.class);
-        peopleService.add03();
+        peopleService.insertPeople();
     }
 
 

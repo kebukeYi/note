@@ -1,7 +1,7 @@
 package com.java.note.mybatis;
 
+import com.java.note.mybatis.vo.MyUser;
 import com.java.note.spring.mapper.UserMapper;
-import com.java.note.redis.bean.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

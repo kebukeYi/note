@@ -30,7 +30,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
      */
     @Override
     public Object postProcessBeforeInitialization(Object arg0, String beanName) throws BeansException {
-        System.out.println("[BeanPostProcessor]接口方法postProcessBeforeInitialization对属性进行更改！" + arg0 + "==beanName " + beanName);
+        System.out.println("[BeanPostProcessor]接口方法postProcessBeforeInitialization对属性进行更改！" + arg0 + " == beanName " + beanName);
         return arg0;
     }
 
@@ -40,20 +40,18 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("[BeanPostProcessor]postProcessAfterInitialization！" + bean + "==beanName " + beanName);
-
+        System.out.println("[BeanPostProcessor]postProcessAfterInitialization！" + bean + " == beanName " + beanName);
         Object proxy = Proxy.newProxyInstance(bean.getClass().getClassLoader(), bean.getClass().getInterfaces(),
                 new InvocationHandler() {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-//                        System.out.println("开始事务");
+                        System.out.println("开始事务");
                         Object result = method.invoke(bean, args);
-//                        System.out.println("关闭事务");
+                        System.out.println("关闭事务");
                         return result;
                     }
                 });
-
-        return proxy;
+        return bean;
     }
 
 

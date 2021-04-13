@@ -7,7 +7,6 @@ package com.java.note.Jdk.enums;
  */
 public enum EnumDemo3 {
 
-
     //枚举实例
     FIRST {
         @Override

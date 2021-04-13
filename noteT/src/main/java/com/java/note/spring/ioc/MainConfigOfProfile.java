@@ -1,9 +1,6 @@
 package com.java.note.spring.ioc;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
@@ -16,10 +13,10 @@ import java.beans.PropertyVetoException;
  * 1. 启动命令 ：  -Dspring.profiles.active=test
  * 2. 利用代码：先用无参构造器 构造出容器   、 applicationContext. getEnvironment(). setActiveProfiles("test","dev");、再注册数据源配置类
  */
-@Configuration
+//@Configuration
 public class MainConfigOfProfile {
 
-    @Profile("test")
+//    @Profile("test")
 //    @Bean("dataSourceTest")
     public DataSource dataSourceTest() throws PropertyVetoException {
         ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();
@@ -30,7 +27,7 @@ public class MainConfigOfProfile {
         return comboPooledDataSource;
     }
 
-    @Profile("dev")
+//    @Profile("dev")
 //    @Bean("dataSourceDev")
     public DataSource dataSourceDev() throws PropertyVetoException {
         ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();
@@ -41,7 +38,7 @@ public class MainConfigOfProfile {
         return comboPooledDataSource;
     }
 
-    @Profile("sim")
+//    @Profile("sim")
 //    @Bean("dataSourceProd")
     public DataSource dataSourceProd() throws PropertyVetoException {
         ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();

@@ -1,4 +1,4 @@
-package com.java.note.mybatis;
+package com.java.note.mybatis.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,5 +15,10 @@ public class MyUser {
     private Integer age;
     private Double money;
 
-
+    public MyUser(String name, String address, Integer age, Double money) {
+        this.name = name;
+        this.address = address;
+        this.age = age;
+        this.money = money;
+    }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.note.spring.mapper.PeopleMapper">
+
+    <insert id="insertPeople" parameterType="com.java.note.mybatis.vo.PeopleDto">
+     insert  into  people  (name,age) values   (#{item.name},#{item.age})
+    </insert>
+
+    <insert id="insertBatch" parameterType="com.java.note.mybatis.vo.PeopleDto">
+        insert into people (name,age)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},#{item.age})
+        </foreach>
+    </insert>
+
+</mapper>
