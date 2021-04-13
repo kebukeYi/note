@@ -16,16 +16,8 @@ public class Syntax4 {
         PersonCreater personCreater1 = Person::new;
         Person person=personCreater1.getPerson();
 
-
-
-
         PersonCreater2 creater2=Person::new;
         Person person1=creater2.getPerson("ff",12);
-
-
-
-
-
 
     }
 }

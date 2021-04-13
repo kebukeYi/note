@@ -1,14 +1,10 @@
 package com.java.note.java8.lambda;
 
-import com.java.note.java8.bean.Person;
 import com.java.note.java8.lambda.interfaces.Comparator;
-
-import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 
 /**
  * @Author : mmy
- * @Creat Time : 2020/3/31  16:14
+ * @Create : Time : 2020/3/31  16:14
  * @Description
  */
 public class Lambda {
@@ -20,7 +16,6 @@ public class Lambda {
 
     @FunctionalInterface  修饰于 只有一个抽象方法的注解
      */
-
 
     public static void main(String[] args) {
         //1. 接口实现类对象

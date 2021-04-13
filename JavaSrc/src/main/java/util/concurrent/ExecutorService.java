@@ -34,6 +34,7 @@
  */
 
 package java.util.concurrent;
+
 import java.util.List;
 import java.util.Collection;
 
@@ -66,12 +67,12 @@ import java.util.Collection;
  * executor services provided in this package.
  *
  * <h3>Usage Examples</h3>
- *
+ * <p>
  * Here is a sketch of a network service in which threads in a thread
  * pool service incoming requests. It uses the preconfigured {@link
  * Executors#newFixedThreadPool} factory method:
  *
- *  <pre> {@code
+ * <pre> {@code
  * class NetworkService implements Runnable {
  *   private final ServerSocket serverSocket;
  *   private final ExecutorService pool;
@@ -100,12 +101,12 @@ import java.util.Collection;
  *     // read and service request on socket
  *   }
  * }}</pre>
- *
+ * <p>
  * The following method shuts down an {@code ExecutorService} in two phases,
  * first by calling {@code shutdown} to reject incoming tasks, and then
  * calling {@code shutdownNow}, if necessary, to cancel any lingering tasks:
  *
- *  <pre> {@code
+ * <pre> {@code
  * void shutdownAndAwaitTermination(ExecutorService pool) {
  *   pool.shutdown(); // Disable new tasks from being submitted
  *   try {
@@ -131,8 +132,8 @@ import java.util.Collection;
  * any actions taken by that task, which in turn <i>happen-before</i> the
  * result is retrieved via {@code Future.get()}.
  *
- * @since 1.5
  * @author Doug Lea
+ * @since 1.5
  */
 public interface ExecutorService extends Executor {
 
@@ -146,12 +147,12 @@ public interface ExecutorService extends Executor {
      * to do that.
      *
      * @throws SecurityException if a security manager exists and
-     *         shutting down this ExecutorService may manipulate
-     *         threads that the caller is not permitted to modify
-     *         because it does not hold {@link
-     *         java.lang.RuntimePermission}{@code ("modifyThread")},
-     *         or the security manager's {@code checkAccess} method
-     *         denies access.
+     *                           shutting down this ExecutorService may manipulate
+     *                           threads that the caller is not permitted to modify
+     *                           because it does not hold {@link
+     *                           java.lang.RuntimePermission}{@code ("modifyThread")},
+     *                           or the security manager's {@code checkAccess} method
+     *                           denies access.
      */
     void shutdown();
 
@@ -171,12 +172,12 @@ public interface ExecutorService extends Executor {
      *
      * @return list of tasks that never commenced execution
      * @throws SecurityException if a security manager exists and
-     *         shutting down this ExecutorService may manipulate
-     *         threads that the caller is not permitted to modify
-     *         because it does not hold {@link
-     *         java.lang.RuntimePermission}{@code ("modifyThread")},
-     *         or the security manager's {@code checkAccess} method
-     *         denies access.
+     *                           shutting down this ExecutorService may manipulate
+     *                           threads that the caller is not permitted to modify
+     *                           because it does not hold {@link
+     *                           java.lang.RuntimePermission}{@code ("modifyThread")},
+     *                           or the security manager's {@code checkAccess} method
+     *                           denies access.
      */
     List<Runnable> shutdownNow();
 
@@ -202,13 +203,13 @@ public interface ExecutorService extends Executor {
      * interrupted, whichever happens first.
      *
      * @param timeout the maximum time to wait
-     * @param unit the time unit of the timeout argument
+     * @param unit    the time unit of the timeout argument
      * @return {@code true} if this executor terminated and
-     *         {@code false} if the timeout elapsed before termination
+     * {@code false} if the timeout elapsed before termination
      * @throws InterruptedException if interrupted while waiting
      */
     boolean awaitTermination(long timeout, TimeUnit unit)
-        throws InterruptedException;
+            throws InterruptedException;
 
     /**
      * Submits a value-returning task for execution and returns a
@@ -227,11 +228,11 @@ public interface ExecutorService extends Executor {
      * {@link Callable} form so they can be submitted.
      *
      * @param task the task to submit
-     * @param <T> the type of the task's result
+     * @param <T>  the type of the task's result
      * @return a Future representing pending completion of the task
      * @throws RejectedExecutionException if the task cannot be
-     *         scheduled for execution
-     * @throws NullPointerException if the task is null
+     *                                    scheduled for execution
+     * @throws NullPointerException       if the task is null
      */
     <T> Future<T> submit(Callable<T> task);
 
@@ -240,13 +241,13 @@ public interface ExecutorService extends Executor {
      * representing that task. The Future's {@code get} method will
      * return the given result upon successful completion.
      *
-     * @param task the task to submit
+     * @param task   the task to submit
      * @param result the result to return
-     * @param <T> the type of the result
+     * @param <T>    the type of the result
      * @return a Future representing pending completion of the task
      * @throws RejectedExecutionException if the task cannot be
-     *         scheduled for execution
-     * @throws NullPointerException if the task is null
+     *                                    scheduled for execution
+     * @throws NullPointerException       if the task is null
      */
     <T> Future<T> submit(Runnable task, T result);
 
@@ -258,8 +259,8 @@ public interface ExecutorService extends Executor {
      * @param task the task to submit
      * @return a Future representing pending completion of the task
      * @throws RejectedExecutionException if the task cannot be
-     *         scheduled for execution
-     * @throws NullPointerException if the task is null
+     *                                    scheduled for execution
+     * @throws NullPointerException       if the task is null
      */
     Future<?> submit(Runnable task);
 
@@ -274,18 +275,18 @@ public interface ExecutorService extends Executor {
      * collection is modified while this operation is in progress.
      *
      * @param tasks the collection of tasks
-     * @param <T> the type of the values returned from the tasks
+     * @param <T>   the type of the values returned from the tasks
      * @return a list of Futures representing the tasks, in the same
-     *         sequential order as produced by the iterator for the
-     *         given task list, each of which has completed
-     * @throws InterruptedException if interrupted while waiting, in
-     *         which case unfinished tasks are cancelled
-     * @throws NullPointerException if tasks or any of its elements are {@code null}
+     * sequential order as produced by the iterator for the
+     * given task list, each of which has completed
+     * @throws InterruptedException       if interrupted while waiting, in
+     *                                    which case unfinished tasks are cancelled
+     * @throws NullPointerException       if tasks or any of its elements are {@code null}
      * @throws RejectedExecutionException if any task cannot be
-     *         scheduled for execution
+     *                                    scheduled for execution
      */
     <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks)
-        throws InterruptedException;
+            throws InterruptedException;
 
     /**
      * Executes the given tasks, returning a list of Futures holding
@@ -299,25 +300,24 @@ public interface ExecutorService extends Executor {
      * The results of this method are undefined if the given
      * collection is modified while this operation is in progress.
      *
-     * @param tasks the collection of tasks
+     * @param tasks   the collection of tasks
      * @param timeout the maximum time to wait
-     * @param unit the time unit of the timeout argument
-     * @param <T> the type of the values returned from the tasks
+     * @param unit    the time unit of the timeout argument
+     * @param <T>     the type of the values returned from the tasks
      * @return a list of Futures representing the tasks, in the same
-     *         sequential order as produced by the iterator for the
-     *         given task list. If the operation did not time out,
-     *         each task will have completed. If it did time out, some
-     *         of these tasks will not have completed.
-     * @throws InterruptedException if interrupted while waiting, in
-     *         which case unfinished tasks are cancelled
-     * @throws NullPointerException if tasks, any of its elements, or
-     *         unit are {@code null}
+     * sequential order as produced by the iterator for the
+     * given task list. If the operation did not time out,
+     * each task will have completed. If it did time out, some
+     * of these tasks will not have completed.
+     * @throws InterruptedException       if interrupted while waiting, in
+     *                                    which case unfinished tasks are cancelled
+     * @throws NullPointerException       if tasks, any of its elements, or
+     *                                    unit are {@code null}
      * @throws RejectedExecutionException if any task cannot be scheduled
-     *         for execution
+     *                                    for execution
      */
-    <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks,
-                                  long timeout, TimeUnit unit)
-        throws InterruptedException;
+    <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
+            throws InterruptedException;
 
     /**
      * Executes the given tasks, returning the result
@@ -328,18 +328,18 @@ public interface ExecutorService extends Executor {
      * collection is modified while this operation is in progress.
      *
      * @param tasks the collection of tasks
-     * @param <T> the type of the values returned from the tasks
+     * @param <T>   the type of the values returned from the tasks
      * @return the result returned by one of the tasks
-     * @throws InterruptedException if interrupted while waiting
-     * @throws NullPointerException if tasks or any element task
-     *         subject to execution is {@code null}
-     * @throws IllegalArgumentException if tasks is empty
-     * @throws ExecutionException if no task successfully completes
+     * @throws InterruptedException       if interrupted while waiting
+     * @throws NullPointerException       if tasks or any element task
+     *                                    subject to execution is {@code null}
+     * @throws IllegalArgumentException   if tasks is empty
+     * @throws ExecutionException         if no task successfully completes
      * @throws RejectedExecutionException if tasks cannot be scheduled
-     *         for execution
+     *                                    for execution
      */
     <T> T invokeAny(Collection<? extends Callable<T>> tasks)
-        throws InterruptedException, ExecutionException;
+            throws InterruptedException, ExecutionException;
 
     /**
      * Executes the given tasks, returning the result
@@ -350,21 +350,20 @@ public interface ExecutorService extends Executor {
      * The results of this method are undefined if the given
      * collection is modified while this operation is in progress.
      *
-     * @param tasks the collection of tasks
+     * @param tasks   the collection of tasks
      * @param timeout the maximum time to wait
-     * @param unit the time unit of the timeout argument
-     * @param <T> the type of the values returned from the tasks
+     * @param unit    the time unit of the timeout argument
+     * @param <T>     the type of the values returned from the tasks
      * @return the result returned by one of the tasks
-     * @throws InterruptedException if interrupted while waiting
-     * @throws NullPointerException if tasks, or unit, or any element
-     *         task subject to execution is {@code null}
-     * @throws TimeoutException if the given timeout elapses before
-     *         any task successfully completes
-     * @throws ExecutionException if no task successfully completes
+     * @throws InterruptedException       if interrupted while waiting
+     * @throws NullPointerException       if tasks, or unit, or any element
+     *                                    task subject to execution is {@code null}
+     * @throws TimeoutException           if the given timeout elapses before
+     *                                    any task successfully completes
+     * @throws ExecutionException         if no task successfully completes
      * @throws RejectedExecutionException if tasks cannot be scheduled
-     *         for execution
+     *                                    for execution
      */
-    <T> T invokeAny(Collection<? extends Callable<T>> tasks,
-                    long timeout, TimeUnit unit)
-        throws InterruptedException, ExecutionException, TimeoutException;
+    <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
+            throws InterruptedException, ExecutionException, TimeoutException;
 }

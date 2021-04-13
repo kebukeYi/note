@@ -11,15 +11,12 @@ public class Exercise3 {
 
 
     public static void main(String[] args) {
-//开辟线程
-
-
-
-
+        //开辟线程
+        threads(args);
     }
 
 
-    //开辟线程
+    //开辟线程方法
     public static void threads(String[] args) {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -40,7 +37,9 @@ public class Exercise3 {
                 return "放放风";
             }
         };
+
         try {
+            //获取返回值
             Object o = callable.call();
             System.out.println(o.toString());
         } catch (Exception e) {
@@ -49,8 +48,9 @@ public class Exercise3 {
 
         Runnable runnable = () -> System.out.println("run1");
         runnable.run();
+
         Object object = runnable;
-        //0bject objLambda= () -> System. out. println("run")报错, 必须转化为-一个函数式接口
+//        Object objLambda= () -> System. out. println("run");//报错, 必须转化为-一个函数式接口
         Object obj = (Runnable) () -> System.out.println("run2");
     }
 

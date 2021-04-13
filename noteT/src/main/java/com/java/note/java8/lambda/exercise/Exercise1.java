@@ -11,7 +11,7 @@ import java.util.List;
  * @Creat Time : 2020/3/31  21:28
  * @Description
  */
-public class exercise1 {
+public class Exercise1 {
 
     public static void main(String[] args) {
         List<Person> list = new ArrayList<>();
