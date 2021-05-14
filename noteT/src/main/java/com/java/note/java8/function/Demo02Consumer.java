@@ -47,7 +47,6 @@ public class Demo02Consumer {
             //先第一个再第二个
             sex.andThen(name).accept(s);
         }
-
     }
 
 

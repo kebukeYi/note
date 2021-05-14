@@ -58,7 +58,7 @@ public class AtomicInteger extends Number implements java.io.Serializable {
     private static final long serialVersionUID = 6214790243416807050L;
 
     // setup to use Unsafe.compareAndSwapInt for updates
-    // CAS 是一条CPU 并发原语
+    // CAS 是一条 CPU 并发原语
     //Unsafe 类 操作本地内存中的数据 类似于C指针一样操作主内存中的数据；
     private static final Unsafe unsafe = Unsafe.getUnsafe();
     private static final long valueOffset;

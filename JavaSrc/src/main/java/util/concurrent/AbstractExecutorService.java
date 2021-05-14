@@ -131,7 +131,7 @@ public abstract class AbstractExecutorService implements ExecutorService {
      */
     public <T> Future<T> submit(Callable<T> task) {
         if (task == null) throw new NullPointerException();
-        //Callable 包装成了 RunnableFuture  使用了适配器模式？？
+        //Callable 包装成了 RunnableFuture  使用了适配器模式
         RunnableFuture<T> ftask = newTaskFor(task);
         execute(ftask);
         return ftask;

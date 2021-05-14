@@ -117,6 +117,10 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E> implements BlockingQ
 
     /**
      * Main lock guarding all access
+     * 只有一把锁,不分读锁和写锁
+     * LinkedBlockingQueue的读和写操作使用了两个锁，takeLock和putLock，读写操作不会造成资源的争抢。
+     * ArrayBlockingQueue的读和写使用的是同一把锁，读写操作存在锁的竞争。因此LinkedBlockingQueue的吞吐量高于ArrayBlockingQueue
+     * 链接：https://juejin.cn/post/6844904000056197127
      */
     final ReentrantLock lock;
 
@@ -159,8 +163,9 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E> implements BlockingQ
      * @param v the element
      */
     private static void checkNotNull(Object v) {
-        if (v == null)
+        if (v == null) {
             throw new NullPointerException();
+        }
     }
 
     /**
@@ -257,6 +262,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E> implements BlockingQ
      * @param capacity the capacity of this queue
      * @throws IllegalArgumentException if {@code capacity < 1}
      */
+    //由于是数组实现的,所以初始化时必须指定大小
     public ArrayBlockingQueue(int capacity) {
         this(capacity, false);
     }
@@ -272,8 +278,9 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E> implements BlockingQ
      * @throws IllegalArgumentException if {@code capacity < 1}
      */
     public ArrayBlockingQueue(int capacity, boolean fair) {
-        if (capacity <= 0)
+        if (capacity <= 0) {
             throw new IllegalArgumentException();
+        }
         this.items = new Object[capacity];
         lock = new ReentrantLock(fair);
         notEmpty = lock.newCondition();

@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 /**
  * @Author : mmy
  * @Creat Time : 2020/6/18  11:18
- * @Description 时机： bean被定义，但是还没被初始化；
- * 演示Bean工厂 后置处理器接口方法 ，并不支持 add beanDefinition;  思路 ： MyBeanDefinitionRegister
+ * @Description 时机： bean被定义，但是还没被实例化（初始化）；
+ * 演示 Bean工厂 后置处理器接口方法 ，并不支持 add beanDefinition;  因为 这是容器启动阶段的最后几步，只能修改一些bd的属性；
+ * 思路 ： MyBeanDefinitionRegister 从装备 BeanDefintion 源头出发
  */
 @Component
 public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {

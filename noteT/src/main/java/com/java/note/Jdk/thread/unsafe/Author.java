@@ -9,6 +9,7 @@ import lombok.Data;
  */
 @Data
 public class Author {
+
     String name;
     int seq;
 

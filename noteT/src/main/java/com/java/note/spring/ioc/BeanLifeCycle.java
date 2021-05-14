@@ -12,7 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class BeanLifeCycle {
 
     public static void main(String[] args) {
-        System.out.println("现在开始初始化容器");
+        System.out.println("从现在开始 初始化 卢本伟容器！");
 
         ApplicationContext factory = new ClassPathXmlApplicationContext("beans.xml");
         System.out.println("容器初始化成功");

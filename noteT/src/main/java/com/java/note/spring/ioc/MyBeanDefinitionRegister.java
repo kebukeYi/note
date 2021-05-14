@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @Author : mmy
  * @Creat Time : 2020/6/24  15:09
- * @Description 向容器中注入bean
+ * @Description: 源头 向容器中注入bean
  */
 public class MyBeanDefinitionRegister implements ImportBeanDefinitionRegistrar {
 

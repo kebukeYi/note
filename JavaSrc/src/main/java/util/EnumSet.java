@@ -73,13 +73,11 @@ import sun.misc.SharedSecrets;
  * Java Collections Framework</a>.
  *
  * @author Josh Bloch
- * @since 1.5
- * @see EnumMap
  * @serial exclude
+ * @see EnumMap
+ * @since 1.5
  */
-public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
-    implements Cloneable, java.io.Serializable
-{
+public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E> implements Cloneable, java.io.Serializable {
     /**
      * The class of all the elements of this set.
      */
@@ -92,17 +90,19 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
 
     private static Enum<?>[] ZERO_LENGTH_ENUM_ARRAY = new Enum<?>[0];
 
-    EnumSet(Class<E>elementType, Enum<?>[] universe) {
+    EnumSet(Class<E> elementType, Enum<?>[] universe) {
         this.elementType = elementType;
-        this.universe    = universe;
+        this.universe = universe;
     }
 
     /**
      * Creates an empty enum set with the specified element type.
+     * Effective Java：
+     * 静态工厂的第四大优势：返回的对象的类 是可以根据每次的调用参数返回不同的值
      *
-     * @param <E> The class of the elements in the set
+     * @param <E>         The class of the elements in the set
      * @param elementType the class object of the element type for this enum
-     *     set
+     *                    set
      * @return An empty enum set of the specified type.
      * @throws NullPointerException if <tt>elementType</tt> is null
      */
@@ -121,9 +121,9 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * Creates an enum set containing all of the elements in the specified
      * element type.
      *
-     * @param <E> The class of the elements in the set
+     * @param <E>         The class of the elements in the set
      * @param elementType the class object of the element type for this enum
-     *     set
+     *                    set
      * @return An enum set containing all the elements in the specified type.
      * @throws NullPointerException if <tt>elementType</tt> is null
      */
@@ -144,7 +144,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * set, initially containing the same elements (if any).
      *
      * @param <E> The class of the elements in the set
-     * @param s the enum set from which to initialize this enum set
+     * @param s   the enum set from which to initialize this enum set
      * @return A copy of the specified enum set.
      * @throws NullPointerException if <tt>s</tt> is null
      */
@@ -160,15 +160,15 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * (in order to determine the new enum set's element type).
      *
      * @param <E> The class of the elements in the collection
-     * @param c the collection from which to initialize this enum set
+     * @param c   the collection from which to initialize this enum set
      * @return An enum set initialized from the given collection.
      * @throws IllegalArgumentException if <tt>c</tt> is not an
-     *     <tt>EnumSet</tt> instance and contains no elements
-     * @throws NullPointerException if <tt>c</tt> is null
+     *                                  <tt>EnumSet</tt> instance and contains no elements
+     * @throws NullPointerException     if <tt>c</tt> is null
      */
     public static <E extends Enum<E>> EnumSet<E> copyOf(Collection<E> c) {
         if (c instanceof EnumSet) {
-            return ((EnumSet<E>)c).clone();
+            return ((EnumSet<E>) c).clone();
         } else {
             if (c.isEmpty())
                 throw new IllegalArgumentException("Collection is empty");
@@ -187,7 +187,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * <i>not</i> contained in the specified set.
      *
      * @param <E> The class of the elements in the enum set
-     * @param s the enum set from whose complement to initialize this enum set
+     * @param s   the enum set from whose complement to initialize this enum set
      * @return The complement of the specified set in this set
      * @throws NullPointerException if <tt>s</tt> is null
      */
@@ -199,7 +199,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
 
     /**
      * Creates an enum set initially containing the specified element.
-     *
+     * <p>
      * Overloadings of this method exist to initialize an enum set with
      * one through five elements.  A sixth overloading is provided that
      * uses the varargs feature.  This overloading may be used to create
@@ -207,9 +207,9 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * is likely to run slower than the overloadings that do not use varargs.
      *
      * @param <E> The class of the specified element and of the set
-     * @param e the element that this set is to contain initially
-     * @throws NullPointerException if <tt>e</tt> is null
+     * @param e   the element that this set is to contain initially
      * @return an enum set initially containing the specified element
+     * @throws NullPointerException if <tt>e</tt> is null
      */
     public static <E extends Enum<E>> EnumSet<E> of(E e) {
         EnumSet<E> result = noneOf(e.getDeclaringClass());
@@ -219,7 +219,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
 
     /**
      * Creates an enum set initially containing the specified elements.
-     *
+     * <p>
      * Overloadings of this method exist to initialize an enum set with
      * one through five elements.  A sixth overloading is provided that
      * uses the varargs feature.  This overloading may be used to create
@@ -227,10 +227,10 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * is likely to run slower than the overloadings that do not use varargs.
      *
      * @param <E> The class of the parameter elements and of the set
-     * @param e1 an element that this set is to contain initially
-     * @param e2 another element that this set is to contain initially
-     * @throws NullPointerException if any parameters are null
+     * @param e1  an element that this set is to contain initially
+     * @param e2  another element that this set is to contain initially
      * @return an enum set initially containing the specified elements
+     * @throws NullPointerException if any parameters are null
      */
     public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2) {
         EnumSet<E> result = noneOf(e1.getDeclaringClass());
@@ -241,7 +241,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
 
     /**
      * Creates an enum set initially containing the specified elements.
-     *
+     * <p>
      * Overloadings of this method exist to initialize an enum set with
      * one through five elements.  A sixth overloading is provided that
      * uses the varargs feature.  This overloading may be used to create
@@ -249,11 +249,11 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * is likely to run slower than the overloadings that do not use varargs.
      *
      * @param <E> The class of the parameter elements and of the set
-     * @param e1 an element that this set is to contain initially
-     * @param e2 another element that this set is to contain initially
-     * @param e3 another element that this set is to contain initially
-     * @throws NullPointerException if any parameters are null
+     * @param e1  an element that this set is to contain initially
+     * @param e2  another element that this set is to contain initially
+     * @param e3  another element that this set is to contain initially
      * @return an enum set initially containing the specified elements
+     * @throws NullPointerException if any parameters are null
      */
     public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2, E e3) {
         EnumSet<E> result = noneOf(e1.getDeclaringClass());
@@ -265,7 +265,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
 
     /**
      * Creates an enum set initially containing the specified elements.
-     *
+     * <p>
      * Overloadings of this method exist to initialize an enum set with
      * one through five elements.  A sixth overloading is provided that
      * uses the varargs feature.  This overloading may be used to create
@@ -273,12 +273,12 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * is likely to run slower than the overloadings that do not use varargs.
      *
      * @param <E> The class of the parameter elements and of the set
-     * @param e1 an element that this set is to contain initially
-     * @param e2 another element that this set is to contain initially
-     * @param e3 another element that this set is to contain initially
-     * @param e4 another element that this set is to contain initially
-     * @throws NullPointerException if any parameters are null
+     * @param e1  an element that this set is to contain initially
+     * @param e2  another element that this set is to contain initially
+     * @param e3  another element that this set is to contain initially
+     * @param e4  another element that this set is to contain initially
      * @return an enum set initially containing the specified elements
+     * @throws NullPointerException if any parameters are null
      */
     public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2, E e3, E e4) {
         EnumSet<E> result = noneOf(e1.getDeclaringClass());
@@ -291,7 +291,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
 
     /**
      * Creates an enum set initially containing the specified elements.
-     *
+     * <p>
      * Overloadings of this method exist to initialize an enum set with
      * one through five elements.  A sixth overloading is provided that
      * uses the varargs feature.  This overloading may be used to create
@@ -299,17 +299,16 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * is likely to run slower than the overloadings that do not use varargs.
      *
      * @param <E> The class of the parameter elements and of the set
-     * @param e1 an element that this set is to contain initially
-     * @param e2 another element that this set is to contain initially
-     * @param e3 another element that this set is to contain initially
-     * @param e4 another element that this set is to contain initially
-     * @param e5 another element that this set is to contain initially
-     * @throws NullPointerException if any parameters are null
+     * @param e1  an element that this set is to contain initially
+     * @param e2  another element that this set is to contain initially
+     * @param e3  another element that this set is to contain initially
+     * @param e4  another element that this set is to contain initially
+     * @param e5  another element that this set is to contain initially
      * @return an enum set initially containing the specified elements
+     * @throws NullPointerException if any parameters are null
      */
     public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2, E e3, E e4,
-                                                    E e5)
-    {
+                                                    E e5) {
         EnumSet<E> result = noneOf(e1.getDeclaringClass());
         result.add(e1);
         result.add(e2);
@@ -326,12 +325,12 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * number of elements, but it is likely to run slower than the overloadings
      * that do not use varargs.
      *
-     * @param <E> The class of the parameter elements and of the set
+     * @param <E>   The class of the parameter elements and of the set
      * @param first an element that the set is to contain initially
-     * @param rest the remaining elements the set is to contain initially
-     * @throws NullPointerException if any of the specified elements are null,
-     *     or if <tt>rest</tt> is null
+     * @param rest  the remaining elements the set is to contain initially
      * @return an enum set initially containing the specified elements
+     * @throws NullPointerException if any of the specified elements are null,
+     *                              or if <tt>rest</tt> is null
      */
     @SafeVarargs
     public static <E extends Enum<E>> EnumSet<E> of(E first, E... rest) {
@@ -348,13 +347,13 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * contain the endpoints themselves, which may be identical but must not
      * be out of order.
      *
-     * @param <E> The class of the parameter elements and of the set
+     * @param <E>  The class of the parameter elements and of the set
      * @param from the first element in the range
-     * @param to the last element in the range
-     * @throws NullPointerException if {@code from} or {@code to} are null
-     * @throws IllegalArgumentException if {@code from.compareTo(to) > 0}
+     * @param to   the last element in the range
      * @return an enum set initially containing all of the elements in the
-     *         range defined by the two specified endpoints
+     * range defined by the two specified endpoints
+     * @throws NullPointerException     if {@code from} or {@code to} are null
+     * @throws IllegalArgumentException if {@code from.compareTo(to) > 0}
      */
     public static <E extends Enum<E>> EnumSet<E> range(E from, E to) {
         if (from.compareTo(to) > 0)
@@ -379,7 +378,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
     public EnumSet<E> clone() {
         try {
             return (EnumSet<E>) super.clone();
-        } catch(CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
     }
@@ -403,8 +402,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      * The result is uncloned, cached, and shared by all callers.
      */
     private static <E extends Enum<E>> E[] getUniverse(Class<E> elementType) {
-        return SharedSecrets.getJavaLangAccess()
-                                        .getEnumConstantsShared(elementType);
+        return SharedSecrets.getJavaLangAccess().getEnumConstantsShared(elementType);
     }
 
     /**
@@ -416,9 +414,8 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
      *
      * @serial include
      */
-    private static class SerializationProxy <E extends Enum<E>>
-        implements java.io.Serializable
-    {
+    private static class SerializationProxy<E extends Enum<E>>
+            implements java.io.Serializable {
         /**
          * The element type of this enum set.
          *
@@ -444,7 +441,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
         private Object readResolve() {
             EnumSet<E> result = EnumSet.noneOf(elementType);
             for (Enum<?> e : elements)
-                result.add((E)e);
+                result.add((E) e);
             return result;
         }
 
@@ -458,7 +455,7 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E>
     // readObject method for the serialization proxy pattern
     // See Effective Java, Second Ed., Item 78.
     private void readObject(java.io.ObjectInputStream stream)
-        throws java.io.InvalidObjectException {
+            throws java.io.InvalidObjectException {
         throw new java.io.InvalidObjectException("Proxy required");
     }
 }

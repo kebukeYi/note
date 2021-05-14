@@ -12,9 +12,8 @@ public class CountDownLatchHttp {
     public static void main(String[] args) throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         for (int i = 0; i < 10; i++) {
-//            Thread thread = new Thread();
-//            thread.join();
-
+            Thread thread = new Thread();
+            thread.join();
         }
     }
 

@@ -21,9 +21,8 @@ public class Program {
 
     }
 
-
     /*
-    中间操作
+    延迟方法
      */
     public static void creatProcess() {
         Stream<Person> stream = Data.getPersonList().stream();
@@ -164,9 +163,9 @@ public class Program {
 
     }
 
-/*
-并行流
- */
+    /*
+    并行流
+     */
     public static void RowStream() {
         Stream<Person> stream = Data.getPersonList().stream();
         /*
@@ -196,6 +195,8 @@ public class Program {
 
         /*
         映射  map
+        如果需要将流中的元素映射到另一个流中，可以使用 map 方法，流之间的转换，
+        这可以将一种T类型转换成为R类型，而这种转换的动作，就称为“映射”。
          */
 //        String[] array = {"ming", "yang", "hao", "hei"};
         //获取所有的字符
@@ -204,6 +205,15 @@ public class Program {
         //对 流中的数据 进行扁平化处理
 //        System.out.println(Arrays.stream(array).map(ele -> ele.split("")).flatMap(Arrays::stream).collect(Collectors.toList()));//就是把[m,i,n,g]中每一个元素都当作是一个流 然后再合并成一个流
 
+
+        /*
+         * concat
+         * 如果有两个流，希望合并成为一个流，那么可以使用 Stream 接口的静态方法 concat
+         */
+        Stream<String> original1 = Stream.of("Java", "C", "Python");
+        Stream<String> original2 = Stream.of("Hadoop", "Spark");
+        Stream<String> result = Stream.concat(original1, original2);
+        result.forEach(System.out::println);
     }
 
 

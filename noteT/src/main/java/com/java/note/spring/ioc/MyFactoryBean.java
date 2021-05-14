@@ -10,7 +10,7 @@ import java.lang.reflect.Proxy;
 /**
  * @Author : mmy
  * @Creat Time : 2020/6/24  14:22
- * @Description 生成特殊的Bean : 现在可以生成MyBatis的 *Mapper 代理对象 ，然后可以装配在Spring 中，再在service 层 DI ；
+ * @Description 生成特殊的Bean :  现在可以生成MyBatis的 *Mapper 代理对象 ，然后可以装配在Spring 中，再在service 层 DI ；
  */
 //@Component
 //public class MyFactoryBean implements FactoryBean {

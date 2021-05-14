@@ -106,10 +106,10 @@ import sun.misc.SharedSecrets;
  * @param <E> the type of elements held in this collection
  * @author Doug Lea
  * @since 1.5
+ * 是一个将元素按照优先级排序的阻塞的阻塞队列，元素的优先级越高，将会越先出队列。这是一个无界队列
  */
 @SuppressWarnings("unchecked")
-public class PriorityBlockingQueue<E> extends AbstractQueue<E>
-        implements BlockingQueue<E>, java.io.Serializable {
+public class PriorityBlockingQueue<E> extends AbstractQueue<E> implements BlockingQueue<E>, java.io.Serializable {
     private static final long serialVersionUID = 5595510919245408276L;
 
     /*

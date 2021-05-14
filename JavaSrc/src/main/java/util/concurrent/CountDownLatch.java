@@ -155,6 +155,7 @@ import java.util.concurrent.locks.AbstractQueuedSynchronizer;
  * @since 1.5
  */
 public class CountDownLatch {
+
     /**
      * Synchronization control For CountDownLatch.
      * Uses AQS state to represent count.
@@ -171,8 +172,9 @@ public class CountDownLatch {
             return getState();
         }
 
-        //
+        //仅仅是获取锁的状态
         protected int tryAcquireShared(int acquires) {
+            //刚开始是大于 0 的初始值 所以返回 -1
             return (getState() == 0) ? 1 : -1;
         }
 
@@ -180,14 +182,16 @@ public class CountDownLatch {
          * 更新 AQS.state 值，每调用一次，state值减一，当state -1 正好为0时，返回true
          */
         protected boolean tryReleaseShared(int releases) {
-            //自旋
+            // 将同步状态进行减一，减一之后，同步状态变为0，就返回true，表示可以唤醒同步队列中正在等待的线程了
             for (; ; ) {
                 // 获取当前 AQS.state
                 int c = getState();
                 // 条件成立：说明前面已经有线程 触发 唤醒操作了，这里返回 false
+                // 在对state进行减一操作之前，会先判断一下state的值是否为0，如果state已经为0了，此时还有线程来对state进行减1，这个时候是不正常的操作，因此会返回false
                 if (c == 0) {
                     return false;
                 }
+
                 // 执行到这里，说明 state > 0
                 int nextc = c - 1;
 
@@ -241,8 +245,10 @@ public class CountDownLatch {
      * @throws InterruptedException if the current thread is interrupted
      *                              while waiting
      */
+    //  让调用该方法的线程阻塞，当CountDownLatch的计数器减为0时，才会让线程解阻塞
+    //怎么通知的?
     public void await() throws InterruptedException {
-        //
+        //共享模式下获取资源
         sync.acquireSharedInterruptibly(1);
     }
 
@@ -284,11 +290,11 @@ public class CountDownLatch {
      * @param unit    the time unit of the {@code timeout} argument
      * @return {@code true} if the count reached zero and {@code false}
      * if the waiting time elapsed before the count reached zero
-     * @throws InterruptedException if the current thread is interrupted
-     *                              while waiting
+     * @throws InterruptedException if the current thread is interrupted while waiting
      */
+    //让调用该方法的线程超时阻塞，如果超过了指定的时间，CountDownLatch的计数器还没有减为0，那么线程就会直接返回
     public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
-        //
+        //共享模式
         return sync.tryAcquireSharedNanos(1, unit.toNanos(timeout));
     }
 

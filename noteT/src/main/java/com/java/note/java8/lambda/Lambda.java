@@ -5,9 +5,10 @@ import com.java.note.java8.lambda.interfaces.Comparator;
 /**
  * @Author : mmy
  * @Create : Time : 2020/3/31  16:14
- * @Description
+ * @Description: Java 8的Lambda让我们可以更加专注于做什么(What)，而不是怎么做(How)。
  */
 public class Lambda {
+
     /*
     Lambda:匿名函数,，可以对一个接口进行非常简洁的实现，但是最关键的基本要求是： 函数式接口 +  接口中只能有一个要实现的抽象方法即没有加  default  修饰的方法；
     允许把函数作为一个方法的参数(函数作为参数传递进方法中。

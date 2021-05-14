@@ -4,8 +4,8 @@ import java.util.function.Consumer;
 
 /**
  * @Author : mmy
- * @Creat Time : 2020/3/31  22:25
- * @Description
+ * @CreatTime : 2020/3/31  22:25
+ * @Description :
  */
 public class ClosureDemo2 {
 
@@ -16,7 +16,11 @@ public class ClosureDemo2 {
         };
 
         consumer.accept(12);
+
     }
 
+    private static void method(Consumer<Integer> consumer) {
+
+    }
 
 }

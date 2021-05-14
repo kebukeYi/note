@@ -63,6 +63,7 @@ public class CountDownLatchTest02 {
 
         private void doWork() throws InterruptedException {
             TimeUnit.SECONDS.sleep(5);
+            System.out.println("开始工作");
         }
 
         public Worker(int id, CountDownLatch startSignal, CountDownLatch doneSignal) {

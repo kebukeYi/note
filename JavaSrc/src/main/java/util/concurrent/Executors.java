@@ -215,6 +215,7 @@ public class Executors {
      * @return the newly created thread pool
      */
     public static ExecutorService newCachedThreadPool() {
+        //CachedThreadPool，线程数大小无界的线程池。核心线程数等于0，最大线程数等于Integer.MAX_VALUE，这个值已经非常大了，因此称之为线程数大小无界的线程池
         return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>());
     }
@@ -230,7 +231,9 @@ public class Executors {
      * @throws NullPointerException if threadFactory is null
      *                              CachedThreadPool 的corePoolSize 被设置为空（0），maximumPoolSize被设置为 Integer.MAX.VALUE，
      *                              即它是无界的，这也就意味着如果主线程提交任务的速度高于 maximumPool 中线程处理任务的速度时，
-     *                              CachedThreadPool 会不断创建新的线程。极端情况下，这样会导致耗尽 cpu 和内存资源。
+     *                              CachedThreadPool 会不断创建新的线程。极端情况下，这样会导致耗尽 cpu 和内存资源
+     *                              令keepAliveTime等于60，单位为秒，这说明空闲线程最多存活60秒
+     *
      */
     public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
         return new ThreadPoolExecutor(0, Integer.MAX_VALUE,

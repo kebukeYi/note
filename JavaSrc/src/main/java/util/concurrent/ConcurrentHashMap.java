@@ -1380,8 +1380,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
      * for each key-value mapping, followed by a null pair.
      * The key-value mappings are emitted in no particular order.
      */
-    private void writeObject(java.io.ObjectOutputStream s)
-            throws java.io.IOException {
+    private void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
         // For serialization compatibility
         // Emulate segment calculation from previous version of this class
         int sshift = 0;
@@ -1393,8 +1392,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         int segmentShift = 32 - sshift;
         int segmentMask = ssize - 1;
         @SuppressWarnings("unchecked")
-        Segment<K, V>[] segments = (Segment<K, V>[])
-                new Segment<?, ?>[DEFAULT_CONCURRENCY_LEVEL];
+        Segment<K, V>[] segments = (Segment<K, V>[]) new Segment<?, ?>[DEFAULT_CONCURRENCY_LEVEL];
         for (int i = 0; i < segments.length; ++i)
             segments[i] = new Segment<K, V>(LOAD_FACTOR);
         s.putFields().put("segments", segments);
@@ -6685,8 +6683,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
     }
 
     @SuppressWarnings("serial")
-    static final class MapReduceValuesToIntTask<K, V>
-            extends BulkTask<K, V, Integer> {
+    static final class MapReduceValuesToIntTask<K, V> extends BulkTask<K, V, Integer> {
         final ToIntFunction<? super V> transformer;
         final IntBinaryOperator reducer;
         final int basis;

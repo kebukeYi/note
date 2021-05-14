@@ -1,39 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea, Bill Scherer, and Michael Scott with
- * assistance from members of JCP JSR-166 Expert Group and released to
- * the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent;
 
 import java.util.concurrent.locks.LockSupport;
@@ -81,9 +45,9 @@ import java.util.Spliterators;
  * @param <E> the type of elements held in this collection
  * @author Doug Lea and Bill Scherer and Michael Scott
  * @since 1.5
+ * 是一个不存储元素的阻塞队列
  */
-public class SynchronousQueue<E> extends AbstractQueue<E>
-        implements BlockingQueue<E>, java.io.Serializable {
+public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQueue<E>, java.io.Serializable {
     private static final long serialVersionUID = -3223113410248163686L;
 
     /*
@@ -175,8 +139,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
          *              offered by producer.
          * @param timed if this operation should timeout
          * @param nanos the timeout, in nanoseconds
-         * @param e     可以为null，null时表示这个请求是一个 REQUEST 类型的请求   (消费)
-         *              如果不是null，说明这个请求是一个 DATA 类型的请求。（入队）
+         * @param e     可以为null，null时表示这个请求是一个 REQUEST 类型的请求   (消费) ; 如果不是null，说明这个请求是一个 DATA 类型的请求。（入队）
          * @param timed 如果为true 表示指定了超时时间 ,如果为false 表示不支持超时，表示当前请求一直等待到匹配为止，或者被中断。
          * @param nanos 超时时间限制 单位 纳秒
          * @return E 如果当前请求是一个 REQUEST类型的请求，返回值如果不为 null 表示 匹配成功；
@@ -194,7 +157,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
     //如果自旋期间未被匹配到，自旋次数达到某个指标后，还是会将当前线程挂起的...
     //NCPUS：当一个平台只有一个CPU时，你觉得还需要自旋么？
     //答：肯定不需要自旋了，因为一个cpu同一时刻只能执行一个线程，自旋没有意义了...而且你还站着cpu 其它线程没办法执行..这个
-    //栈的状态更不会改变了.. 当只有一个cpu时 会直接选择 LockSupport.park() 挂起等待者线程。
+    //栈的状态更不会改变了.. 当只有一个cpu时 会直接选择 LockSupport.park() 挂起等待者线程
 
     /**
      * The number of CPUs, for spin control
@@ -1063,14 +1026,14 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
     /**
      * Inserts the specified element into this queue, waiting if necessary
      * up to the specified wait time for another thread to receive it.
+     * 每个插入操作必须得等到另一个线程调用了移除操作后，该线程才会返回，否则将一直阻塞
      *
      * @return {@code true} if successful, or {@code false} if the
      * specified waiting time elapses before a consumer appears
      * @throws InterruptedException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public boolean offer(E e, long timeout, TimeUnit unit)
-            throws InterruptedException {
+    public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
         if (e == null) throw new NullPointerException();
         if (transferer.transfer(e, true, unit.toNanos(timeout)) != null)
             return true;
@@ -1094,16 +1057,16 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
     }
 
     /**
-     * Retrieves and removes the head of this queue, waiting if necessary
-     * for another thread to insert it.
+     * Retrieves and removes the head of this queue, waiting if necessary for another thread to insert it.
      *
      * @return the head of this queue
      * @throws InterruptedException {@inheritDoc}
      */
     public E take() throws InterruptedException {
         E e = transferer.transfer(null, false, 0);
-        if (e != null)
+        if (e != null) {
             return e;
+        }
         Thread.interrupted();
         throw new InterruptedException();
     }
@@ -1119,8 +1082,9 @@ public class SynchronousQueue<E> extends AbstractQueue<E>
      */
     public E poll(long timeout, TimeUnit unit) throws InterruptedException {
         E e = transferer.transfer(null, true, unit.toNanos(timeout));
-        if (e != null || !Thread.interrupted())
+        if (e != null || !Thread.interrupted()) {
             return e;
+        }
         throw new InterruptedException();
     }
 

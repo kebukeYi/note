@@ -57,19 +57,28 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     //当前task状态
     private volatile int state;
-    //还未执行
+
+    //还未执行 默认
     private static final int NEW = 0;
-    //尚未完全结束，一种临界状态 等待赋值 outcome
+
+    // 任务处于完成中，什么是完成中呢？有两种情况
+    // 1. 任务正常被线程执行完成了，但是还没有将返回值赋值给outcome属性
+    // 2. 任务在执行过程中出现了异常，被捕获了，然后处理异常了，在将异常对象赋值给outcome属性之前
     private static final int COMPLETING = 1;
+
     //当前任务正常结束
     private static final int NORMAL = 2;
-    //任务执行中 向上抛出了异常
+
+    // 任务出了异常，并将异常对象赋值给outcome属性之后
     private static final int EXCEPTIONAL = 3;
-    //当前任务被取消
+
+    // 调用cancle(false)，任务被取消了
     private static final int CANCELLED = 4;
-    //当前任务中断中  只是一个标记
+
+    // 调用cancle(true)，任务取消，但是在线程中断之前
     private static final int INTERRUPTING = 5;
-    //当前任务已经中断
+
+    //  调用cancle(true)，任务取消，但是在线程中断之后
     private static final int INTERRUPTED = 6;
 
     /**
@@ -93,7 +102,8 @@ public class FutureTask<V> implements RunnableFuture<V> {
 
     /**
      * Treiber stack of waiting threads
-     * 因为会有很多线程去get结果
+     * 用来保存等待获取任务返回值的线程的等待队列，当我们在主线程中调用Future.get()方法时，就会将主线程封装成一个WaitNode。
+     * 当有多个线程同时调用Future.get()方法时，WaitNode会通过next属性来维护一个链表
      * 采用头插法  保存 想得到结果的线程 节点
      */
     private volatile WaitNode waiters;
@@ -221,14 +231,17 @@ public class FutureTask<V> implements RunnableFuture<V> {
     /**
      * @throws CancellationException {@inheritDoc}
      */
-    public V get(long timeout, TimeUnit unit)
-            throws InterruptedException, ExecutionException, TimeoutException {
+    public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         if (unit == null)
             throw new NullPointerException();
         int s = state;
+        // 如果状态处于NEW或者COMPLETING状态，表示任务还没有执行完成，需要等待
         if (s <= COMPLETING &&
-                (s = awaitDone(true, unit.toNanos(timeout))) <= COMPLETING)
+                // awaitDone()进行等待
+                (s = awaitDone(true, unit.toNanos(timeout))) <= COMPLETING) {
             throw new TimeoutException();
+        }
+        // 返回结果
         return report(s);
     }
 
@@ -262,7 +275,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
             outcome = v;
             //再次赋值正常结束
             UNSAFE.putOrderedInt(this, stateOffset, NORMAL);
-            //
+            //唤醒waiters这个属性构成的等待队列中的线程
             finishCompletion();
         }
     }
@@ -284,7 +297,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
             outcome = t;
             //设置状态
             UNSAFE.putOrderedInt(this, stateOffset, EXCEPTIONAL);
-            //
+            //唤醒waiters这个属性构成的等待队列中的线程
             finishCompletion();
         }
     }
@@ -310,6 +323,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
                 boolean ran;
                 try {
                     //调用自己的 业务逻辑
+                    // 执行任务
                     result = c.call();
                     ran = true;
                 } catch (Throwable ex) {
@@ -317,10 +331,12 @@ public class FutureTask<V> implements RunnableFuture<V> {
                     result = null;
                     ran = false;
                     //处理异常
+                    // 出异常时将state置为EXCEPTIONAL
                     setException(ex);
                 }
                 //任务成功执行保存结果
                 if (ran) {
+                    // 设置任务状态为COMPLETING，然后保存返回值，最后再设置为NORMAL
                     set(result);
                 }
             }
@@ -427,7 +443,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
         for (WaitNode q; (q = waiters) != null; ) {
             //使用 cas waiters 置为 null  怕外部线程取消当前任务
             if (UNSAFE.compareAndSwapObject(this, waitersOffset, q, null)) {
-                //
+                //自选大法好
                 for (; ; ) {
                     //获取当前节点封装的thread
                     Thread t = q.thread;
@@ -465,7 +481,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * @param nanos time to wait, if timed
      * @return state upon completion
      */
-    //
+    //需要进入等待状态 等待正确结果
     private int awaitDone(boolean timed, long nanos) throws InterruptedException {
         //不是超时
         final long deadline = timed ? System.nanoTime() + nanos : 0L;
@@ -492,8 +508,9 @@ public class FutureTask<V> implements RunnableFuture<V> {
                     q.thread = null;
                 }
                 return s;
-                //说明：任务 接近完后状态； 这里让当前任务 再释放 cpu  ，进行下一次抢占cpu
+                //说明：任务 接近完后状态； 这里让当前任务 再释放 cpu , 进行下一次抢占 cpu , 为何?
             } else if (s == COMPLETING) {
+                //
                 Thread.yield();
 
                 //条件成立：第一次自旋  当前线程还未创建节点对象   此时开始创建节点对象

@@ -126,6 +126,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
             // 获取当前 AQS 内部状态量
             int c = getState();
             if (c == 0) {
+                // 与公平锁的不同之处在于，公平在在进行CAS操作之前，会先判断同步队列中是否有人排队
                 //锁是空闲状态 为该线程获取锁 ；不检查排队情况，直接争抢
                 if (compareAndSetState(0, acquires)) {
                     //并设置当前线程独占锁
@@ -151,9 +152,9 @@ public class ReentrantLock implements Lock, java.io.Serializable {
             int c = getState() - releases;
             //判断线程是否是锁持有者
             if (Thread.currentThread() != getExclusiveOwnerThread()) throw new IllegalMonitorStateException();
-            //初始化释放结果
+            // 因为上面一步已经确认了是当前线程持有锁，所以在修改state时，肯定是线程安全的
             boolean free = false;
-            //如果当前线程未重入，释放成功
+            // 因为可能锁被重入了，重入了几次就需要释放几次锁，所以这个地方需要判断，只有当state=0时才表示完全释放了锁。
             if (c == 0) {
                 free = true;
                 //释放锁持有的线程
@@ -211,9 +212,10 @@ public class ReentrantLock implements Lock, java.io.Serializable {
         final void lock() {
             //上来就是一个cas操作 尝试获取到锁
             if (compareAndSetState(0, 1)) {
-                //若得的一个true返回，则会执行setExclusiveOwnerThread(Thread.currentThread());，该方法作用是为锁设置独占线程，
+                //若得的一个true返回，则会执行setExclusiveOwnerThread(Thread.currentThread());该方法作用是为锁设置独占线程
                 setExclusiveOwnerThread(Thread.currentThread());
             } else {
+                //如果修改失败，就再去调用AQS的acquire()方法去尝试获取锁
                 acquire(1);
             }
         }
@@ -235,6 +237,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
         @Override
         final void lock() {
             //调用父类AQS方法
+            //在AQS的acquire()方法中会先调用子类的tryAcquire()方法 ↓
             // 获取锁 +1 操作
             acquire(1);
         }
@@ -247,14 +250,25 @@ public class ReentrantLock implements Lock, java.io.Serializable {
         @Override
         protected final boolean tryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
+            // 获取同步状态state的值（在AQS中，state就相当于锁，如果线程能成功修改state的值，那么就表示该线程获取到了锁）
             int c = getState();
-            //当前AQS 锁是空闲状态 为该线程获取锁
+            // 如果c等于0，表示还没有任何线程获取到锁
             if (c == 0) {
-                //hasQueuedPredecessors()这个⽅法主要是判断当前线程是否位于CLH同步队列中的第⼀个 或者 检查在队列中是否存在 比当前线程更早的等待者
-                // 如果没有等待者  false  直接尝试获取锁
-                // 存在等待者 返回  true  需要入队
+
+                /**
+                 * 此时可能存在多个线程同时执行到这儿，均满足c==0这个条件
+                 * 在if条件中，会先调用hasQueuedPredecessors()方法来判断队列中是否已经有线程在排队，该方法返回true表示有线程在排队，返回false表示没有线程在排队
+                 * 第1种情况：hasQueuedPredecessors()返回true，表示有线程排队，
+                 *           此时 !hasQueuedPredecessors() == false，由于&& 运算符的短路作用，if的条件判断为false，那么就不会进入到if语句中，tryAcquire()方法就会返回false
+                 *
+                 * 第2种情况：hasQueuedPredecessors()返回false，表示没有线程排队
+                 *           此时 !hasQueuedPredecessors() == true, 那么就会进行&&后面的判断，就会调用compareAndSetState()方法去进行修改state字段的值
+                 *           compareAndSetState()方法是一个CAS方法,它会对state字段进行修改，它的返回值结果又需要分两种情况
+                 *           第 i 种情况：对state字段进行CAS修改成功，就会返回true，此时if的条件判断就为true了，就会进入到if语句中，同时也表示当前线程获取到了锁。那么最终tryAcquire()方法会返回true
+                 *           第 ii 种情况：如果对state字段进行CAS修改失败，说明在这一瞬间，已经有其他线程获取到了锁，那么if的条件判断就为false了，就不会进入到if语句块中，最终tryAcquire()方法会返回false。
+                 */
                 if (!hasQueuedPredecessors() && compareAndSetState(0, acquires)) {
-                    //需要当前线程为独占者
+                    // 当前线程成功修改了state字段的值，那么就表示当前线程获取到了锁，那么就将AQS中锁的拥有者设置为当前线程，然后返回true
                     setExclusiveOwnerThread(current);
                     //抢占成功
                     return true;
@@ -264,11 +278,11 @@ public class ReentrantLock implements Lock, java.io.Serializable {
             // 执行到这里有几种情况
             // c!=0     c>0  需要检查是否是独占锁的线程  因为支持可重入
             else if (current == getExclusiveOwnerThread()) {
-                //可重入锁
+                // 如果是当前线程，那么就将state的值加1，这就是锁的重入
                 int nextc = c + acquires;
                 //越界判断
                 if (nextc < 0) throw new Error("Maximum lock count exceeded");
-                //更新值
+                // 因为此时肯定只有一个线程获取到了锁，只有获取到锁的线程才会执行到这行代码，所以可以直接调用setState(nextc)方法来修改state的值，这儿不会存在线程安全的问题
                 setState(nextc);
                 //抢占成功
                 return true;
@@ -276,9 +290,9 @@ public class ReentrantLock implements Lock, java.io.Serializable {
 
             //1. CAS 失败 ： c==0 时 cas修改状态失败
             //2. c>0 时 当前线程不是独占锁的线程
+            // 如果state不等于0，且当前线程也不等于已经获取到锁的线程，那么就返回false，表示当前线程没有获取到锁
             return false;
         }
-
     }
 
     /**

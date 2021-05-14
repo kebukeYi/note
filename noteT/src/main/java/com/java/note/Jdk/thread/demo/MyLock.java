@@ -13,8 +13,9 @@ public class MyLock {
     static Object Lock = new Object();
 
     public static void main(String[] args) {
-        Lock.notify();
+        Lock lock = new ReentrantLock(true);
+        lock.lock();
 
-        Lock lock = new ReentrantLock();
+        lock.unlock();
     }
 }

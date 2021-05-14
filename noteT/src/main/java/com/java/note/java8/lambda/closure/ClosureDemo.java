@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 /**
  * @Author : mmy
- * @Creat Time : 2020/3/31  22:19
+ * @CreatTime : 2020/3/31  22:19
  * @Description
  */
 public class ClosureDemo {

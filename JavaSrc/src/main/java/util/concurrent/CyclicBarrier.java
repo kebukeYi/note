@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent;
 
 import java.util.concurrent.locks.Condition;
@@ -133,13 +98,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * corresponding {@code await()} in other threads.
  *
  * @author Doug Lea
- * 简单来说：CyclicBarrier允许⼀组线程互相等待，直到到达某个公共屏障点。叫做cyclic是因为当所有等
- * 待线程都被释放以后，CyclicBarrier可以被重⽤(对⽐于CountDownLatch是不能重⽤的)
+ * 简单来说：CyclicBarrier允许⼀组线程互相等待，直到到达某个公共屏障点。
+ * 叫做cyclic是因为当所有等待线程都被释放以后，CyclicBarrier可以被重⽤(对⽐于CountDownLatch是不能重⽤的)
  * 使⽤说明：
- * CountDownLatch注重的是等待其他线程完成，CyclicBarrier注重的是：当线程到达某个状态后，
- * 暂停下来等待其他线程，所有线程均到达以后，继续执⾏。
- * @see CountDownLatch
- * @since 1.5
+ * CountDownLatch注重的是等待其他线程完成，其他线程都已经完成了,消亡了, 主流程再自己走;
+ * CountDownLatch的计数器减为0后，不会重置，因此不能重复使用.
+ * CyclicBarrier注重的是：当线程到达某个状态后，暂停下来等待其他线程，所有线程均到达以后，所有线程继可以执⾏,不会消亡;
+ * CyclicBarrier的计数器减为0后，可以重置计数器，从而可以再次使用，这一点通过类名中含有Cyclic（循环）就能看出.
  */
 public class CyclicBarrier {
     /**
@@ -155,35 +120,41 @@ public class CyclicBarrier {
      */
     private static class Generation {
         //表示当前“代”是否被打破，如果代被打破 ，那么再来到这一代的线程 就会直接抛出 BrokenException异常
-        //且在这一代 挂起的线程 都会被唤醒，然后抛出 BrokerException异常。
+        //且在这一 代 挂起的线程 都会被唤醒，然后抛出 BrokerException 异常
         boolean broken = false;
     }
 
     /**
      * The lock for guarding barrier entry
      */
-    //因为 barrier 实现是依赖于 Condition 条件队列的，condition 条件队列必须依赖 lock 才能使用。
+    //因为 barrier 实现是依赖于 Condition 条件队列的，condition 条件队列必须依赖 lock 才能使用
+    // 用来保证线程安全，防止多个线程同时修改count时，出现线程不安全的情况
     private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Condition to wait on until tripped
      */
-    //线程挂起实现使用的 condition 队列，条件：当前 代 所有线程到位，这个条件队列内的线程 才会被唤醒。
+    //线程挂起实现使用的 condition 队列，条件：当前 代 所有线程到位，这个条件队列内的线程 才会被唤醒
+    // 等待队列
     private final Condition trip = lock.newCondition();
+
 
     /**
      * The number of parties
      */
+    //记录计数器的初始值
     //Barrier需要参与进来的线程数量
     private final int parties;
 
     /* The command to run when tripped */
     //当前代 最后一个到位的线程 需要执行的事件
+    //CyclicBarrier支持当计数器减为0后，先执行一个Runnable任务，然后执行阻塞在屏障处的线程
     private final Runnable barrierCommand;
 
     /**
      * The current generation
      * 表示barrier对象 当前 “代”
+     * 当计数器重置时，也会重置该属性。当出现超时等待时，会令generation中的broken属性为true
      */
     private Generation generation = new Generation();
 
@@ -192,7 +163,8 @@ public class CyclicBarrier {
      * on each generation.  It is reset to parties on each new
      * generation or when broken.
      */
-    //表示当前“代”还有多少个线程 未到位。
+    //计数器，当调用await()方法时，会令count减1
+    //表示当前“代”还有多少个线程 未到位
     //初始值为parties
     private int count;
 
@@ -202,7 +174,6 @@ public class CyclicBarrier {
      */
     private void nextGeneration() {
         // 将在 trip 条件队列内挂起的线程 全部唤醒
-        // signal completion of last generation
         trip.signalAll();
 
         //重置count为parties
@@ -237,18 +208,19 @@ public class CyclicBarrier {
         final ReentrantLock lock = this.lock;
         //加锁
         //为什么要加锁呢？
-        //因为 barrier的挂起 和 唤醒 依赖的组件是 condition
+        //因为 barrier 的挂起 和 唤醒 依赖的组件是 condition
         lock.lock();
 
         try {
             //获取barrier当前的 “代”
             final Generation g = generation;
+            //在第一次进入时，肯定为false（默认值就是false），该字段的值只有当线程调用await(long timeout,TimeUint unit)方法，且出现了超时情况，才会为true
             //如果当前代是已经被打破状态，则当前调用await方法的线程，直接抛出Broken异常
             if (g.broken) {
                 throw new BrokenBarrierException();
             }
 
-            //如果当前线程的中断标记位 为 true，则打破当前代，然后当前线程抛出 中断异常
+            //如果当前线程的中断标记位 为 true，则打破当前代，然后当前线程抛出 中断异常（让所有等待的线程醒来）
             if (Thread.interrupted()) {
                 //1.设置当前代的状态为broken状态  2.唤醒在trip 条件队列内的线程
                 breakBarrier();
@@ -258,20 +230,23 @@ public class CyclicBarrier {
             //正常逻辑..
             //假设 parties 给的是 5，那么index对应的值为 4,3,2,1,0
             int index = --count;
+
             //条件成立：说明当前线程是最后一个到达barrier的线程，此时需要做什么呢？
+            //如果递减后的结果为0，说明所有线程达到屏障
             if (index == 0) {  // tripped
                 //标记：true表示 最后一个线程 执行cmd时未抛异常。  false，表示最后一个线程执行cmd时抛出异常了.
                 //cmd就是创建 barrier对象时 指定的第二个 Runnable接口实现，这个可以为null
                 boolean ranAction = false;
                 try {
                     final Runnable command = barrierCommand;
-                    //条件成立：说明创建barrier对象时 指定 Runnable接口了，这个时候最后一个到达的线程 就需要执行这个接口
-                    if (command != null)
+                    //条件成立：说明创建barrier对象时 指定 Runnable接口了，这个时候最后一个到达的线程 就需要执行这个接口任务
+                    if (command != null) {
                         command.run();
+                    }
                     //command.run()未抛出异常的话，那么线程会执行到这里。
                     ranAction = true;
-                    //开启新的一代
-                    //1.唤醒 trip 条件队列内挂起的线程，被唤醒的线程 会依次 获取到 lock ，然后依次退出 await 方法。
+                    // 在nextGeneration()会唤醒等待队列中的所有线程，边让计数器的count值重置
+                    //1.唤醒 trip 条件队列内挂起的线程，被唤醒的线程 会依次 获取到 lock ，然后依次退出 await 方法
                     //2.重置 count 为 parties
                     //3.创建一个新的 generation 对象，表示新的一代
                     nextGeneration();
@@ -285,7 +260,7 @@ public class CyclicBarrier {
                 }
             }
 
-            // 执行到这里，说明当前线程 并不是最后一个到达 Barrier 的线程..此时需要进入一个自旋中.
+            // 执行到这里，说明当前线程 并不是最后一个到达 Barrier 的线程..此时需要进入一个自旋中...
 
             // loop until tripped, broken, interrupted, or timed out
             //自旋，一直到 条件满足、当前代被打破、线程被中断，等待超时
@@ -293,22 +268,21 @@ public class CyclicBarrier {
                 try {
                     //条件成立：说明当前线程是不指定超时时间的
                     if (!timed) {
-                        //当前线程 会 释放掉 lock，然后进入到 trip 条件队列的尾部，然后挂起自己，等待被唤醒。
+                        //当前线程 会 释放掉 lock，然后进入到 trip 条件队列的尾部，然后挂起自己，等待被唤醒
                         trip.await();
-                    } else if (nanos > 0L)
+                    } else if (nanos > 0L) {
                         // 说明当前线程调用 await 方法时 是指定了 超时时间的！
                         nanos = trip.awaitNanos(nanos);
+                    }
                 } catch (InterruptedException ie) {
-
                     // 抛出中断异常，会进来这里
                     // 什么时候会抛出 InterruptedException 异常呢？
                     // Node 节点在 条件队列内 时 收到中断信号时 会抛出中断异常！
 
-
                     // 条件一：g == generation 成立，说明当前代并没有变化
-                    // 条件二：! g.broken 当前代如果没有被打破，那么当前线程就去打破，并且抛出异常..
+                    // 条件二：! g.broken 当前代如果没有被打破，那么当前线程就去打破，并且抛出异常...
                     if (g == generation && !g.broken) {
-                        //
+                        //唤醒
                         breakBarrier();
                         throw ie;
                     } else {
@@ -325,18 +299,20 @@ public class CyclicBarrier {
                 //3.当前线程trip中等待超时，然后主动转移到 阻塞队列 然后获取到锁 唤醒
 
                 //条件成立：当前代已经被打破
-                if (g.broken)
+                if (g.broken) {
                     //线程唤醒后依次抛出BrokenBarrier异常
                     throw new BrokenBarrierException();
+                }
 
                 //唤醒后，执行到这里，有几种情况？
                 //1.正常情况，当前barrier开启了新的一代（trip.signalAll()）
                 //3.当前线程trip中等待超时，然后主动转移到 阻塞队列 然后获取到锁 唤醒。
 
                 //条件成立：说明当前线程挂起期间，最后一个线程到位了，然后触发了开启新的一代的逻辑，此时唤醒trip条件队列内的线程
-                if (g != generation)
+                if (g != generation) {
                     //返回当前线程的index
                     return index;
+                }
 
                 //唤醒后，执行到这里，有几种情况？
                 //3.当前线程trip中等待超时，然后主动转移到 阻塞队列 然后获取到锁 唤醒
@@ -346,7 +322,7 @@ public class CyclicBarrier {
                     //抛出超时异常.
                     throw new TimeoutException();
                 }
-            }
+            }//for over
 
         } finally {
             lock.unlock();
@@ -365,12 +341,13 @@ public class CyclicBarrier {
      *                      tripped, or {@code null} if there is no action
      * @throws IllegalArgumentException if {@code parties} is less than 1
      */
+    // barrierAction是一个Runnable，当计数器减为0时，会先执行barrierAction，然后再打开屏障
     public CyclicBarrier(int parties, Runnable barrierAction) {
         //因为小于等于0 的barrier没有任何意义..
         if (parties <= 0) throw new IllegalArgumentException();
 
         this.parties = parties;
-        //count的初始值 就是parties，后面当前代每到位一个线程，count--
+        //count的初始值 就是 parties，后面 当前代 每到位一个线程，count--
         this.count = parties;
         this.barrierCommand = barrierAction;
     }
@@ -385,6 +362,7 @@ public class CyclicBarrier {
      * @throws IllegalArgumentException if {@code parties} is less than 1
      */
     public CyclicBarrier(int parties) {
+        // parties用来指定计数器的大小
         this(parties, null);
     }
 
@@ -451,6 +429,7 @@ public class CyclicBarrier {
      *                                broken when {@code await} was called, or the barrier
      *                                action (if present) failed due to an exception
      */
+    //让线程等待在阻塞在屏障处，并令计数器减1，不支持超时等待
     public int await() throws InterruptedException, BrokenBarrierException {
         try {
             return dowait(false, 0L);
@@ -553,6 +532,7 @@ public class CyclicBarrier {
      * and choose one to perform the reset.  It may be preferable to
      * instead create a new barrier for subsequent use.
      */
+    //重置屏障
     public void reset() {
         final ReentrantLock lock = this.lock;
         lock.lock();

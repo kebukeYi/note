@@ -1,27 +1,3 @@
-/*
- * Copyright (c) 1994, 2016, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
 
 package java.lang;
 
@@ -673,10 +649,12 @@ public class Thread implements Runnable {
         /* Notify the group that this thread is about to be started
          * so that it can be added to the group's list of threads
          * and the group's unstarted count can be decremented. */
+        //
         group.add(this);
 
         boolean started = false;
         try {
+            //真正开始的地方
             start0();
             started = true;
         } finally {
@@ -1190,8 +1168,10 @@ public class Thread implements Runnable {
      *                                  <i>interrupted status</i> of the current thread is
      *                                  cleared when this exception is thrown.
      *                                  <p>
+     *                                      join()方法的作用是：在当前线程A中调用另外一个线程B的join()方法后，会让当前线程A阻塞，直到线程B的逻辑执行完成，A线程才会解阻塞，
+     *                                      然后继续执行自己的业务逻辑。
      *                                  成员方法加了synchronized说明是synchronized(this)，
-     *                                  this是谁？this就是threadA子线程对象本身。也就是说，主线程持有了threadA这个子线程对象的锁。
+     *                                  this是谁？this就是threadA子线程对象本身。也就是说，主线程持有了threadA这个子线程对象的锁
      */
     public final synchronized void join(long millis) throws InterruptedException {
         long base = System.currentTimeMillis();
@@ -1200,18 +1180,27 @@ public class Thread implements Runnable {
         if (millis < 0) {
             throw new IllegalArgumentException("timeout value is negative");
         }
-
+        // 当millis为0时，表示不限时长地等待
         if (millis == 0) {
+            // 通过while()死循环，只要线程还活着，那么就等待
             while (isAlive()) {
+                //等待 notify()、notifyAll() 来唤醒
                 wait(0);
             }
-        } else {
+        }
+        //有等待时长
+        else {
             while (isAlive()) {
+                //得出延迟
                 long delay = millis - now;
+                //直接毙掉
                 if (delay <= 0) {
                     break;
                 }
+                //等待时长
+                //等待不存活
                 wait(delay);
+                //再次等待
                 now = System.currentTimeMillis() - base;
             }
         }
