@@ -23,6 +23,7 @@ public class UDPProverbServer {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UDPProverbServerHandler());
+
             b.bind(port).sync().channel().closeFuture().await();
         } catch (Exception e) {
             e.printStackTrace();

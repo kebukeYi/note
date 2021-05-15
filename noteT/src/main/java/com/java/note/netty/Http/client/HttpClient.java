@@ -20,6 +20,7 @@ import java.net.URI;
  * @Description
  */
 public class HttpClient {
+
     public void connect(String host, int port) throws Exception {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -37,6 +38,7 @@ public class HttpClient {
                     ch.pipeline().addLast(new HttpClientHandler());
                 }
             });
+
             ChannelFuture f = b.connect(host, port).sync();
             URI uri = new URI("/post");
             String msg = "Are you ok?";

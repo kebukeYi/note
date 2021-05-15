@@ -1,37 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
 
 package java.util.concurrent;
 
@@ -166,6 +132,8 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
 
     /**
      * Wait queue for waiting takes
+     * 当队列为空时，不能再从队列中获取元素了，此时想从队列中获取元素的线程就需要等待，直到队列中有元素被添加进来有数据的时机
+     * 那么此时线程应该在哪儿等待呢？就是在notEmpty这个非空等待队列中等待.
      */
     private final Condition notEmpty = takeLock.newCondition();
 
@@ -177,6 +145,8 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
 
     /**
      * Wait queue for waiting puts
+     * 当队列已满时，不能再向队列中添加元素了，此时向队列中添加元素的线程就需要等待，直到队列不满的时机,
+     * 那么线程应该在哪儿等待呢？就是在notFull这个非满等待队列中等待
      */
     private final Condition notFull = putLock.newCondition();
 
@@ -220,6 +190,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
 
     /**
      * Removes a node from head of queue.
+     * head.next -> first.next->second.next
      *
      * @return the node
      */
@@ -228,9 +199,11 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
         // assert head.item == null;
         Node<E> h = head;
         Node<E> first = h.next;
+        //头节点 自己指向 自己 ??? 为什么不让老的head节点的next指针指向null ???
         h.next = h; // help GC
         head = first;
         E x = first.item;
+        //
         first.item = null;
         return x;
     }
@@ -343,42 +316,54 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
     }
 
     /**
-     * Inserts the specified element at the tail of this queue, waiting if
-     * necessary for space to become available.
+     * Inserts the specified element at the tail of this queue, waiting if necessary for space to become available.
+     * 当队列已满时，put(e)方法会一直阻塞线程，直到队列不满。当成功添加元素到队列中时，put(e)方法才会返回结束，该方法没有返回值
      *
      * @throws InterruptedException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
     public void put(E e) throws InterruptedException {
         if (e == null) throw new NullPointerException();
-        // Note: convention in all put/take/etc is to preset local var
-        // holding count negative to indicate failure unless set.
+        // Note: convention in all put/take/etc is to preset local var holding count negative to indicate failure unless set.
+        // 用负数 表示失败  put/take 操作
         int c = -1;
         Node<E> node = new Node<E>(e);
+        //获取 put 锁
         final ReentrantLock putLock = this.putLock;
+        //元素个数 包含两个操作: 添加到队列 + count++ = 保证两个操作的数据一致性
         final AtomicInteger count = this.count;
+        // 可中断的获取锁
         putLock.lockInterruptibly();
         try {
             /*
-             * Note that count is used in wait guard even though it is
-             * not protected by lock. This works because count can
-             * only decrease at this point (all other puts are shut
-             * out by lock), and we (or some other waiting put) are
-             * signalled if it ever changes from capacity. Similarly
-             * for all other uses of count in other wait guards.
+             * Note that count is used in wait guard even though it is not protected by lock.
+             * This works because count can only decrease at this point (all other puts are shut out by lock), and we (or some other waiting put) are
+             * signalled if it ever changes from capacity.
+             * Similarly for all other uses of count in other wait guards.
              */
+            // 如果队列满了，则进行等待，等待队列是 非满状态
+            //等待队列 会不会满?
             while (count.get() == capacity) {
                 notFull.await();
             }
+            // 入队
             enqueue(node);
+            // 队列元素个数自增，注意，由于这里调用的是getAndIncrement()方法，
+            // 不是incrementAndGet()方法，所以返回的是自增之前的值
             c = count.getAndIncrement();
-            if (c + 1 < capacity)
+
+            // 如果阻塞队列还没有满，就唤醒处于notFull(put)等待队列中的线程
+            if (c + 1 < capacity) {
                 notFull.signal();
+            }
         } finally {
             putLock.unlock();
         }
-        if (c == 0)
+        // 如果阻塞队列在没有添加元素之前，阻塞队列的元素个数为0，那么可能有线程处于notEmpty(takes)的等待队列中
+        // 因此这里会唤醒处于notEmpty(takes)的等待队列中的线程
+        if (c == 0) {
             signalNotEmpty();
+        }
     }
 
     /**
@@ -391,27 +376,40 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      */
     public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
-        if (e == null) throw new NullPointerException();
+        if (e == null) {
+            throw new NullPointerException();
+        }
+        // 根据传入的time和时间单位，计算需要等待对少纳秒
         long nanos = unit.toNanos(timeout);
         int c = -1;
         final ReentrantLock putLock = this.putLock;
         final AtomicInteger count = this.count;
+        //
         putLock.lockInterruptibly();
         try {
+            //经典 while 循环
             while (count.get() == capacity) {
-                if (nanos <= 0)
+                // 如果超时，直接返回false
+                if (nanos <= 0) {
                     return false;
+                }
+                // 等待（最终是调用LockSupport.parkNanos(this, nanosTimeout)）
                 nanos = notFull.awaitNanos(nanos);
             }
+            // 入队
             enqueue(new Node<E>(e));
             c = count.getAndIncrement();
-            if (c + 1 < capacity)
+            //通知 可以继续 插入元素了
+            if (c + 1 < capacity) {
                 notFull.signal();
+            }
         } finally {
             putLock.unlock();
         }
-        if (c == 0)
+        //通知可以 获取元素了
+        if (c == 0) {
             signalNotEmpty();
+        }
         return true;
     }
 
@@ -429,24 +427,36 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
     public boolean offer(E e) {
         if (e == null) throw new NullPointerException();
         final AtomicInteger count = this.count;
-        if (count.get() == capacity)
+        // 如果阻塞队列满了，直接返回false
+        if (count.get() == capacity) {
             return false;
+        }
         int c = -1;
         Node<E> node = new Node<E>(e);
+        //获取锁
         final ReentrantLock putLock = this.putLock;
+        //
         putLock.lock();
         try {
+            //队列未满 可以 put
             if (count.get() < capacity) {
+                //入队
                 enqueue(node);
+                //之前的值
                 c = count.getAndIncrement();
-                if (c + 1 < capacity)
+                if (c + 1 < capacity) {
+                    //唤醒 未满(put) 队列
                     notFull.signal();
+                }
             }
         } finally {
             putLock.unlock();
         }
-        if (c == 0)
+        //唤醒获取 take 线程
+        if (c == 0) {
             signalNotEmpty();
+        }
+        // 如果线程调用putLock.lock()没有获取到锁，那么此时c等于-1，因此会也会返回false
         return c >= 0;
     }
 
@@ -455,20 +465,30 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
         int c = -1;
         final AtomicInteger count = this.count;
         final ReentrantLock takeLock = this.takeLock;
+        //获取锁
         takeLock.lockInterruptibly();
         try {
+            // 如果阻塞队列中一直没有元素，线程就一直等待，直到队列中有元素后调用notEmpty等待队列的signal()方法
             while (count.get() == 0) {
                 notEmpty.await();
             }
+            //出队
             x = dequeue();
+            //获取出队之前的值 并且 随后 减一
             c = count.getAndDecrement();
-            if (c > 1)
+            // 如果阻塞队列中还有元素，就唤醒等待在notEmpty等待队列中的线程
+            if (c > 1) {
+                //继续出队操作
                 notEmpty.signal();
+            }
         } finally {
             takeLock.unlock();
         }
-        if (c == capacity)
+        // 如果在元素出队列前，队列处于已满状态，那么从队列中移出一个元素后，队列就变为非满状态了
+        // 此时就唤醒等待在notFull等待队列中的线程
+        if (c == capacity) {
             signalNotFull();
+        }
         return x;
     }
 
@@ -478,59 +498,76 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
         long nanos = unit.toNanos(timeout);
         final AtomicInteger count = this.count;
         final ReentrantLock takeLock = this.takeLock;
+        //
         takeLock.lockInterruptibly();
         try {
             while (count.get() == 0) {
-                if (nanos <= 0)
+                // 如果已经超时，直接返回null
+                if (nanos <= 0) {
                     return null;
+                }
+                // 等待(调用的是LockSupport.parkNanos(this, nanosTimeout))
                 nanos = notEmpty.awaitNanos(nanos);
             }
             x = dequeue();
             c = count.getAndDecrement();
-            if (c > 1)
+            if (c > 1) {
                 notEmpty.signal();
+            }
         } finally {
             takeLock.unlock();
         }
-        if (c == capacity)
+        if (c == capacity) {
             signalNotFull();
+        }
         return x;
     }
 
     public E poll() {
         final AtomicInteger count = this.count;
-        if (count.get() == 0)
+        // 如果队列为空，就立即返回null，不会阻塞线程
+        if (count.get() == 0) {
             return null;
+        }
         E x = null;
         int c = -1;
         final ReentrantLock takeLock = this.takeLock;
+        //两种锁会有什么不一样的?
         takeLock.lock();
         try {
             if (count.get() > 0) {
+                // 取元素
                 x = dequeue();
                 c = count.getAndDecrement();
-                if (c > 1)
+                // 非空通知
+                if (c > 1) {
                     notEmpty.signal();
+                }
             }
         } finally {
             takeLock.unlock();
         }
-        if (c == capacity)
+        // 非满通知
+        if (c == capacity) {
             signalNotFull();
+        }
         return x;
     }
 
     public E peek() {
-        if (count.get() == 0)
+        if (count.get() == 0) {
             return null;
+        }
         final ReentrantLock takeLock = this.takeLock;
         takeLock.lock();
         try {
+            // 取第一个元素
             Node<E> first = head.next;
-            if (first == null)
+            if (first == null) {
                 return null;
-            else
+            } else {
                 return first.item;
+            }
         } finally {
             takeLock.unlock();
         }
@@ -806,11 +843,14 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
         private E currentElement;
 
         Itr() {
+            //全上锁
             fullyLock();
             try {
+                //
                 current = head.next;
-                if (current != null)
+                if (current != null) {
                     currentElement = current.item;
+                }
             } finally {
                 fullyUnlock();
             }

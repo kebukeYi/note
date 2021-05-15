@@ -28,6 +28,7 @@ public class UDPProverbClient {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UDPProverbClientHandler());
+
             Channel ch = b.bind(0).sync().channel();
             //向网段内的所有机器广播
             ch.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("汽车人上报的信号值：" + new Random().nextInt(100), CharsetUtil.UTF_8),
