@@ -1,13 +1,19 @@
 package com.java.note.Jdk.io.NIO;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * NIO客户端
@@ -19,6 +25,9 @@ public class NIOClient {
 
     //通道管理器
     private Selector selector;
+
+    private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
 
     /**
      * 获得一个Socket通道，并对该通道做一些工作
@@ -36,7 +45,7 @@ public class NIOClient {
         channel.connect(new InetSocketAddress(ip, port));
         //将通道管理器和该通道绑定，并为该通道注册SelectionKey.OP_CONNECT事件。
         channel.register(selector, SelectionKey.OP_CONNECT);
-//        channel.register(selector, SelectionKey.OP_READ);
+        //  channel.register(selector, SelectionKey.OP_READ);
     }
 
     /**
@@ -48,7 +57,7 @@ public class NIOClient {
         //轮询访问Selector
         while (true) {
             //选择一组可以进行I/O的操作的事件，放在selector中，客户端的该方法不会阻塞
-            System.out.println("selector.select() : " + selector.select());
+            selector.select();
             //获得selector中选中的项的迭代器
             Iterator<SelectionKey> ite = this.selector.selectedKeys().iterator();
             while (ite.hasNext()) {
@@ -66,7 +75,7 @@ public class NIOClient {
                     channel.configureBlocking(false);
                     //给服务端发送信息；
                     System.out.println("客户端已连接成功！");
-                    channel.write(ByteBuffer.wrap(new String("客户端已连接成功！").getBytes("UTF-8")));
+                     channel.write(ByteBuffer.wrap(new String("客户端已连接成功！" + channel.getLocalAddress()).getBytes("UTF-8")));
                     //和服务器端连接成功后，为了可以接受到服务端的信息，需要给通道设置读的权限
                     channel.register(this.selector, SelectionKey.OP_READ);
                 } else if (key.isReadable()) {
@@ -92,11 +101,22 @@ public class NIOClient {
         byte[] data = buffer.array();
         String msg = new String(data).trim();
         System.out.println("客户端收到信息：" + msg);
-        System.out.println("请输入信息：");
-        Scanner scanne = new Scanner(System.in);
-        String text = scanne.nextLine();
+        //System.out.println("请输入信息：");
+        //Scanner scanne = new Scanner(System.in);
+        //String text = scanne.nextLine();
+        String text = "我是客户端 " + channel.getLocalAddress() + " 发送 " + UUID.randomUUID();
         ByteBuffer outBuffer = ByteBuffer.wrap(text.getBytes("utf-8"));
-        channel.write(outBuffer);// 将消息回送给客户端
+        executorService.scheduleWithFixedDelay(() -> {
+            try {
+                channel.write(outBuffer);// 将消息回送给服务端
+            } catch (ClosedChannelException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }, 10, 3, TimeUnit.SECONDS);
     }
 
     /**
@@ -107,7 +127,7 @@ public class NIOClient {
 
     public static void main(String args[]) throws IOException {
         NIOClient client = new NIOClient();
-        client.initClient("127.0.0.1", 8000);
+        client.initClient("127.0.0.1", 8080);
         client.connect();
     }
 }

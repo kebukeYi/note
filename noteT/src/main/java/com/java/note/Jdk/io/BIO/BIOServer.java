@@ -20,21 +20,25 @@ public class BIOServer {
     static int PORT = 32222;
 
     public static void main(String[] args) throws Exception {
+        //服务端的 channel
         ServerSocket socket = new ServerSocket(PORT);
         socket.setSoTimeout(1000);//超过次时间没有数据发来时  主线程可以做别的事
         System.out.println("服务端已经启动，监听端口为：" + PORT);
         boolean flag = true;
+        //
         Socket client = null;
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         while (flag) {
             try {
                 //底层硬件 阻塞
+                //客户端的 channel 链接
                 client = socket.accept();
             } catch (SocketTimeoutException e) {
                 System.out.println("做其他事 " + System.currentTimeMillis());
                 continue;
             }
             System.out.println(client.hashCode() + " 已连接...");
+            //多线程模型
             executorService.submit(new EchoClientHandler(client));
         }
         executorService.shutdown();
