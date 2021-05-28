@@ -7,5 +7,15 @@ package com.java.note.jvm;
  * @Version :  0.0.1
  */
 public class MyItem {
-    byte i = 0;
+
+
+    public static void ipp() {
+        String[][] b = new String[][]{};
+        int i = 1;
+        i++;
+    }
+
+    public static void main(String[] args) {
+        ipp();
+    }
 }

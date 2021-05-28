@@ -1,30 +1,3 @@
-/*
- * Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-// -- This file was mechanically generated: Do not edit! -- //
-
 package java.nio;
 
 import java.io.FileDescriptor;
@@ -82,6 +55,7 @@ class DirectByteBuffer extends MappedByteBuffer implements DirectBuffer {
                 // Paranoia
                 return;
             }
+            //释放空间
             unsafe.freeMemory(address);
             address = 0;
             Bits.unreserveMemory(size, capacity);
@@ -89,6 +63,7 @@ class DirectByteBuffer extends MappedByteBuffer implements DirectBuffer {
 
     }
 
+    //
     private final Cleaner cleaner;
 
     public Cleaner cleaner() {

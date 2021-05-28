@@ -9,13 +9,14 @@ import java.lang.ref.SoftReference;
  */
 public class SoftReferenceDemo {
 
-    public static void softMemoryEnough() {
+    public static void softMemoryEnough() throws InterruptedException {
         Object o = new Object();
         SoftReference<Object> softReference = new SoftReference<>(o);
         System.out.println(o);
         System.out.println(softReference.get());
         o = null;
         System.gc();
+        Thread.sleep(200);
         System.out.println("======================");
         System.out.println(o);
         System.out.println(softReference.get());
@@ -42,7 +43,7 @@ public class SoftReferenceDemo {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         softMemoryEnough();
 //        softMemoryNotEnough();
     }

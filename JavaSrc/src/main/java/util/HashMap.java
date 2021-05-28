@@ -184,9 +184,11 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     /**
      * Returns a power of two size for the given target capacity.
      * 返回一个大于等于且最接近 cap 的2的幂次方整数，如给定9，返回2的4次方16
+     * 防止本来就是2的次幂数返回2倍，比如cap是8，若不减1，则返回16而不是8了
+     *
      */
     static final int tableSizeFor(int cap) {
-        //容量减1，为了防止初始化容量已经是2的幂的情况，否则传入16返回32，-1的话 传入16返回16，最后有+1运算。
+        //容量减1，为了防止初始化容量已经是2的幂的情况，否则传入16返回32，-1的话 传入16返回16，最后有+1运算
         int n = cap - 1;
         n |= n >>> 1;
         n |= n >>> 2;
