@@ -8,8 +8,10 @@ import org.openjdk.jol.info.ClassLayout;
  * @Description : Object obj=new Object()占用字节
  * @Version :  0.0.1
  */
-public class HeapMemory {
+class HeapMemory {
 
+
+    //-XX:+TraceClassLoading 可以看加载了哪些类
     public static void main(String[] args) {
         Object obj = new Object();
         MyItem myItem = new MyItem();

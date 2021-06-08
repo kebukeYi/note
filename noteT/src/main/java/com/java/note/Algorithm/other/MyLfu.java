@@ -91,8 +91,6 @@ public class MyLfu {
             node.pre = null;
             node.next = head;
             head = node;
-
-
         }
         return null;
     }

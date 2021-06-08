@@ -10,7 +10,7 @@ import java.util.Stack;
 /**
  * @Author : mmy
  * @Creat Time : 2020/4/17  11:43
- * @Description 二叉搜索树建立
+ * @Description 二叉搜索树建立 以及各种遍历
  */
 public class BST {
 
@@ -53,7 +53,7 @@ public class BST {
         return root;
     }
 
-    // 创建二叉树
+    // 创建搜索二叉树
     public Node put(Node root, int value, int hight) {
         if (root == null) return new Node(value, 1, 1);
         if (value > root.val) root.right = put(root.right, value, hight);
@@ -63,23 +63,26 @@ public class BST {
         return root;
     }
 
-
     public static void main(String[] args) {
         BST bst = new BST();
         Node root = null;
         for (int i : TREE_VALUE) {
             root = bst.put(i);
         }
-//        printPreOder(root);
-//        printPostOder(root);
+//        printPreOrder(root);
+//        System.out.println();
+//        printPreOrder2(root);
+//        System.out.println(arrayList);
+        printPostOrder(root);
+        System.out.println();
+        printPostOrder2(root);
 //        System.out.println();
 //        printLevelOrder(root);
 //        System.out.println();
 //        System.out.println(hight(root));
-        inCureNode(root);
-        System.out.println();
-        System.out.println(arrayList);
-
+//        inCureNode(root);
+//        System.out.println();
+//        System.out.println(arrayList);
 //        preCureNode(root);
     }
 
@@ -105,7 +108,7 @@ public class BST {
         inCureNode(node.right);//3
     }
 
-    //递归遍历  后序序 二叉树
+    //递归遍历  后序 二叉树
     public static void postCureNode(Node node) {
         if (node == null) {
             return;
@@ -115,8 +118,8 @@ public class BST {
         printNode(node);
     }
 
-    // 非递归遍历  先序遍历  利用栈
-    public static void printPreOder(Node root) {
+    // 非递归遍历  先序遍历  利用栈1
+    public static void printPreOrder(Node root) {
         Stack<Node> stack = new Stack<>();
         Node tempNode = root;
         while (true) {
@@ -133,7 +136,26 @@ public class BST {
         }
     }
 
-    // 非递归遍历 中序遍历 利用栈
+    // 非递归遍历  先序遍历  利用栈2
+    public static void printPreOrder2(Node root) {
+        Stack<Node> stack = new Stack<>();
+        Node tempNode = root;
+        while (tempNode != null || !stack.isEmpty()) {
+            while (tempNode != null) {
+                //进栈先打印
+                printNode(tempNode);
+                stack.push(tempNode);
+                tempNode = tempNode.left;
+            }
+            if (!stack.isEmpty()) {
+                tempNode = stack.pop();
+                tempNode = tempNode.right;
+            }
+
+        }
+    }
+
+    // 非递归遍历 中序遍历 利用栈1
     public static void printInOder(Node root) {
         Stack<Node> stack = new Stack<>();
         Node tempNode = root;
@@ -142,7 +164,6 @@ public class BST {
                 stack.push(tempNode);
                 tempNode = tempNode.left;
             }
-
             if (stack.isEmpty()) {
                 break;
             }
@@ -152,8 +173,26 @@ public class BST {
         }
     }
 
-    // 非递归遍历 后序遍历 利用栈
-    public static void printPostOder(Node root) {
+    // 非递归遍历 中序遍历 利用栈2
+    public static void printInOder2(Node root) {
+        Stack<Node> stack = new Stack<>();
+        Node tempNode = root;
+        while (tempNode != null || !stack.isEmpty()) {
+            while (tempNode != null) {
+                stack.push(tempNode);
+                tempNode = tempNode.left;
+            }
+            if (!stack.isEmpty()) {
+                tempNode = stack.pop();
+                //出栈打印
+                printNode(tempNode);
+                tempNode = tempNode.right;
+            }
+        }
+    }
+
+    // 非递归遍历 后序遍历 利用栈1
+    public static void printPostOrder(Node root) {
         Stack<Node> stack = new Stack<>();
         Node tempNode = root;
         while (true) {
@@ -165,12 +204,10 @@ public class BST {
                     tempNode = tempNode.left;
                 }
             }
-
             tempNode = stack.pop();
-
             if (tempNode.flag == false) {//左边没搞完
                 stack.push(tempNode);
-                tempNode.flag = true;//
+                tempNode.flag = true;
                 tempNode = tempNode.right;
             } else {//左边搞完  该搞右边的了
                 printNode(tempNode);
@@ -182,6 +219,31 @@ public class BST {
             }
         }
     }
+
+
+    // 非递归遍历 后序遍历 利用栈2
+    public static void printPostOrder2(Node root) {
+        Stack<Node> stack = new Stack<>();
+        Node tempNode = root;
+        stack.push(root);
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Node node = stack.pop();
+            if (!stack.isEmpty() && node == stack.peek()) {
+                if (node.right != null) {
+                    stack.push(node.right);
+                    stack.push(node.right);
+                }
+                if (node.left != null) {
+                    stack.push(node.left);
+                    stack.push(node.left);
+                }
+            } else {
+                System.out.println(node.val);
+            }
+        }
+    }
+
 
     // 层序遍历 利用队列
     public static void printLevelOrder(Node root) {

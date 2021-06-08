@@ -3,7 +3,7 @@ package com.java.note.Algorithm.other;
 /**
  * @Author : fang.com
  * @CreatTime : 2021-03-15 17:28
- * @Description :
+ * @Description : 二分查找
  * @Version :  0.0.1
  */
 public class binarySearch {

@@ -9,15 +9,14 @@ import java.util.Arrays;
  */
 public class SuNum {
 
-
     public static int getSuNumbers(int num) {
         int count = 0;
         for (int i = 2; i < num; i++) {
             int flag = 0;
-            // for (int j = 2; j <i; j++) {  //开始做法
+            //开始做法
+            // for (int j = 2; j <i; j++) {
             //根号做法
             for (int j = 2; j * j <= i; j++) {
-
                 if (i % j == 0) {
                     flag = 1;
                     break;
@@ -26,9 +25,7 @@ public class SuNum {
             if (flag == 0) {
                 count++;
             }
-
         }
-
         return count;
     }
 
@@ -36,7 +33,6 @@ public class SuNum {
         int count = 0;
         boolean[] isPerm = new boolean[num];
         Arrays.fill(isPerm, true);
-
         for (int i = 2; i < num; i++) {
             if (isPerm[i]) {
                 for (int j = i * 2; j < num; j = j + i) {
@@ -49,7 +45,6 @@ public class SuNum {
                 count++;
             }
         }
-
         return count;
     }
 

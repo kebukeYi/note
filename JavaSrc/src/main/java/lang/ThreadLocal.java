@@ -229,18 +229,18 @@ public class ThreadLocal<T> {
      * @return the map
      */
     ThreadLocalMap getMap(Thread t) {
-        //返回当前线程的 threadlocal 对象
+        //返回当前线程的 ThreadLocalMap 对象
         return t.threadLocals;
     }
 
     /**
-     * Create the map associated with a ThreadLocal. Overridden in
-     * InheritableThreadLocal.
+     * Create the map associated with a ThreadLocal. Overridden in InheritableThreadLocal.
      *
      * @param t          the current thread
      * @param firstValue value for the initial entry of the map
      */
     void createMap(Thread t, T firstValue) {
+        //
         t.threadLocals = new ThreadLocalMap(this, firstValue);
     }
 

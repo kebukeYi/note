@@ -26,7 +26,6 @@ import java.util.List;
  * * 返回 合并后的新闻列表 即将插入内容转成news 同时插入到指定位置
  */
 
-
 public class News {
 
     @Data
@@ -112,7 +111,6 @@ public class News {
             Message cur = head;
             //当前节点不为空时 进行新闻列表遍历
             while (cur != null) {
-
                 // 判断  要插入的信息 是否 在 新闻列表的 首节点  之前
                 // 是的话 就需要插入头 并成为 新的新闻链表头节点
                 //不是的话  就判断 是否在 头节点之后
