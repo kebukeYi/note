@@ -7,12 +7,12 @@ package com.java.note.Algorithm.guide;
  */
 public class One {
 
-    public static String replaceSpace(String args) {
+    public static Strings replaceSpace(Strings args) {
 
         return args.replaceAll("\\s", "%20");
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println(replaceSpace("We are hello"));
     }
 }

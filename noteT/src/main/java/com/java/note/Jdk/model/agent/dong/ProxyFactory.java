@@ -28,7 +28,7 @@ public class ProxyFactory {
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         System.out.println("开始动态代理");
                         // 获取当前执行的方法的方法名
-                        String methodName = method.getName();
+                        Strings methodName = method.getName();
                         System.out.println(methodName);
                         System.out.println(proxy.getClass());
                         System.out.println(args[0]);
@@ -50,7 +50,7 @@ public class ProxyFactory {
         return proxy;
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         IUserDao target = new UserDao();
         MyUserDao myUserDao = new MyUserDao();
         System.out.println("目标对象 " + target.getClass());

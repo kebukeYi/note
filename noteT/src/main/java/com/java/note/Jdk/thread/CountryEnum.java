@@ -19,9 +19,9 @@ public enum CountryEnum {
     private Integer reCode;
 
     @Getter
-    private String retMessage;
+    private Strings retMessage;
 
-    CountryEnum(Integer reCode, String retMessage) {
+    CountryEnum(Integer reCode, Strings retMessage) {
         this.reCode = reCode;
         this.retMessage = retMessage;
     }

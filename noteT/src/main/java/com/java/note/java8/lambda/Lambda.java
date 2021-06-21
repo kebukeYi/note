@@ -18,7 +18,7 @@ public class Lambda {
     @FunctionalInterface  修饰于 只有一个抽象方法的注解
      */
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //1. 接口实现类对象
         MyComparetor myComparetor = new MyComparetor();
         //2.使用匿名内部类

@@ -6,7 +6,7 @@ package com.java.note.Jdk.model.bridge;
  * @Description
  */
 public class Test {
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //苹果 笔记本
         Computer computer = new LapTop(new Apple());
         computer.info();

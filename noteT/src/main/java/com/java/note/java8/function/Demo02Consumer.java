@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  **/
 public class Demo02Consumer {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //传入逻辑
         //数据在被调用的函数内部
         consumerString(
@@ -21,7 +21,7 @@ public class Demo02Consumer {
                 s -> System.out.println(s.toLowerCase()));
 
         //实战
-        String[] array = {"大雄，男", "静香，女", "胖虎，男"};
+        Strings[] array = {"大雄，男", "静香，女", "胖虎，男"};
         printName(
                 //传入第一个逻辑
                 s -> System.out.println("性别：" + s.split("，")[1] + ","),
@@ -31,19 +31,19 @@ public class Demo02Consumer {
                 array);
     }
 
-    private static void consumerString(Consumer<String> one, Consumer<String> two) {
+    private static void consumerString(Consumer<Strings> one, Consumer<Strings> two) {
         //如果一个方法的参数和返回值全都是 Consumer 类型，那么就可以实现效果:消费数据的时候，
         // 首先做一个操作， 然后再做一个操作，实现组合。
         // 而这个方法就是 Consumer 接口中的default方法 andThen
         //先保存 one 的函数逻辑
         //再保存 two 的函数逻辑
         //最后 串行执行
-        Consumer<String> stringConsumer = one.andThen(two);
+        Consumer<Strings> stringConsumer = one.andThen(two);
         stringConsumer.accept("two");
     }
 
-    public static void printName(Consumer<String> sex, Consumer<String> name, String[] array) {
-        for (String s : array) {
+    public static void printName(Consumer<Strings> sex, Consumer<Strings> name, Strings[] array) {
+        for (Strings s : array) {
             //先第一个再第二个
             sex.andThen(name).accept(s);
         }

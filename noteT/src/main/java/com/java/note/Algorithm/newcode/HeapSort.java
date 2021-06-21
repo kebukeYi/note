@@ -7,7 +7,7 @@ import java.util.Arrays;
  */
 public class
 HeapSort {
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int[] arr = {1, 7, 2, 9, 3, 8, 6, 5, 4};
         sort(arr);
         System.out.println(Arrays.toString(arr));

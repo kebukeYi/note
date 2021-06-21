@@ -17,7 +17,7 @@ public class BadConcurrentJedisTest {
 
     private static final Jedis jedis = new Jedis("127.0.0.1", 6379);
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         for (int i = 0; i < 20; i++) {
             pool.execute(new RedisSet());
         }

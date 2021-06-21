@@ -31,7 +31,7 @@ public class MetaJavaYmm {
      * <p>
      * D. 也选我, 选我就得分
      */
-    public static String qn0 = "CD";
+    public static Strings qn0 = "CD";
 
     /**
      * qn1:
@@ -63,7 +63,7 @@ public class MetaJavaYmm {
      * <p>
      * D. 2
      */
-    public static String qn1 = "D";
+    public static Strings qn1 = "D";
 
     /**
      * qn2:
@@ -85,7 +85,7 @@ public class MetaJavaYmm {
      * C. 10001
      * D. 9998
      */
-    public static String qn2 = "C";
+    public static Strings qn2 = "C";
 
     /**
      * qn3:
@@ -99,7 +99,7 @@ public class MetaJavaYmm {
      * <p>
      * D. 这个字符串在内存中总共占用 20 byte
      */
-    public static String qn3 = "C";
+    public static Strings qn3 = "C";
 
     /*** qn4:
      下面代码会分别输出怎样的结果:
@@ -140,7 +140,7 @@ public class MetaJavaYmm {
      D. 没人比我更懂java; 没人比我更懂java;
      */
 
-    public static String qn4 = "B";
+    public static Strings qn4 = "B";
 
     /**
      * qn5:
@@ -170,7 +170,7 @@ public class MetaJavaYmm {
      * <p>
      * D. Line 6
      */
-    public static String qn5 = "B";
+    public static Strings qn5 = "B";
 
     /* qn6:
         下面代码会输出怎样的结果:
@@ -207,7 +207,7 @@ public class MetaJavaYmm {
 
         D. 以上都不对
     */
-    public static String qn6 = "D";
+    public static Strings qn6 = "D";
 
     /* qn7:
         一棵二叉树后序遍历的节点顺序是: 6 4 5 2 7 3 1 ，中序遍历是: 6 4 2 5 1 3 7 ，则前序遍历结果为:
@@ -220,7 +220,7 @@ public class MetaJavaYmm {
 
         D. 1 2 3 4 5 6 7
     */
-    public static String qn7 = "C";
+    public static Strings qn7 = "C";
 
     /**
      * qn8:
@@ -250,7 +250,7 @@ public class MetaJavaYmm {
      * D. CNN FakeNews ; CNN FakeNews
      */
 
-    public static String qn8 = "B";
+    public static Strings qn8 = "B";
 
     /**
      * qn9:
@@ -281,7 +281,7 @@ public class MetaJavaYmm {
      * E. 抛出异常
      */
 
-    public static String qn9 = "C";
+    public static Strings qn9 = "C";
 
     /* qn10:
         public class Queue {
@@ -309,7 +309,7 @@ public class MetaJavaYmm {
         D. q.front == (q.rear+1) % MaxSize;
     */
 
-    public static String qn10 = "D";
+    public static Strings qn10 = "D";
 
     /**
      * qn11:
@@ -362,7 +362,7 @@ public class MetaJavaYmm {
      * E. SQL_2
      */
 
-    public static String qn11 = "ABCE";
+    public static Strings qn11 = "ABCE";
 
     /* qn12:
         已知一个完全二叉树的第6层有3个叶子结点，则整个二叉树的结点数最多有
@@ -376,7 +376,7 @@ public class MetaJavaYmm {
         D. 121
     */
 
-    public static String qn12 = "A";
+    public static Strings qn12 = "A";
 
     /* qn13:
         下面代码会分别输出怎样的结果:
@@ -396,7 +396,7 @@ public class MetaJavaYmm {
         D. false true false
     */
 
-    public static String qn13 = "D";
+    public static Strings qn13 = "D";
 
     /* qn14:
         下面的代码在java(jdk8)最终会产生几个String对象:
@@ -416,7 +416,7 @@ public class MetaJavaYmm {
         D. 5
     */
 
-    public static String qn14 = "D";
+    public static Strings qn14 = "D";
 
     /* qn15:
         若进栈序列为a，b，c，d，e，f，进栈和出栈可以穿插进行，则不可能出现的出栈序列是()
@@ -430,7 +430,7 @@ public class MetaJavaYmm {
         D. d，c，b，a，e，f
     */
 
-    public static String qn15 = "A";
+    public static Strings qn15 = "A";
 
     /*
      * 以下是实现题
@@ -484,20 +484,20 @@ public class MetaJavaYmm {
      * @param map 上述的 map
      * @return 所有的字符串
      */
-    public static Set<String> showMap(Map<String, Object> map) {
-        ArrayList arrayList = new ArrayList<String>();
+    public static Set<Strings> showMap(Map<Strings, Object> map) {
+        ArrayList arrayList = new ArrayList<Strings>();
         dfs(map, arrayList);
         return null;
     }
 
 
-    public static String dfs(Object value, ArrayList arrayList) {
+    public static Strings dfs(Object value, ArrayList arrayList) {
         if (value instanceof Map) {
             Map map = (Map) value;
-            Iterator<Map.Entry<String, Object>> iterator = map.entrySet().iterator();
+            Iterator<Map.Entry<Strings, Object>> iterator = map.entrySet().iterator();
             while (iterator.hasNext()) {
-                Map.Entry<String, Object> next = iterator.next();
-                String nextKey = next.getKey();
+                Map.Entry<Strings, Object> next = iterator.next();
+                Strings nextKey = next.getKey();
                 Object nextValue = next.getValue();
                 arrayList.add(nextKey);
                 dfs(nextValue, arrayList);
@@ -509,7 +509,7 @@ public class MetaJavaYmm {
             }
         } else if (value instanceof Number) {
 
-        } else if (value instanceof String) {
+        } else if (value instanceof Strings) {
 
         }
         return "";

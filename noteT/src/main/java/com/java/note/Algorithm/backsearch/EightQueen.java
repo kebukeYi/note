@@ -73,7 +73,7 @@ public class EightQueen {
         System.out.println("=========================");
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         EightQueen eightQueen = new EightQueen();
         eightQueen.putQueen(0);
         System.out.println(eightQueen.count);

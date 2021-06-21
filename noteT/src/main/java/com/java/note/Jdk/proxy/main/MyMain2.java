@@ -9,7 +9,7 @@ import java.util.stream.Stream;
  */
 public class MyMain2 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 
         MyController controller = new MyController();
         //获取class 对象

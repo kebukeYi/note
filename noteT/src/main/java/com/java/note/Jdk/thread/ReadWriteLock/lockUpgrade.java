@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  **/
 public class lockUpgrade {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         ReadWriteLock lock = new ReentrantReadWriteLock();
         // 创建读锁
         Lock readLock = lock.readLock();

@@ -14,7 +14,7 @@ import java.util.Properties;
  */
 public class ConsumerCreator {
 
-    public static Consumer<String, String> createConsumer() {
+    public static Consumer<Strings, Strings> createConsumer() {
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.BROKER_LIST);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstants.GROUP_ID_CONFIG);
@@ -23,17 +23,17 @@ public class ConsumerCreator {
         return new KafkaConsumer<>(properties);
     }
 
-    public static void main(String[] args) {
-        String TOPIC = "test-topic";
-        Consumer<String, String> consumer = ConsumerCreator.createConsumer();
+    public static void main(Strings[] args) {
+        Strings TOPIC = "test-topic";
+        Consumer<Strings, Strings> consumer = ConsumerCreator.createConsumer();
         // 循环消费消息
         while (true) {
             //subscribe topic and consume message
             consumer.subscribe(Collections.singletonList(TOPIC));
 
-            ConsumerRecords<String, String> consumerRecords =
+            ConsumerRecords<Strings, Strings> consumerRecords =
                     consumer.poll(Duration.ofMillis(1000));
-            for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
+            for (ConsumerRecord<Strings, Strings> consumerRecord : consumerRecords) {
                 System.out.println("Consumer consume message:" + consumerRecord.value());
             }
         }

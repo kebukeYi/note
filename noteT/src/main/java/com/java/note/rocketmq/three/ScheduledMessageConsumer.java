@@ -14,7 +14,7 @@ import java.util.List;
  * @Description
  */
 public class ScheduledMessageConsumer {
-    public static void main(String[] args) throws Exception {
+    public static void main(Strings[] args) throws Exception {
         // 实例化消费者
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ExampleConsumer");
         // 订阅Topics

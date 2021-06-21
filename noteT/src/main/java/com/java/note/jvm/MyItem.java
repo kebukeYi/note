@@ -10,12 +10,12 @@ public class MyItem {
 
 
     public static void ipp() {
-        String[][] b = new String[][]{};
+        Strings[][] b = new Strings[][]{};
         int i = 1;
         i++;
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         ipp();
     }
 }

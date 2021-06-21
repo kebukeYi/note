@@ -9,7 +9,7 @@ package com.java.note.Jdk.thread.CompletableFuture;
 public class CustomerInfoService implements RemoteLoader {
 
     @Override
-    public String load() {
+    public Strings load() {
         this.delay();
         return "学生信息";
     }

@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class MyReentrantLock {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         ReentrantLock reentrantLock = new ReentrantLock();
         CountDownLatch countDownLatch = new CountDownLatch(10);
     }

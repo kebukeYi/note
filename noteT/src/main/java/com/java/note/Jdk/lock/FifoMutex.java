@@ -61,7 +61,7 @@ public class FifoMutex {
         System.out.println(Thread.currentThread().getName() + "\t" + "释放锁");
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         final FifoMutex mutex = new FifoMutex();
         new Thread(new Runnable() {
             @Override

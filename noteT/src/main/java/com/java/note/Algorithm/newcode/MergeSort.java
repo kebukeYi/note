@@ -5,7 +5,7 @@ import java.util.Arrays;
 // 归并排序
 public class MergeSort {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int[] arr = {9, 8, 7, 6, 5, 4, 3, 2, 1};
         sort(arr, 0, 8);
         System.out.println(Arrays.toString(arr));

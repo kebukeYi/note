@@ -12,7 +12,7 @@ public class MyLock {
 
     static Object Lock = new Object();
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Lock lock = new ReentrantLock(true);
         lock.lock();
 

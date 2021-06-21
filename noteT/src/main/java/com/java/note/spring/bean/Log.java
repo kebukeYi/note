@@ -16,10 +16,10 @@ public class Log {
 
 
     int id;
-    String time;
-    String data;
+    Strings time;
+    Strings data;
 
-    public Log(String time, String data) {
+    public Log(Strings time, Strings data) {
         this.data = data;
         this.time = time;
     }

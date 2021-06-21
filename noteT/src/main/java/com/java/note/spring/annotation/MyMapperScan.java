@@ -16,5 +16,5 @@ import java.lang.annotation.*;
 @Import(MyBeanDefinitionRegister.class)
 public @interface MyMapperScan {
 
-    String value() default "";
+    Strings value() default "";
 }

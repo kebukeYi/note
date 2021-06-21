@@ -8,7 +8,7 @@ package com.java.note.Jdk.thread.CompletableFuture;
  */
 public class WatchRecordService implements RemoteLoader {
     @Override
-    public String load() {
+    public Strings load() {
         this.delay();
         return "观看记录";
     }

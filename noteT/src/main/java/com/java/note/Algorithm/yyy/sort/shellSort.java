@@ -7,7 +7,7 @@ package com.java.note.Algorithm.yyy.sort;
  */
 public class shellSort {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int[] arr = {9, 8, 7, 6, 5, 4, 3, 2, 1};
     }
 

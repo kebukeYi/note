@@ -8,12 +8,12 @@ package com.java.note.Algorithm.JZoffer;
  * 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
  */
 public class Offer20 {
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println(get("2"));
     }
 
 
-    public static boolean get(String h) {
+    public static boolean get(Strings h) {
 
 
         return false;
@@ -22,7 +22,7 @@ public class Offer20 {
     public boolean isNumeric(char[] str) {
         if (str == null || str.length == 0)
             return false;
-        return new String(str).matches("[+-]?\\d*(\\.\\d+)?([eE][+-]?\\d+)?");
+        return new Strings(str).matches("[+-]?\\d*(\\.\\d+)?([eE][+-]?\\d+)?");
     }
 
 }

@@ -11,7 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class BeanLifeCycle {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println("从现在开始 初始化 卢本伟容器！");
 
         ApplicationContext factory = new ClassPathXmlApplicationContext("beans.xml");

@@ -10,11 +10,11 @@ package com.java.note.Algorithm.JZoffer;
  * 例如，字符串 “aaa” 与模式 “a.a” 和 “ab*ac*a” 匹配，但是与 “aa.a” 和 “ab*a” 均不匹配。
  */
 public class Offer19 {
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
     }
 
 
-    public static int get(String s, String p) {
+    public static int get(Strings s, Strings p) {
         //dp 思想
         // f[i][j] s的前i个 字符串 和 j个字符串
         int n = s.length();

@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 public class WeakReferenceDemo {
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Object o = new Object();
         WeakReference weakReference = new WeakReference<>(o);
         System.out.println(o);

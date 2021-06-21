@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
 public class SimpleNioServer {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         oneNio();
     }
 

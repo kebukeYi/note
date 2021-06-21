@@ -21,7 +21,7 @@ import java.net.URI;
  */
 public class HttpClient {
 
-    public void connect(String host, int port) throws Exception {
+    public void connect(Strings host, int port) throws Exception {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -41,7 +41,7 @@ public class HttpClient {
 
             ChannelFuture f = b.connect(host, port).sync();
             URI uri = new URI("/post");
-            String msg = "Are you ok?";
+            Strings msg = "Are you ok?";
             DefaultFullHttpRequest request = new DefaultFullHttpRequest(
                     HttpVersion.HTTP_1_1, HttpMethod.POST, uri.toASCIIString(),
                     Unpooled.wrappedBuffer(msg.getBytes()));
@@ -60,7 +60,7 @@ public class HttpClient {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(Strings[] args) throws Exception {
         HttpClient client = new HttpClient();
         client.connect("127.0.0.1", 8000);
     }

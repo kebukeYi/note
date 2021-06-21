@@ -2,7 +2,6 @@ package com.java.note.redis.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -15,22 +14,22 @@ import lombok.NoArgsConstructor;
 public class User {
 
 
-    String id;
-    String name;
+    Strings id;
+    Strings name;
     int age;
 
 
     public User() {
     }
 
-    public User(String id, String name) {
+    public User(Strings id, Strings name) {
         this.id = id;
         this.name = name;
     }
 
 
     @Override
-    public String toString() {
+    public Strings toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +

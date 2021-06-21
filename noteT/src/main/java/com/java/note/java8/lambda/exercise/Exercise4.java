@@ -1,7 +1,5 @@
 package com.java.note.java8.lambda.exercise;
 
-import java.util.function.*;
-
 /**
  * @Author : mmy
  * @Creat Time : 2020/3/31  21:54
@@ -10,7 +8,7 @@ import java.util.function.*;
 public class Exercise4 {
 
     //系统内置的一些函数式接口
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 //        IntPredicate              int                  boolean
 //         LongPredicate        long                boolean
 //        DoublePredicate     double            boolean

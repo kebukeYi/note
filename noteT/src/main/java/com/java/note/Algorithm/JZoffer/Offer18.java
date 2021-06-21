@@ -16,7 +16,7 @@ public class Offer18 {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
     }
 
     //删除链表节点

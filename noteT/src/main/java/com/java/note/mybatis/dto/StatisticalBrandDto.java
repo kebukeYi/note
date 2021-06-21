@@ -14,13 +14,13 @@ import java.util.List;
 @Builder
 public class StatisticalBrandDto {
 
-    private String cityName;
+    private Strings cityName;
 
-    private List<String> districtList;
-    private List<String> comareaList;
+    private List<Strings> districtList;
+    private List<Strings> comareaList;
 
 
-    private String brandNameChar;
+    private Strings brandNameChar;
 
     private Integer pageindex = 1;
     private Integer pagesize = 5000;

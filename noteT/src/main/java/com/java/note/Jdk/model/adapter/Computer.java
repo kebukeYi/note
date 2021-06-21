@@ -11,7 +11,7 @@ public class Computer {
         net2USB.handlerRequestz();
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Computer computer = new Computer();//电脑
         Adaptee adaptee = new Adaptee();//网线
         Adapter adapter = new Adapter(); //转接器 1

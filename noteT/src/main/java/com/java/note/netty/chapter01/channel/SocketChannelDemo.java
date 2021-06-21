@@ -18,7 +18,7 @@ import java.nio.channels.SocketChannel;
  * @since 1.0.0
  */
 public class SocketChannelDemo {
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         // 打开一个通道
         SocketChannel socketChannel = SocketChannel.open();
         // 发起连接，连接到本机的 EchoServer
@@ -35,6 +35,6 @@ public class SocketChannelDemo {
         ByteBuffer echoBuffer = ByteBuffer.allocate(1024);
         socketChannel.read(echoBuffer);
 
-        System.out.println(new String(echoBuffer.array()));
+        System.out.println(new Strings(echoBuffer.array()));
     }
 }

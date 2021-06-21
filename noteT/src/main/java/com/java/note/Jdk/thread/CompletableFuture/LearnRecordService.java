@@ -9,7 +9,7 @@ package com.java.note.Jdk.thread.CompletableFuture;
  */
 public class LearnRecordService implements RemoteLoader {
     @Override
-    public String load() {
+    public Strings load() {
         this.delay();
         return "成绩记录";
     }

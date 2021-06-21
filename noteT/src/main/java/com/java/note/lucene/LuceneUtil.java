@@ -25,7 +25,7 @@ public class LuceneUtil {
      * @param path
      * @return
      */
-    public static Directory getDirectory(String path) {
+    public static Directory getDirectory(Strings path) {
         Directory directory = null;
         try {
             directory = FSDirectory.open(Paths.get(path));

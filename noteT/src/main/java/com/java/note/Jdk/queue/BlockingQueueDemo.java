@@ -14,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class BlockingQueueDemo {
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         BlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(3);
         arrayBlockingQueue.add("a");
         arrayBlockingQueue.add("b");

@@ -2,7 +2,6 @@ package com.java.note.Jdk.reference;
 
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
 
 /**
  * @Author : mmy
@@ -16,7 +15,7 @@ import java.lang.ref.WeakReference;
  */
 public class PhantomReferenceDemo {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         Object o = new Object();
         PhantomReferenceDemo phantomReferenceDemo = new PhantomReferenceDemo();
         ReferenceQueue<PhantomReferenceDemo> referenceQueue = new ReferenceQueue<>();

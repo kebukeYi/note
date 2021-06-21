@@ -4,7 +4,7 @@ public interface Cooking {
 
 
     //烧烤做法
-    String barbecue(String food);
+    Strings barbecue(Strings food);
 
 
 }

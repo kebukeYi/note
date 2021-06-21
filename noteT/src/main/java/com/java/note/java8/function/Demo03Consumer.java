@@ -12,7 +12,7 @@ import java.util.function.Predicate;
  **/
 public class Demo03Consumer {
 
-    private static Set<String> setName = new LinkedHashSet<String>();
+    private static Set<Strings> setName = new LinkedHashSet<Strings>();
 
     static {
         setName.add("nalke");
@@ -20,8 +20,8 @@ public class Demo03Consumer {
         setName.add("mme");
     }
 
-    public static void main(String[] args) {
-        String beanName = "nalke";
+    public static void main(Strings[] args) {
+        Strings beanName = "nalke";
         //有点话就执行删除操作
         updateManualSingletonNames(
                 //执行删除操作
@@ -33,10 +33,10 @@ public class Demo03Consumer {
         System.out.println(setName);
     }
 
-    public static void updateManualSingletonNames(Consumer<Set<String>> action, Predicate<Set<String>> condition) {
+    public static void updateManualSingletonNames(Consumer<Set<Strings>> action, Predicate<Set<Strings>> condition) {
         if (condition.test(setName)) {
             action.accept(setName);
-            Set<String> updatedSingletons = new LinkedHashSet<>(setName);
+            Set<Strings> updatedSingletons = new LinkedHashSet<>(setName);
             setName = updatedSingletons;
         }
     }

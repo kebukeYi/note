@@ -35,7 +35,7 @@ public class Main {
     static int[] dy = {0, -1, 1, 0};
     static final int N = 1000;
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         HashMap<Integer, List<Integer>> cow = new HashMap<>();// 行 列list
         HashMap<Integer, List<Integer>> col = new HashMap<>();//列 行list
         List<Integer> cols = null;//每行 的列list
@@ -45,7 +45,7 @@ public class Main {
         int k = scanner.nextInt();
         for (int i = 0; i < k; i++) {
             int x = scanner.nextInt();//行
-            String s = scanner.nextLine().trim();
+            Strings s = scanner.nextLine().trim();
             int y = Integer.parseInt(s);//列
             points.add(new Point(x, y));//点
 

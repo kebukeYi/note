@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  */
 public class ClosureDemo {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int n = getNumber().get();
         System.out.println(n);
     }

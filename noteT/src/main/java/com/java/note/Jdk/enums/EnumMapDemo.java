@@ -1,6 +1,5 @@
 package com.java.note.Jdk.enums;
 
-import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -14,7 +13,7 @@ enum color {
 }
 
 public class EnumMapDemo {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(5);
         for (int i = 0; i < 5; i++) {
             new Thread(() -> {

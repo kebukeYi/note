@@ -14,7 +14,7 @@ public class OperationProxy implements Operate {
     private Operator operator = null;
 
     @Override
-    public String doSomething(String name) {
+    public Strings doSomething(Strings name) {
         System.out.println("静态代理 开始");
         beforeDoSomething();
         if (operator == null) {
@@ -36,7 +36,7 @@ public class OperationProxy implements Operate {
         System.out.println("after doing something");
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //使用OperationProxy代替Operator
         Operate operate = new OperationProxy();
         //代理者代替真实者做事情

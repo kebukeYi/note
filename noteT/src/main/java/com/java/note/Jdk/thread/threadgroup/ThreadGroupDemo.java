@@ -15,7 +15,7 @@ public class ThreadGroupDemo {
 
     private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //Returns the thread group to which this thread belongs.
         // This method returns null if this thread has died
         // java.lang.ThreadGroup[name=main,maxpri=10]

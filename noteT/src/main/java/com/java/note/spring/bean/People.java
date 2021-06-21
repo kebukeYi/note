@@ -19,14 +19,14 @@ public class People implements BeanFactoryAware, BeanNameAware, InitializingBean
 
     private int id;
 
-    private String name;
-    private String age;
+    private Strings name;
+    private Strings age;
 
     private BeanFactory beanFactory;
 
-    private String beanName;
+    private Strings beanName;
 
-    public People(String name, String age) {
+    public People(Strings name, Strings age) {
         this.name = name;
         this.age = age;
     }
@@ -45,7 +45,7 @@ public class People implements BeanFactoryAware, BeanNameAware, InitializingBean
 
     // 这是BeanNameAware接口方法
     @Override
-    public void setBeanName(String name) {
+    public void setBeanName(Strings name) {
         System.out.println("【BeanNameAware接口】调用BeanNameAware.setBeanName()");
         this.beanName = name;
     }
@@ -71,7 +71,7 @@ public class People implements BeanFactoryAware, BeanNameAware, InitializingBean
 
     @Override
     public void setEmbeddedValueResolver(StringValueResolver resolver) {
-        String name = resolver.resolveStringValue("${os.name}");
+        Strings name = resolver.resolveStringValue("${os.name}");
         System.out.println("【EmbeddedValueResolverAware 接口setEmbeddedValueResolver() ==> " + name);
     }
 }

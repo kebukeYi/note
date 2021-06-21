@@ -17,7 +17,7 @@ public class LongAdderTest {
 
     private static int maxValue = 1000;
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Counter lockTest = new LongAdderTest().new Counter();
         long startTime = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(readThreadNum + writeThreadNum);

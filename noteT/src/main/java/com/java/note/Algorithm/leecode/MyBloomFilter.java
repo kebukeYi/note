@@ -78,11 +78,11 @@ public class MyBloomFilter {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         MyBloomFilter filter = new MyBloomFilter();
 
-        String value1 = "https://javaguide.cn/";
-        String value2 = "https://github.com/Snailclimb";
+        Strings value1 = "https://javaguide.cn/";
+        Strings value2 = "https://github.com/Snailclimb";
         System.out.println(filter.contains(value1));
         System.out.println(filter.contains(value2));
 

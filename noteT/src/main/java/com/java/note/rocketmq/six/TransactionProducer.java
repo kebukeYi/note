@@ -19,7 +19,7 @@ import java.util.concurrent.*;
  */
 public class TransactionProducer {
 
-    public static void main(String[] args) throws MQClientException, InterruptedException {
+    public static void main(Strings[] args) throws MQClientException, InterruptedException {
 
         TransactionListener transactionListener = new TransactionListenerImpl();
 
@@ -42,7 +42,7 @@ public class TransactionProducer {
 
         producer.start();
 
-        String[] tags = new String[]{"TagA", "TagB", "TagC", "TagD", "TagE"};
+        Strings[] tags = new Strings[]{"TagA", "TagB", "TagC", "TagD", "TagE"};
         for (int i = 0; i < Remote.COUNT; i++) {
             try {
                 Message msg =

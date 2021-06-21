@@ -18,10 +18,10 @@ import java.util.concurrent.FutureTask;
  */
 public class FutureTaskTest {
 
-    private static final ConcurrentMap<Object, Future<String>> taskCache = new ConcurrentHashMap<Object, Future<String>>();
+    private static final ConcurrentMap<Object, Future<Strings>> taskCache = new ConcurrentHashMap<Object, Future<Strings>>();
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         for (int i = 0; i < 2; i++) {
             try {
                 Thread.sleep(1000);
@@ -47,27 +47,27 @@ public class FutureTaskTest {
             e.printStackTrace();
         }
         //打印任务
-        for (Entry<Object, Future<String>> en : taskCache.entrySet()) {
+        for (Entry<Object, Future<Strings>> en : taskCache.entrySet()) {
             System.out.println(en.getKey() + "===" + en.getValue());
         }
 
     }
 
 
-    private static String executionTask(final String taskName) throws ExecutionException, InterruptedException {
+    private static Strings executionTask(final Strings taskName) throws ExecutionException, InterruptedException {
         while (true) {
             // 1.1,2.1
-            Future<String> future = taskCache.get(taskName);
+            Future<Strings> future = taskCache.get(taskName);
             //刚开始为空
             if (future == null) {
-                Callable<String> task = new Callable<String>() {
+                Callable<Strings> task = new Callable<Strings>() {
                     @Override
-                    public String call() throws InterruptedException {
+                    public Strings call() throws InterruptedException {
                         return "taskName : " + taskName;
                     }
                 };
                 // 1.3
-                FutureTask<String> futureTask = new FutureTask<String>(task);
+                FutureTask<Strings> futureTask = new FutureTask<Strings>(task);
                 //返回new
                 future = taskCache.putIfAbsent(taskName, futureTask);
                 if (future == null) {

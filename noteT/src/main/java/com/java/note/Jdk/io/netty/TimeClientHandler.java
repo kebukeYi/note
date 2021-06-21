@@ -1,9 +1,7 @@
 package com.java.note.Jdk.io.netty;
 
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.concurrent.EventExecutorGroup;
 
 /**
  * @author : kebukeyi
@@ -17,7 +15,7 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("shoudaol");
-        String firstMessage = "hello";
+        Strings firstMessage = "hello";
         ctx.writeAndFlush(firstMessage.getBytes());
     }
 

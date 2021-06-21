@@ -7,19 +7,19 @@ package com.java.note.Jdk.reflect.two;
  **/
 public class Person {
 
-    private String name;
+    private Strings name;
     private int age;
 
     public Person() {
     }
 
-    public Person(String name, int age) {
+    public Person(Strings name, int age) {
         this.name = name;
         this.age = age;
     }
 
     @Override
-    public String toString() {
+    public Strings toString() {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
@@ -30,11 +30,11 @@ public class Person {
         System.out.println("我是Person中的方法！！！");
     }
 
-    public String getName() {
+    public Strings getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Strings name) {
         this.name = name;
     }
 
@@ -48,19 +48,19 @@ public class Person {
 }
 
 class Student {
-    private String name;
+    private Strings name;
     private int age;
 
     public Student() {
     }
 
-    public Student(String name, int age) {
+    public Student(Strings name, int age) {
         this.name = name;
         this.age = age;
     }
 
     @Override
-    public String toString() {
+    public Strings toString() {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
@@ -71,11 +71,11 @@ class Student {
         System.out.println("我是Student中的方法！！！");
     }
 
-    public String getName() {
+    public Strings getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Strings name) {
         this.name = name;
     }
 

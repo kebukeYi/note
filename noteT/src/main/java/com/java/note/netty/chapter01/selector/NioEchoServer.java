@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class NioEchoServer {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         // 1. 首先获取一个selector多路复用器
         Selector selector = Selector.open();
 

@@ -1,8 +1,6 @@
 package com.java.note.Jdk.thread.FastThreadLocal;
 
 import io.netty.util.concurrent.FastThreadLocal;
-import io.netty.util.concurrent.FastThreadLocalThread;
-import io.netty.util.internal.InternalThreadLocalMap;
 
 /**
  * @author : kebukeyi
@@ -16,7 +14,7 @@ public class FastThreadLocalTest {
     private static FastThreadLocal<Integer> fastThreadLocal = new FastThreadLocal<>();
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //if (thread instanceof FastThreadLocalThread) 使用FastThreadLocalThread更优，普通线程也可以
 //        new FastThreadLocalThread(() -> {
 //            for (int i = 0; i < 10; i++) {

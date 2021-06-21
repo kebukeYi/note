@@ -1,9 +1,5 @@
 package com.java.note.spring.ioc;
 
-import com.java.note.spring.aop.MainConfigOfAOP;
-import com.java.note.spring.aop.MathCalculator;
-import com.java.note.spring.mapper.PeopleMapper;
-import com.java.note.spring.mapper.UserMapper;
 import com.java.note.spring.config.MainConfig;
 import com.java.note.spring.service.PeopleService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -16,7 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class MyIOC {
 
     @SuppressWarnings("resource")
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(MainConfig.class);
 //        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(MainConfigOfAOP.class);
 //        String[] beanNamesForType = ac.getBeanDefinitionNames();

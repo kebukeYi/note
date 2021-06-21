@@ -48,7 +48,7 @@ public class LeeCode69 {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println(computSqrt(8));
         System.out.println(InvSqrt(8));
         System.out.println(mySqrt(8));

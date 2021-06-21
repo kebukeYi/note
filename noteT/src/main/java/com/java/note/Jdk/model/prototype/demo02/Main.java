@@ -1,7 +1,5 @@
 package com.java.note.Jdk.model.prototype.demo02;
 
-import com.java.note.Jdk.model.prototype.demo02.Video;
-
 import java.util.Date;
 
 /**
@@ -10,7 +8,7 @@ import java.util.Date;
  * @Description
  */
 public class Main {
-    public static void main(String[] args) throws CloneNotSupportedException {
+    public static void main(Strings[] args) throws CloneNotSupportedException {
         Date date = new Date();
 
         com.java.note.Jdk.model.prototype.demo02.Video video = new com.java.note.Jdk.model.prototype.demo02.Video("name01", date);

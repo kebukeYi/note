@@ -7,7 +7,7 @@ package com.java.note.Algorithm.JZoffer;
  */
 public class Offer14 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println(get(10));
     }
 

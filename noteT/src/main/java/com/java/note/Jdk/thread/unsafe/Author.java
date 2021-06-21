@@ -10,13 +10,13 @@ import lombok.Data;
 @Data
 public class Author {
 
-    String name;
+    Strings name;
     int seq;
 
     public Author() {
     }
 
-    public Author(String name, int seq) {
+    public Author(Strings name, int seq) {
         this.name = name;
         this.seq = seq;
     }

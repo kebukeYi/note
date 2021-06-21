@@ -14,7 +14,7 @@ import java.util.concurrent.*;
  */
 public class TestSingle {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(Strings[] args) throws ExecutionException, InterruptedException {
         Singleton1 singleton1 = Singleton1.SINGLETON1;
         System.out.println(singleton1);
 

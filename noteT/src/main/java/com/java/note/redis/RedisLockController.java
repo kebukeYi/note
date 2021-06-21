@@ -18,11 +18,11 @@ import java.util.UUID;
 //@RequestMapping("/redis")
 public class RedisLockController {
 
-    private static final String LOCK_SUCCESS = "OK";
-    private static final String SET_IF_NOT_EXIST = "NX";
-    private static final String SET_WITH_EXPIRE_TIME = "PX";
-    private static final String LOCK_KEY = "lockKey";
-    private static final String STOCK = "stock";
+    private static final Strings LOCK_SUCCESS = "OK";
+    private static final Strings SET_IF_NOT_EXIST = "NX";
+    private static final Strings SET_WITH_EXPIRE_TIME = "PX";
+    private static final Strings LOCK_KEY = "lockKey";
+    private static final Strings STOCK = "stock";
 
 
     static Object lock = new Object();
@@ -35,12 +35,12 @@ public class RedisLockController {
      * 第一种解法
      */
 //    @GetMapping("/stock")
-    public String redisLock() {
+    public Strings redisLock() {
         Jedis jedis = JedisUtil6800.getJedis();
-        String clinenId = UUID.randomUUID().toString();
+        Strings clinenId = UUID.randomUUID().toString();
         Object eval;
         try {
-            String result = jedis.set(LOCK_KEY, clinenId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10);
+            Strings result = jedis.set(LOCK_KEY, clinenId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10);
             if (!LOCK_SUCCESS.equals(result)) {
                 return "error";
             }
@@ -69,7 +69,7 @@ public class RedisLockController {
              //        end
              */
 
-            String luaScript = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return 0 end";
+            Strings luaScript = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return 0 end";
             eval = jedis.eval(luaScript, Collections.singletonList(LOCK_KEY), Collections.singletonList(clinenId));
 
         }
@@ -82,7 +82,7 @@ public class RedisLockController {
      * 第二种解法
      */
 //    @GetMapping("/redisson")
-    public static String redisson2() {
+    public static Strings redisson2() {
         Redisson redisson = redisson();
         RLock rLock = redisson.getLock(LOCK_KEY);
         try {
@@ -109,7 +109,7 @@ public class RedisLockController {
         return (Redisson) Redisson.create(config);
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         redisson();
     }
 }

@@ -10,20 +10,20 @@ public enum PromotionType {
     COUPON("优惠卷", 1), REDPACKED("红包", 2);
 
     // 成员变量
-    private String name;
+    private Strings name;
     private int index;
 
     // 构造方法
-    PromotionType(String name, int index) {
+    PromotionType(Strings name, int index) {
         this.name = name;
         this.index = index;
     }
 
     // get set 方法
-    public String getName() {
+    public Strings getName() {
         return name;
     }
-    public void setName(String name) {
+    public void setName(Strings name) {
         this.name = name;
     }
     public int getIndex() {

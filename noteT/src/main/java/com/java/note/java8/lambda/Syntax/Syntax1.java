@@ -9,7 +9,7 @@ import com.java.note.java8.lambda.interfaces.*;
  */
 public class Syntax1 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //1. Lambda 表达式的基础语法
         //（）：参数列表
         // { }  ： 方法体

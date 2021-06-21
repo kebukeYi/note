@@ -26,7 +26,7 @@ import java.util.Scanner;
  */
 public class Main3 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         HashMap<Integer, List<Integer>> shop = new HashMap<>();// 行 列list
         List<Integer> priceList = null;
         Scanner scanner = new Scanner(System.in);
@@ -36,7 +36,7 @@ public class Main3 {
 
         for (int i = 0; i < n; i++) {
             int x = scanner.nextInt();//价格
-            String s = scanner.nextLine().trim();
+            Strings s = scanner.nextLine().trim();
             int y = Integer.parseInt(s);//种类
             priceList = shop.get(y);
             if (priceList == null) {

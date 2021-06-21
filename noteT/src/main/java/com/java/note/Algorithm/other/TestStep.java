@@ -39,7 +39,7 @@ public class TestStep {
         return sum;
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //递归做法
         System.out.println(f(4));
         System.out.println();

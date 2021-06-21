@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class UserRedPacket {
     private int id; // 红包 ID
     private int userId; // 领取用户 ID
-    private String sku; // 商品 SKU
+    private Strings sku; // 商品 SKU
     private BigDecimal redPacket; // 领取红包金额
 }

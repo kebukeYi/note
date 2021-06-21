@@ -11,7 +11,7 @@ import java.util.Stack;
  */
 public class Offer31 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int[] pushA = {1, 2, 3, 4, 5};
 //        int[] popA = {4, 3, 5, 1, 2};
         int[] popA = {4, 5, 3, 2, 1};

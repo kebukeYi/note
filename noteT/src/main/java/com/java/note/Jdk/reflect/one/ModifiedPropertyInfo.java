@@ -16,11 +16,11 @@ public class ModifiedPropertyInfo implements Serializable {
     /**
      * 发生变化的属性名称
      */
-    private String propertyName;
+    private Strings propertyName;
     /**
      * 发生变化的属性注释
      */
-    private String propertyComment;
+    private Strings propertyComment;
     /**
      * 修改前的值
      */

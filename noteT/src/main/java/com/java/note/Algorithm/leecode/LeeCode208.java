@@ -55,7 +55,7 @@ public class LeeCode208 {
         /**
          * Inserts a word into the trie.
          */
-        public void insert(String word) {
+        public void insert(Strings word) {
             char[] words = word.toCharArray();
             TrieNode node = root;
             for (char x : words) {
@@ -68,7 +68,7 @@ public class LeeCode208 {
         }
 
         // returns the node where search ends
-        private TrieNode searchPrefix(String word) {
+        private TrieNode searchPrefix(Strings word) {
             TrieNode node = root;
             for (int i = 0; i < word.length(); i++) {
                 char curLetter = word.charAt(i);
@@ -85,7 +85,7 @@ public class LeeCode208 {
         /**
          * Returns if the word is in the trie.
          */
-        public boolean search(String word) {
+        public boolean search(Strings word) {
             TrieNode trieNode = searchPrefix(word);
             return trieNode != null && trieNode.isEnd;
         }
@@ -94,7 +94,7 @@ public class LeeCode208 {
          * Returns if there is any word in the trie that starts with the given prefix.
          * 判断 Trie 中是或有以 prefix 为前缀的单词
          */
-        public boolean startsWith(String prefix) {
+        public boolean startsWith(Strings prefix) {
             TrieNode node = searchPrefix(prefix);
             return node != null;
         }

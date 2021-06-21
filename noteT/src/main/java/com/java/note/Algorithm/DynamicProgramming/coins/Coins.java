@@ -35,7 +35,7 @@ public class Coins {
         return res;
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int f = f(10);
         System.out.println(f);
     }

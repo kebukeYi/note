@@ -30,7 +30,7 @@ public class MyThread extends Thread {
     }
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         MyThread thread = new MyThread();
         thread.start();
         try {

@@ -14,7 +14,7 @@ public class Three {
     字符出现的次数为双数
     字符出现的次数为双数+1单个字符的字数
      */
-    public static int creatLongStr(String s) {
+    public static int creatLongStr(Strings s) {
         char[] chars = s.toCharArray();
         HashSet<Character> hashSet = new HashSet<>();
         int count = 0;
@@ -33,7 +33,7 @@ public class Three {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println(creatLongStr("abccccdd"));
     }
 }

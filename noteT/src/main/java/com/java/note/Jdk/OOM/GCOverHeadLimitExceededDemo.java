@@ -23,7 +23,7 @@ public class GCOverHeadLimitExceededDemo {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Map m = new HashMap();
         while (true) {
             for (int i = 0; i < 1000; i++) {

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SemaphoreTest02 {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
 
         final Semaphore semaphore = new Semaphore(2, true);
 

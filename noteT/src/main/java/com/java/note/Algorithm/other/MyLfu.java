@@ -12,13 +12,13 @@ import java.util.HashMap;
 public class MyLfu {
     @Data
     static class ListNode {
-        String key;
-        String value;
+        Strings key;
+        Strings value;
         int hz;
         ListNode pre;
         ListNode next;
 
-        public ListNode(String key, String value, int hz) {
+        public ListNode(Strings key, Strings value, int hz) {
             this.key = key;
             this.value = value;
             this.hz = hz;
@@ -27,12 +27,12 @@ public class MyLfu {
 
     int limit = 15;
     int hz = 1;
-    HashMap<String, ListNode> hashMap = new HashMap<>(limit);
+    HashMap<Strings, ListNode> hashMap = new HashMap<>(limit);
     ListNode head;
     ListNode tail;
 
 
-    public void add(String key, String value) {
+    public void add(Strings key, Strings value) {
         if (limit == 15) {
             if (hashMap.containsKey(key)) {
                 ListNode node = hashMap.get(key);
@@ -68,7 +68,7 @@ public class MyLfu {
 
     }
 
-    public ListNode getListNode(String key) {
+    public ListNode getListNode(Strings key) {
         if (hashMap.containsKey(key)) {
             //删除连中的节点
             ListNode node = hashMap.get(key);
@@ -95,7 +95,7 @@ public class MyLfu {
         return null;
     }
 
-    public void removeListNode(String key) {
+    public void removeListNode(Strings key) {
 
 
     }

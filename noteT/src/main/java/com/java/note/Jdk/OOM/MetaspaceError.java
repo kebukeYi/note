@@ -25,7 +25,7 @@ public class MetaspaceError {
     static class OOMTest {
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int i = 0;
         try {
             while (true) {

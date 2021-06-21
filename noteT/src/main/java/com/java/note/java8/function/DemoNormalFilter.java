@@ -11,18 +11,18 @@ import java.util.List;
  **/
 public class DemoNormalFilter {
 
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
+    public static void main(Strings[] args) {
+        List<Strings> list = new ArrayList<>();
         Collections.addAll(list, "Java", "C", "Python", "Hadoop", "Spark");
 
         System.out.print("筛选前的集合：");
-        for (String s : list) {
+        for (Strings s : list) {
             System.out.print(s + "，");
         }
         System.out.println();
 
         System.out.print("经过条件1筛选后的集合：");
-        for (String s : list) {
+        for (Strings s : list) {
             if (s.length() >= 4) {
                 System.out.print(s + "，");
             }
@@ -30,7 +30,7 @@ public class DemoNormalFilter {
         System.out.println();
 
         System.out.print("经过条件2筛选后的集合：");
-        for (String s : list) {
+        for (Strings s : list) {
             if (s.length() >= 5) {
                 System.out.print(s + "，");
             }

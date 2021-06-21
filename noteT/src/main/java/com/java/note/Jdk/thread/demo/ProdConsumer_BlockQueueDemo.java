@@ -1,7 +1,6 @@
 package com.java.note.Jdk.thread.demo;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,16 +15,16 @@ class ShareData2 {
     //默认是 生产+消费
     private volatile boolean flag = true;
     private AtomicInteger atomicInteger = new AtomicInteger(0);
-    BlockingQueue<String> blockingDeque = null;
+    BlockingQueue<Strings> blockingDeque = null;
 
     //细节落地 传接口
-    public ShareData2(BlockingQueue<String> blockingDeque) {
+    public ShareData2(BlockingQueue<Strings> blockingDeque) {
         this.blockingDeque = blockingDeque;
         System.out.println(blockingDeque.getClass().getName());
     }
 
     public void myProd() throws Exception {
-        String data = null;
+        Strings data = null;
         boolean reValue = true;
         while (flag) {
             data = atomicInteger.incrementAndGet() + "";
@@ -42,7 +41,7 @@ class ShareData2 {
 
 
     public void myConsumer() throws Exception {
-        String data = null;
+        Strings data = null;
         while (flag) {
             data = blockingDeque.poll(2, TimeUnit.SECONDS);
             if (data == null || data.equalsIgnoreCase("")) {
@@ -62,7 +61,7 @@ class ShareData2 {
 
 public class ProdConsumer_BlockQueueDemo {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         ShareData2 shareData2 = new ShareData2(new ArrayBlockingQueue<>(10));
 
         new Thread(() -> {

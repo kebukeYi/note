@@ -3,7 +3,6 @@ package com.java.note.java8.lambda.exercise;
 import com.java.note.java8.bean.Person;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,7 +12,7 @@ import java.util.List;
  */
 public class Exercise1 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         List<Person> list = new ArrayList<>();
         list.add(new Person("小明", 18, 96));
         list.add(new Person("小兰", 23, 98));

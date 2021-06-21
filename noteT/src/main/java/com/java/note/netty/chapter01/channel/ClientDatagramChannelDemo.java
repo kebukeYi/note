@@ -19,12 +19,12 @@ import java.nio.channels.DatagramChannel;
  */
 public class ClientDatagramChannelDemo {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         DatagramChannel channel = DatagramChannel.open();
         //绑定自己的数据的出口 因为不需要建立连接
         channel.socket().bind(new InetSocketAddress(8848));
 
-        String newData = "New String to write to file..." + System.currentTimeMillis();
+        Strings newData = "New String to write to file..." + System.currentTimeMillis();
 
         ByteBuffer buf = ByteBuffer.allocate(1024);
         buf.put(newData.getBytes());

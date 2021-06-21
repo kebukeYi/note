@@ -11,8 +11,8 @@ import java.util.Comparator;
  * @description :
  **/
 public class DemoComparator {
-    public static void main(String[] args) {
-        String[] array = {"abc", "ab", "a"};
+    public static void main(Strings[] args) {
+        Strings[] array = {"abc", "ab", "a"};
         System.out.println("使用比较器比较之前：" + Arrays.toString(array));
         Arrays.sort(array, newComparator());
         System.out.println("使用比较器比较之后：" + Arrays.toString(array));
@@ -28,15 +28,15 @@ public class DemoComparator {
      * a.length() - b.length() > 0 返回 true，
      * a.length() = b.length() 返回 0
      */
-    public static Comparator<String> newComparator() {
+    public static Comparator<Strings> newComparator() {
         return (a, b) -> a.length() - b.length();
     }
 
     //使用匿名内部类
-    public static Comparator<String> newComparator1() {
-        return new Comparator<String>() {
+    public static Comparator<Strings> newComparator1() {
+        return new Comparator<Strings>() {
             @Override
-            public int compare(String o1, String o2) {
+            public int compare(Strings o1, Strings o2) {
                 return o1.length() - o2.length();
             }
         };

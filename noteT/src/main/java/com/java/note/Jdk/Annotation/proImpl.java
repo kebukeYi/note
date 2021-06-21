@@ -10,12 +10,12 @@ import java.lang.annotation.Annotation;
 public class proImpl implements pro {
 
     @Override
-    public String className() {
+    public Strings className() {
         return this.className();
     }
 
     @Override
-    public String methodName() {
+    public Strings methodName() {
         return this.methodName();
     }
 

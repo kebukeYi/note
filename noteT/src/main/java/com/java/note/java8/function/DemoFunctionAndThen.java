@@ -9,7 +9,7 @@ import java.util.function.Function;
  **/
 public class DemoFunctionAndThen {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //请注意，Function的前置条件泛型和后置条件泛型可以相同。
         method(
                 str -> Integer.parseInt(str) + 10,
@@ -17,7 +17,7 @@ public class DemoFunctionAndThen {
         );
     }
 
-    private static void method(Function<String, Integer> one, Function<Integer, Integer> two) {
+    private static void method(Function<Strings, Integer> one, Function<Integer, Integer> two) {
         int num = one.andThen(two).apply("10");
         System.out.println(num);
     }

@@ -21,11 +21,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ReactorClient {
 
-    private static final String IP = "127.0.0.1";
+    private static final Strings IP = "127.0.0.1";
     private static final Integer PORT = 8848;
     private Selector selector;
     private SocketChannel socketChannel;
-    private String username;
+    private Strings username;
     public static ThreadPoolExecutor POOL = new ThreadPoolExecutor(5, 6, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1));
     private ClientReadHandler clientReadHandler;
     private ClientWriteHandler clientWriteHandler;
@@ -58,7 +58,7 @@ public class ReactorClient {
         POOL.submit(() -> clientReadHandler.read(selector));
     }
 
-    public void write(String message) {
+    public void write(Strings message) {
         POOL.submit(() -> clientWriteHandler.write(username, socketChannel, message));
     }
 }
@@ -66,7 +66,7 @@ public class ReactorClient {
 @Slf4j
 @Data
 class ClientWriteHandler {
-    public void write(String username, SocketChannel socketChannel, String message) {
+    public void write(Strings username, SocketChannel socketChannel, Strings message) {
         message = username + " 说：" + message;
         try {
             socketChannel.write(ByteBuffer.wrap(message.getBytes()));
@@ -99,7 +99,7 @@ class ClientReadHandler {
                             e.printStackTrace();
                         }
                         //把读到的缓冲区的数据转成字符串
-                        String msg = new String(buffer.array());
+                        Strings msg = new Strings(buffer.array());
                         log.info(msg.trim());
                     }
                     keys.remove(key);

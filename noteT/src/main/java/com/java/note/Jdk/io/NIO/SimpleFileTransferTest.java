@@ -56,7 +56,7 @@ public class SimpleFileTransferTest {
         return endTime - startTime;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         SimpleFileTransferTest simpleFileTransferTest = new SimpleFileTransferTest();
 //        File sourse = new File("F:\\电影\\[电影天堂www.dygod.cn]猜火车-cd1.rmvb");
         File sourse = new File("F:\\Test-NIO\\2.mp4");

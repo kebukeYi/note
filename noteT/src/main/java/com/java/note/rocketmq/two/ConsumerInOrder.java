@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConsumerInOrder {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(Strings[] args) throws Exception {
 
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("consumerInOrder_group_name_3");
 
@@ -44,7 +44,7 @@ public class ConsumerInOrder {
                 context.setAutoCommit(true);
                 for (MessageExt msg : msgs) {
                     // 可以看到每个queue有唯一的consume线程来消费, 订单对每个queue(分区)有序
-                    System.out.println("consumeThread=" + Thread.currentThread().getName() + "，queueId=" + msg.getQueueId() + ", content:" + new String(msg.getBody()));
+                    System.out.println("consumeThread=" + Thread.currentThread().getName() + "，queueId=" + msg.getQueueId() + ", content:" + new Strings(msg.getBody()));
                 }
                 try {
                     //模拟业务逻辑处理中...

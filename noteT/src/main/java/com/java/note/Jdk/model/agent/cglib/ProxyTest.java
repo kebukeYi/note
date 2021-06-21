@@ -10,7 +10,7 @@ import org.springframework.cglib.proxy.Enhancer;
  */
 public class ProxyTest {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //手动创建目标对象
         Operator operator = new Operator();
         System.out.println("operator:" + operator);

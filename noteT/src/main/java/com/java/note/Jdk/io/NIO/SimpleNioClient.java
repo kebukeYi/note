@@ -19,7 +19,7 @@ public class SimpleNioClient {
 
     private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         oneNio();
     }
 
@@ -32,7 +32,7 @@ public class SimpleNioClient {
         }
         executorService.scheduleWithFixedDelay(() -> {
             try {
-                String message = socketChannel.getLocalAddress().toString() + " Hello World";
+                Strings message = socketChannel.getLocalAddress().toString() + " Hello World";
                 // 使用ByteBuffer进行数据发送
                 ByteBuffer byteBuffer = ByteBuffer.wrap(message.getBytes());
                 socketChannel.write(byteBuffer);

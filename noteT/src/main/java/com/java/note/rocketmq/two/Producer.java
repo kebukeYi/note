@@ -80,7 +80,7 @@ public class Producer {
     }
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(Strings[] args) throws Exception {
 
         DefaultMQProducer producer = new DefaultMQProducer("producer_group_name");
 
@@ -88,22 +88,22 @@ public class Producer {
 
         producer.start();
 
-        String[] tags = new String[]{"TagA", "TagC", "TagD"};
+        Strings[] tags = new Strings[]{"TagA", "TagC", "TagD"};
 
         // 订单列表
         List<OrderStep> orderList = new Producer().buildOrders();
 
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateStr = sdf.format(date);
+        Strings dateStr = sdf.format(date);
         for (int i = 0; i < Remote.COUNT; i++) {
 
             // 加个时间前缀
-            String body = dateStr + " Hello RocketMQ " + orderList.get(i);
+            Strings body = dateStr + " Hello RocketMQ " + orderList.get(i);
             Message msg = new Message("TopicTest", tags[i % tags.length], "KEY" + i, body.getBytes(RemotingHelper.DEFAULT_CHARSET));
 
             // 发送消息时，你能通过 putUserProperty 来设置消息的属性 : 设置一些属性
-            msg.putUserProperty("a", String.valueOf(i));
+            msg.putUserProperty("a", Strings.valueOf(i));
 
             //设置指定的消息队列
             SendResult sendResult = producer.send(msg, new MessageQueueSelector() {
@@ -118,7 +118,7 @@ public class Producer {
                 //根据订单id 选择队列ID
             }, orderList.get(i).getOrderId());
 
-            System.out.println(String.format("SendResult status:%s, queueId:%d, body:%s",
+            System.out.println(Strings.format("SendResult status:%s, queueId:%d, body:%s",
                     sendResult.getSendStatus(),
                     sendResult.getMessageQueue().getQueueId(),
                     body));
@@ -133,7 +133,7 @@ public class Producer {
  */
 class OrderStep {
     private long orderId;
-    private String desc;
+    private Strings desc;
 
     public long getOrderId() {
         return orderId;
@@ -143,16 +143,16 @@ class OrderStep {
         this.orderId = orderId;
     }
 
-    public String getDesc() {
+    public Strings getDesc() {
         return desc;
     }
 
-    public void setDesc(String desc) {
+    public void setDesc(Strings desc) {
         this.desc = desc;
     }
 
     @Override
-    public String toString() {
+    public Strings toString() {
         return "OrderStep{" +
                 "orderId=" + orderId +
                 ", desc='" + desc + '\'' +

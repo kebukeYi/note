@@ -63,7 +63,7 @@ public class BST {
         return root;
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         BST bst = new BST();
         Node root = null;
         for (int i : TREE_VALUE) {

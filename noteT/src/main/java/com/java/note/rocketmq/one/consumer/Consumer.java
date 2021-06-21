@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class Consumer {
 
-    public static void main(String[] args) throws InterruptedException, MQClientException {
+    public static void main(Strings[] args) throws InterruptedException, MQClientException {
 
         // 实例化消费者 天然是一个集群 消费模块
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("consumer_group_name");
@@ -40,9 +40,9 @@ public class Consumer {
 //                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
                 try {
                     for (MessageExt msg : msgs) {
-                        String topic = msg.getTopic();
-                        String tags = msg.getTags();
-                        String result = new String(msg.getBody(), RemotingHelper.DEFAULT_CHARSET);
+                        Strings topic = msg.getTopic();
+                        Strings tags = msg.getTags();
+                        Strings result = new Strings(msg.getBody(), RemotingHelper.DEFAULT_CHARSET);
                         System.out.println("Consumer消费消息-----topic : " + topic + " , tags : " + tags + " , result ： " + result);
                     }
                 } catch (UnsupportedEncodingException e) {

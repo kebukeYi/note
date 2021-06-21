@@ -6,7 +6,7 @@ package com.java.note.Jdk.model.factory.method;
  * @Description
  */
 public class Consumer {
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Car car = new WulingFactory().getCar();
         Car car1 = new TeslaFactory().getCar();
 

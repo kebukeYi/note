@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBufAllocator;
  */
 public class ByteBufTest {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(9, 100);
         // write 方法改变写指针，写完之后写指针未到 capacity 的时候，buffer 仍然可写
         print("allocate ByteBuf(9, 100)", buffer);
@@ -48,7 +48,7 @@ public class ByteBufTest {
 
     }
 
-    private static void print(String action, ByteBuf buffer) {
+    private static void print(Strings action, ByteBuf buffer) {
         System.out.println("after ===========" + action + "============");
         System.out.println("capacity(): " + buffer.capacity());
         System.out.println("maxCapacity(): " + buffer.maxCapacity());

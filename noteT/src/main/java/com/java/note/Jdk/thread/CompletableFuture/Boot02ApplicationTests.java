@@ -74,7 +74,7 @@ public class Boot02ApplicationTests {
         executorService.shutdown();
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         oneThread();
         doFuture();
         doCompletableFuture();

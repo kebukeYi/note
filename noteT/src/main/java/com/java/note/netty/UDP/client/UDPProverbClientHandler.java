@@ -14,7 +14,7 @@ public class UDPProverbClientHandler extends SimpleChannelInboundHandler<Datagra
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
-        String response = msg.content().toString(CharsetUtil.UTF_8);
+        Strings response = msg.content().toString(CharsetUtil.UTF_8);
         System.out.println(response);
         //ctx.close();
     }

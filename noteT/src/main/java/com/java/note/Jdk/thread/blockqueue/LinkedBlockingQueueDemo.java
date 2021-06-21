@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class LinkedBlockingQueueDemo {
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         LinkedBlockingQueue<Integer> blockingQueue = new LinkedBlockingQueue<>();
 
         for (int i = 0; i < 4; i++) {

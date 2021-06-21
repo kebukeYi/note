@@ -8,7 +8,7 @@ import java.util.function.Supplier;
  * @description :
  **/
 public class DemoNumberMax {
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int[] numbers = {1100, 2100, 3200, 400, 500, -600, -700, -800, -900, -1000};
         int numberMax = arrayMax(
                 () -> {

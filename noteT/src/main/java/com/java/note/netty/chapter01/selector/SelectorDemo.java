@@ -18,7 +18,7 @@ import java.nio.channels.SocketChannel;
  * @since 1.0.0
  */
 public class SelectorDemo {
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         // java 获取一个selector，selector 底层实现是什么？
         // 1.windows 默认是 select 系统函数
         // 2.linux 默认是 epoll

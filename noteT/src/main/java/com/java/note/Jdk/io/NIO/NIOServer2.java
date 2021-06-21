@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class NIOServer2 {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
         //处理连接 的 selector
         Selector serverSelector = Selector.open();
         //处理 read 的selector
@@ -78,7 +78,7 @@ public class NIOServer2 {
                                     clientChannel.read(byteBuffer);
                                     byteBuffer.flip();
                                     System.out.println(Charset.defaultCharset().decode(byteBuffer));
-                                    String text = "服务器：我收到了";
+                                    Strings text = "服务器：我收到了";
                                     ByteBuffer outBuffer = ByteBuffer.wrap(text.getBytes());
                                     // 将消息回送给客户端
                                     clientChannel.write(outBuffer);

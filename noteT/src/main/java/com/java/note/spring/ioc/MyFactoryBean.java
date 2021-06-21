@@ -1,7 +1,6 @@
 package com.java.note.spring.ioc;
 
 import org.apache.ibatis.annotations.Select;
-import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -38,7 +37,7 @@ public class MyFactoryBean {
                 if (Object.class.equals(method.getDeclaringClass())) {
                     return method.invoke(this, args);
                 }
-                String[] value = method.getAnnotation(Select.class).value();
+                Strings[] value = method.getAnnotation(Select.class).value();
                 return null;
             }
         });

@@ -32,7 +32,7 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
             reader.reading(content);
             content.release();
             if (reader.isEnd()) {
-                String resultStr = new String(reader.readFull());
+                Strings resultStr = new Strings(reader.readFull());
                 System.out.println("Server said:" + resultStr);
                 ctx.close();
             }

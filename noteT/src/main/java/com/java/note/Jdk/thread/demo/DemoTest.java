@@ -43,7 +43,7 @@ public class DemoTest {
         System.out.println("atomicInteger " + atomicInteger.get());
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         test01();
     }
 }

@@ -12,8 +12,8 @@ import java.util.Map;
  */
 @Data
 public class Merchandise {
-    private String sku;// 商品 SKU
-    private String name; // 商品名称
+    private Strings sku;// 商品 SKU
+    private Strings name; // 商品名称
     private BigDecimal price; // 商品单价
     private Map<PromotionType, SupportPromotions> supportPromotions; // 支持促销类型
 }

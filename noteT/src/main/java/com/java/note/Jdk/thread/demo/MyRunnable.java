@@ -9,12 +9,12 @@ import java.util.Date;
  */
 public class MyRunnable implements Runnable {
 
-    private String command;
+    private Strings command;
 
     public MyRunnable() {
     }
 
-    public MyRunnable(String s) {
+    public MyRunnable(Strings s) {
         this.command = s;
     }
 
@@ -45,11 +45,11 @@ public class MyRunnable implements Runnable {
     }
 
     @Override
-    public String toString() {
+    public Strings toString() {
         return this.command;
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         MyRunnable myRunnable = new MyRunnable();
         Thread thread = new Thread(myRunnable);
         thread.start();

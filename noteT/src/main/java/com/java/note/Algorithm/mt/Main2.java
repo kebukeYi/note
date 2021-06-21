@@ -29,10 +29,10 @@ import java.util.Scanner;
  */
 public class Main2 {
 
-    final static String $ = "$";
+    final static Strings $ = "$";
 
-    public static void main(String[] args) {
-        String str = null;
+    public static void main(Strings[] args) {
+        Strings str = null;
         do {
             Scanner s = new Scanner(System.in);
 //            System.out.println("请输入：");
@@ -41,11 +41,11 @@ public class Main2 {
                 break;
             }
 //            System.out.println("正在计算...");
-            String[] bt = str.split("\\.");
+            Strings[] bt = str.split("\\.");
 //            System.out.println(bt[0]);
 //            System.out.println(bt[1]);
             int a = Integer.parseInt(bt[0]);
-            String b = bt[1];
+            Strings b = bt[1];
             if (!b.equals("") && b != null) {
                 if (b.length() > 2) {
                     b = b.substring(0, 2);

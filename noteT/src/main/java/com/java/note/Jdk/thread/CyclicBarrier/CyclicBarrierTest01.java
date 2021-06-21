@@ -12,11 +12,11 @@ public class CyclicBarrierTest01 {
      * 案例：
      * 模拟过气游戏 “王者荣耀” 游戏开始逻辑
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         final int num = 5;
 
         //第一步：定义玩家，定义5个
-        String[] heros = {"安琪拉", "亚瑟", "马超", "张飞", "刘备"};
+        Strings[] heros = {"安琪拉", "亚瑟", "马超", "张飞", "刘备"};
 
         //第二步：创建固定线程数量的线程池，线程数量为5
         ExecutorService service = Executors.newFixedThreadPool(num);
@@ -40,11 +40,11 @@ public class CyclicBarrierTest01 {
 
 
     static class Player implements Runnable {
-        private String hero;
+        private Strings hero;
         private CyclicBarrier barrier;
         private CountDownLatch countDownLatch;
 
-        public Player(String hero, CyclicBarrier barrier, CountDownLatch countDownLatch) {
+        public Player(Strings hero, CyclicBarrier barrier, CountDownLatch countDownLatch) {
             this.countDownLatch = countDownLatch;
             this.hero = hero;
             this.barrier = barrier;

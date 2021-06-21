@@ -1,7 +1,5 @@
 package com.java.note.Algorithm.acwing;
 
-import com.java.note.Algorithm.mt.Array;
-
 /**
  * @Author : mmy
  * @Creat Time : 20 20/9/9  下午 5:47
@@ -9,7 +7,7 @@ import com.java.note.Algorithm.mt.Array;
  */
 public class ACone {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int N = 20;
         int n = 6;
         Integer[][] array = new Integer[N][N];

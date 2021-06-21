@@ -50,7 +50,7 @@ public class LeeCode124 {
 
     public static int ret = Integer.MIN_VALUE;
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println(pathMax(creatTreeNode()));
     }
 

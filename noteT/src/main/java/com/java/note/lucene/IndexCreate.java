@@ -52,7 +52,7 @@ public class IndexCreate {
      * @param indexDir
      * @throws Exception
      */
-    public IndexCreate(String indexDir) throws Exception {
+    public IndexCreate(Strings indexDir) throws Exception {
 //        获取索引文件的存放地址对象
         FSDirectory dir = FSDirectory.open(Paths.get(indexDir));
 //        标准分词器（针对英文）
@@ -78,7 +78,7 @@ public class IndexCreate {
      * @return
      * @throws Exception
      */
-    public int index(String dataDir) throws Exception {
+    public int index(Strings dataDir) throws Exception {
         File[] files = new File(dataDir).listFiles();
         for (File file : files) {
             indexFile(file);
@@ -115,11 +115,11 @@ public class IndexCreate {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 //        索引文件将要存放的位置
-        String indexDir = "D:\\lucenetemp\\lucene\\demo1";
+        Strings indexDir = "D:\\lucenetemp\\lucene\\demo1";
 //        数据源地址
-        String dataDir = "D:\\lucenetemp\\lucene\\demo1\\data";
+        Strings dataDir = "D:\\lucenetemp\\lucene\\demo1\\data";
         IndexCreate ic = null;
         try {
             ic = new IndexCreate(indexDir);

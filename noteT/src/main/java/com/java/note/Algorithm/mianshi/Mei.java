@@ -45,25 +45,25 @@ package com.java.note.Algorithm.mianshi;
  */
 public class Mei {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         //月份数
         int month = 2;
         //日
         int day = 14;
         //所需要转化的字符
-        String text = "I LOVE YOU";
+        Strings text = "I LOVE YOU";
         start(month, day, text);
     }
 
-    public static void start(int month, int day, String text) {
+    public static void start(int month, int day, Strings text) {
         char[] chars = text.toCharArray();
         for (char c : chars) {
-            String value = getChar(month, day, c);
+            Strings value = getChar(month, day, c);
             System.out.print(value + ",");
         }
     }
 
-    public static String getChar(int month, int day, char c) {
+    public static Strings getChar(int month, int day, char c) {
         month -= 1;
         day -= 1;
         char[][] chars = {
@@ -86,8 +86,8 @@ public class Mei {
         return getCharLocation(chars, c);
     }
 
-    public static String getCharLocation(char[][] chars, char c) {
-        String value = "";
+    public static Strings getCharLocation(char[][] chars, char c) {
+        Strings value = "";
         sys:
         for (int i = 0; i < chars.length; i++) {
             for (int j = 0; j < chars[i].length; j++) {

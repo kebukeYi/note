@@ -20,7 +20,7 @@ public class GCRootDemo {
         System.out.println("第一次GC 完成");
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         m1();
     }
 }

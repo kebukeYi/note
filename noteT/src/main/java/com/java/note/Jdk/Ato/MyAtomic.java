@@ -17,7 +17,7 @@ public class MyAtomic {
     static AtomicStampedReference<Integer> stampedReference = new AtomicStampedReference<>(100, 1);
 
 
-    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
+    public static void main(Strings[] args) throws NoSuchFieldException, IllegalAccessException {
 
         new Thread(() -> {
             reference.compareAndSet(100, 101);

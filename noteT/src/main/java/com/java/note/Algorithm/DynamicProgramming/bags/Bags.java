@@ -14,7 +14,7 @@ public class Bags {
      * 包括： 选第i个 和 不选第i个；
      */
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         int[] weight = new int[]{0, 1, 3, 4, 5};
         int[] values = new int[]{0, 1, 4, 5, 7};
         int sum = 7;

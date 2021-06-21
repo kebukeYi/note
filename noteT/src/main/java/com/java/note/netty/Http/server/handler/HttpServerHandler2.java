@@ -33,7 +33,7 @@ public class HttpServerHandler2 extends ChannelInboundHandlerAdapter {
             reader.reading(content);
             content.release();
             if (reader.isEnd()) {
-                String resultStr = new String(reader.readFull());
+                Strings resultStr = new Strings(reader.readFull());
                 System.out.println("Client said:" + resultStr);
                 FullHttpResponse response = new DefaultFullHttpResponse(
                         HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.wrappedBuffer("I am ok".getBytes()));

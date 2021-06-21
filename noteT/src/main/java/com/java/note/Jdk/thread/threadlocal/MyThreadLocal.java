@@ -31,9 +31,9 @@ public class MyThreadLocal {
         }
     };
 
-    private static final ThreadLocal<String> TIME_THREADLOCAL_2 = new ThreadLocal<String>() {
+    private static final ThreadLocal<Strings> TIME_THREADLOCAL_2 = new ThreadLocal<Strings>() {
         @Override
-        protected String initialValue() {
+        protected Strings initialValue() {
             return System.currentTimeMillis() + "over";
         }
     };
@@ -67,7 +67,7 @@ public class MyThreadLocal {
         return System.currentTimeMillis() - TIME_THREADLOCAL.get();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(Strings[] args) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
         MyThreadLocal.begin();

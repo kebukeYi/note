@@ -8,7 +8,7 @@ package com.java.note.Algorithm.JZoffer;
  */
 public class Offer04 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 
     }
 

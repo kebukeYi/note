@@ -17,7 +17,7 @@ public class StampedLockTest {
     private static int maxValue = 1000;
     private final StampedLock s1 = new StampedLock();
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Counter lockTest = new StampedLockTest().new Counter();
         long startTime = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(readThreadNum + writeThreadNum);

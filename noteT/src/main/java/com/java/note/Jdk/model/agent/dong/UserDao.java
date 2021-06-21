@@ -9,14 +9,14 @@ package com.java.note.Jdk.model.agent.dong;
 public class UserDao implements IUserDao {
 
     @Override
-    public String save(String name) {
+    public Strings save(Strings name) {
         //int i =1/0;用于测试异常通知
         System.out.println("模拟： 保存用户 ! " + name);
         return "success-1";
     }
 
     @Override
-    public String find(int id) {
+    public Strings find(int id) {
         System.out.println("查询用户 " + id);
         return "success-1";
     }

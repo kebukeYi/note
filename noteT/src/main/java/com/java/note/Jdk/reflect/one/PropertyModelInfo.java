@@ -14,12 +14,12 @@ public class PropertyModelInfo {
     /**
      * 属性名称
      */
-    private String propertyName;
+    private Strings propertyName;
 
     /**
      * 属性注释
      */
-    private String propertyComment;
+    private Strings propertyComment;
 
     /**
      * 属性值

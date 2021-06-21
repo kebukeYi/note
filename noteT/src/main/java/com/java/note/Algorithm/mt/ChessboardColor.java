@@ -13,7 +13,7 @@ import java.util.*;
 public class ChessboardColor {
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         List<Point> rows = new ArrayList<>();
         List<Point> cols = new ArrayList<>();
         int sum = 0;

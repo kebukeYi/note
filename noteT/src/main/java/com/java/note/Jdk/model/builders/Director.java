@@ -19,7 +19,7 @@ public class Director {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         Director director = new Director();
         Product product = director.builderProduct(new Worker());
         System.out.println(product.toString());

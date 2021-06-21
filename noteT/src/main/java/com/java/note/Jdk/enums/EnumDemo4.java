@@ -24,7 +24,7 @@ enum EnumDemo4 {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         printName(Color.BLUE);
         printName(Color.RED);
         printName(Color.GREEN);

@@ -42,7 +42,7 @@ public class DateInter extends Pair<Date> {
     //4.先来分析setValue方法，父类的类型是Object，而子类的类型是Date，参数类型不一样，这如果实在普通的继承关系中，根本就不会是重写，而是重载。
     //如果是重载，那么子类中两个setValue方法，一个是参数Object类型，一个是Date类型，可是我们发现，根本就没有这样的一个子类继承自父类的Object类型参数的方法。
     // 所以说，却是 是重写了，而不是重载了。
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(Strings[] args) throws ClassNotFoundException {
         DateInter dateInter = new DateInter();
         dateInter.setValue(new Date());
         //这是为何？

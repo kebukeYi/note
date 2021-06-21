@@ -1,7 +1,5 @@
 package com.java.note.Jdk.io.BIO;
 
-import lombok.val;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -17,7 +15,7 @@ import java.net.Socket;
 public class SimpleBIOServer {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(Strings[] args) throws IOException {
 //        oneBio();
         twoBio();
     }
@@ -38,8 +36,8 @@ public class SimpleBIOServer {
             try {
                 //单线程模型
                 while ((len = inputStream.read(bytes)) != -1) {
-                    System.out.println("receive : " + new String(bytes, 0, len));
-                    accept.getOutputStream().write(new String("我收到了").getBytes());
+                    System.out.println("receive : " + new Strings(bytes, 0, len));
+                    accept.getOutputStream().write(new Strings("我收到了").getBytes());
                     accept.getOutputStream().flush();
                 }
             } catch (Exception e) {
@@ -74,7 +72,7 @@ public class SimpleBIOServer {
                 //怎么释放 bytes 内存???
                 // read()方法是一个阻塞方法，当没有数据可读时，线程会一直阻塞在read()方法上 ,也就是 从始之终只 有一个 main 主线程在干事
                 while ((len = inputStream.read(bytes)) != -1) {
-                    val s = new String(bytes, 0, len);
+                    Strings s = new Strings(bytes, 0, len);
                     System.out.println("receive : " + s);
                     socket.getOutputStream().write((s+ "  我收到了 ").getBytes());
                     socket.getOutputStream().flush();

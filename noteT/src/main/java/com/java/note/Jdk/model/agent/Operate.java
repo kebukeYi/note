@@ -6,5 +6,5 @@ package com.java.note.Jdk.model.agent;
  * @Description
  */
 public interface Operate {
-    String doSomething(String name);
+    Strings doSomething(Strings name);
 }

@@ -5,7 +5,7 @@ package com.java.note.Jdk.thread.CompletableFuture;
  */
 public interface RemoteLoader {
 
-    String load();
+    Strings load();
 
     default void delay() {
         try {

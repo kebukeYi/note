@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 public class MyClassLoader extends ClassLoader {
 
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    protected Class<?> findClass(Strings name) throws ClassNotFoundException {
         Class log = null;
         // 获取该class文件字节码数组
         byte[] classData = getData();
@@ -35,7 +35,7 @@ public class MyClassLoader extends ClassLoader {
         return log;
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
+    public static void main(Strings[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
         MyClassLoader myClassLoader = new MyClassLoader();
         //查找Log这个class文件
         myClassLoader.findClass("Log");
@@ -46,15 +46,15 @@ public class MyClassLoader extends ClassLoader {
         System.out.println("类加载器是:" + Log.getClassLoader());
 
         //利用反射获取main方法
-        Method method = Log.getDeclaredMethod("main", String[].class);
+        Method method = Log.getDeclaredMethod("main", Strings[].class);
         Object object = Log.newInstance();
-        String[] arg = {"ad"};
+        Strings[] arg = {"ad"};
         method.invoke(object, (Object) arg);
     }
 
     private byte[] getData() {
         //指定路径
-        String path = "E:\\TooL\\Log.class";
+        Strings path = "E:\\TooL\\Log.class";
         File file = new File(path);
         FileInputStream in = null;
         ByteArrayOutputStream out = null;

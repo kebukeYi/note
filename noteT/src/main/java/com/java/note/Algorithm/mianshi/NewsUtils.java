@@ -19,7 +19,7 @@ public class NewsUtils {
     @NoArgsConstructor
     class Message {
         private Date beginTime;
-        private String content;
+        private Strings content;
         private int flag;
     }
 

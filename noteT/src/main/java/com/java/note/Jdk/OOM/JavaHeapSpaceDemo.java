@@ -11,14 +11,14 @@ public class JavaHeapSpaceDemo {
 
 
     public static void JavaHeapSpace() {
-        String string = "koo";
+        Strings strings = "koo";
         while (true) {
-            string = string + new Random().nextInt(1000) + new Random().nextInt(20000);
-            string.intern();
+            strings = strings + new Random().nextInt(1000) + new Random().nextInt(20000);
+            strings.intern();
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         JavaHeapSpace();
     }
 }

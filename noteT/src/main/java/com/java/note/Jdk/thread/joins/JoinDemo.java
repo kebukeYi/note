@@ -12,7 +12,7 @@ package com.java.note.Jdk.thread.joins;
  **/
 public class JoinDemo {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println(Thread.currentThread().getName() + " 肚子饿了，想吃饭饭");
 
         Thread b = new Thread(() -> {

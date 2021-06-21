@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) // 当前被描述的注解，会保留到class字节码文件中，并被JVM读取到
 public @interface pro {
 
-    public abstract String className();
+    public abstract Strings className();
 
-    public abstract String methodName();
+    public abstract Strings methodName();
 }

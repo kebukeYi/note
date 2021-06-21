@@ -13,7 +13,7 @@ public class DemoApplication {
      * Redis、NodeJS 的设计就很好地体现了单线程串行的优势。
      */
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         // 运行多线程
         MultiThreadTester test1 = new MultiThreadTester();
         test1.Start();

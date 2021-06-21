@@ -185,7 +185,6 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * Returns a power of two size for the given target capacity.
      * 返回一个大于等于且最接近 cap 的2的幂次方整数，如给定9，返回2的4次方16
      * 防止本来就是2的次幂数返回2倍，比如cap是8，若不减1，则返回16而不是8了
-     *
      */
     static final int tableSizeFor(int cap) {
         //容量减1，为了防止初始化容量已经是2的幂的情况，否则传入16返回32，-1的话 传入16返回16，最后有+1运算
@@ -499,26 +498,26 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                     // 判断链表中结点的key值与插入的元素的key值是否相等
                     if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
                         break;
-                    }
-                    // 用于遍历桶中的链表，与前面的e = p.next组合，可以遍历链表
-                    //正是这里会出现线程安全事故：
-                    p = e;
                 }
+                // 用于遍历桶中的链表，与前面的e = p.next组合，可以遍历链表
+                //正是这里会出现线程安全事故：
+                p = e;
             }
-            //e 不为空的时机：473行  478行  都被赋值了
-            // 表示在桶中找到key值、hash值与插入元素相等的结点
-            if (e != null) { // existing mapping for key
-                // 记录 e 的value
-                V oldValue = e.value;
-                // onlyIfAbsent为false或者旧值为null
-                if (!onlyIfAbsent || oldValue == null) {
-                    //用新值替换旧值
-                    e.value = value;
-                }
-                // 访问后回调函数
-                afterNodeAccess(e);
-                return oldValue;
+        }
+        //e 不为空的时机：473行  478行  都被赋值了
+        // 表示在桶中找到key值、hash值与插入元素相等的结点
+        if (e != null) { // existing mapping for key
+            // 记录 e 的value
+            V oldValue = e.value;
+            // onlyIfAbsent为false或者旧值为null
+            if (!onlyIfAbsent || oldValue == null) {
+                //用新值替换旧值
+                e.value = value;
             }
+            // 访问后回调函数
+            afterNodeAccess(e);
+            return oldValue;
+        }
         //让HashMap的修改次数+1
         ++modCount;
         //判断当前Hash的键值对数量是否超过扩容阈值

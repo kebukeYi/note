@@ -1,7 +1,6 @@
 package com.java.note.Jdk.model.factory.abstractF;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @Author : mmy
@@ -11,7 +10,7 @@ import java.util.Date;
 public class Consumer {
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 
         MiFactory miFactory = new MiFactory();
         IRouterProduct iRouterProduct = miFactory.getIRouterProduct();

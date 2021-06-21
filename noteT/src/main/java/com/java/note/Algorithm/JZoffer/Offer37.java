@@ -21,7 +21,7 @@ public class Offer37 {
     }
 
 
-    String Serialize(TreeNode root) {
+    Strings Serialize(TreeNode root) {
         if (root == null) return "[ ]";
         StringBuilder res = new StringBuilder("[");
         Queue<TreeNode> queue = new LinkedList<>();
@@ -43,12 +43,12 @@ public class Offer37 {
         return res.toString();
     }
 
-    TreeNode Deserialize(String str) {
+    TreeNode Deserialize(Strings str) {
         if (str.equals("[ ]")) {
             return null;
         }
 
-        String[] vals = str.substring(1, str.length() - 1).split(",");
+        Strings[] vals = str.substring(1, str.length() - 1).split(",");
         TreeNode root = new TreeNode(Integer.parseInt(vals[0]));
 
         Queue<TreeNode> queue = new LinkedList<>();

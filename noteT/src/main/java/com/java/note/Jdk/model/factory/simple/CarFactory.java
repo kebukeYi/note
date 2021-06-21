@@ -7,7 +7,7 @@ package com.java.note.Jdk.model.factory.simple;
  */
 public class CarFactory {
 
-    public static Car getCar(String car) {
+    public static Car getCar(Strings car) {
         return new Wuling();
     }
 }

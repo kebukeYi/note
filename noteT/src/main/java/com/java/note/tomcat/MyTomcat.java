@@ -7,7 +7,7 @@ package com.java.note.tomcat;
  */
 public class MyTomcat {
 
-    public static void main(String[] args)  {
+    public static void main(Strings[] args)  {
 //        Tomcat tomcat = new Tomcat();
 //        tomcat.setPort(20000);
 //        tomcat.addWebapp("/index", "src/main/resources/templates/index.html");

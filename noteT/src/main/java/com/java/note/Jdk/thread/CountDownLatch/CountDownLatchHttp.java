@@ -9,7 +9,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class CountDownLatchHttp {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(Strings[] args) throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         for (int i = 0; i < 10; i++) {
             Thread thread = new Thread();
@@ -18,10 +18,10 @@ public class CountDownLatchHttp {
     }
 
     static class AnalogUser extends Thread {
-        String openId;
+        Strings openId;
         CountDownLatch latch;
 
-        public AnalogUser(String openId, CountDownLatch latch) {
+        public AnalogUser(Strings openId, CountDownLatch latch) {
             super();
             this.openId = openId;
             this.latch = latch;

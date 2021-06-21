@@ -12,11 +12,11 @@ import java.util.function.Consumer;
  **/
 public class Demo01Consumer {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         consumerString(s -> System.out.println(s + s));
     }
 
-    private static void consumerString(Consumer<String> function) {
+    private static void consumerString(Consumer<Strings> function) {
         //调用用户传进来的 消费函数 “System.out.println(s+s)l”
         function.accept("Hello");
     }

@@ -16,10 +16,10 @@ import java.util.concurrent.Executors;
  */
 public class BIOServer {
 
-    static final String HOST_NAME = "127.0.0.1";
+    static final Strings HOST_NAME = "127.0.0.1";
     static int PORT = 32222;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(Strings[] args) throws Exception {
         //服务端的 channel
         ServerSocket socket = new ServerSocket(PORT);
         socket.setSoTimeout(1000);//超过次时间没有数据发来时  主线程可以做别的事
@@ -65,7 +65,7 @@ public class BIOServer {
         public void run() {
             while (this.flag) {
                 if (this.scanner.hasNext()) {
-                    String var = this.scanner.next().trim();
+                    Strings var = this.scanner.next().trim();
                     System.out.println("收到客户端发来的 ：" + var);
                     if ("byebye".equals(var)) {
                         this.out.print("");

@@ -18,10 +18,10 @@ import lombok.NoArgsConstructor;
 public class PeopleDto {
 
     private Integer id;
-    private String name;
+    private Strings name;
     private Integer age;
 
-    public PeopleDto(String name, Integer age) {
+    public PeopleDto(Strings name, Integer age) {
         this.name = name;
         this.age = age;
     }

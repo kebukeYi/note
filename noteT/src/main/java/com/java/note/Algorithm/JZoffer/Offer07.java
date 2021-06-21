@@ -2,7 +2,6 @@ package com.java.note.Algorithm.JZoffer;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @Author : mmy
@@ -25,7 +24,7 @@ public class Offer07 {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 
     }
 

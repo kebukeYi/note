@@ -18,7 +18,7 @@ public class TransactionListenerImpl implements TransactionListener {
     private AtomicInteger transactionIndex = new AtomicInteger(0);
 
     //存储当前事务的状态
-    private ConcurrentHashMap<String, Integer> localTrans = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Strings, Integer> localTrans = new ConcurrentHashMap<>();
 
     //执行本地事务
     @Override

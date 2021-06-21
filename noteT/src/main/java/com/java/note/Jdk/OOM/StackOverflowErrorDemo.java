@@ -10,7 +10,7 @@ public class StackOverflowErrorDemo {
         StackOverflowError();
     }
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         StackOverflowError();
     }
 

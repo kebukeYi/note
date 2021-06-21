@@ -8,5 +8,5 @@ public interface MessageBuilder {
      *
      * @return 生成的信息
      */
-    public abstract String builderMessage();
+    public abstract Strings builderMessage();
 }

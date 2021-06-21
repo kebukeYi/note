@@ -1,9 +1,6 @@
 package com.java.note.Algorithm.leecode;
 
-import com.java.note.Algorithm.mt.Array;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,7 +12,7 @@ import java.util.List;
 public class LeeCode416 {
 
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 //        int[] a = new int[]{1, 11, 5, 2, 3};
 //        int[] a = new int[]{1, 3, 4, 4};
 //        int[] a = new int[]{1, 2};

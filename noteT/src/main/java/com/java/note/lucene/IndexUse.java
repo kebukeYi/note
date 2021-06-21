@@ -36,7 +36,7 @@ public class IndexUse {
      * @param indexDir 索引文件所在目录
      * @param q        关键字
      */
-    public static void search(String indexDir, String q) throws Exception {
+    public static void search(Strings indexDir, Strings q) throws Exception {
         FSDirectory indexDirectory = FSDirectory.open(Paths.get(indexDir));
 //        注意:索引输入流不是new出来的，是通过目录读取工具类打开的
         IndexReader indexReader = DirectoryReader.open(indexDirectory);
@@ -65,9 +65,9 @@ public class IndexUse {
 
 
     //查询索引测试
-    public static void main(String[] args) {
-        String indexDir = "D:\\lucenetemp\\lucene\\demo1";
-        String q = "EarlyTerminating-Collector";
+    public static void main(Strings[] args) {
+        Strings indexDir = "D:\\lucenetemp\\lucene\\demo1";
+        Strings q = "EarlyTerminating-Collector";
         try {
             IndexUse.search(indexDir, q);
         } catch (Exception e) {

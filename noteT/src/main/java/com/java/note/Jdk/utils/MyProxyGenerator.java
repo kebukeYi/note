@@ -70,26 +70,26 @@ public class MyProxyGenerator {
     private static final int opc_athrow = 191;
     private static final int opc_checkcast = 192;
     private static final int opc_wide = 196;
-    private static final String superclassName = "java/lang/reflect/Proxy";
-    private static final String handlerFieldName = "h";
+    private static final Strings superclassName = "java/lang/reflect/Proxy";
+    private static final Strings handlerFieldName = "h";
     private static final boolean saveGeneratedFiles = (Boolean) AccessController.doPrivileged(new GetBooleanAction("MyProxyGenerator.saveGeneratedFiles"));
     private static Method hashCodeMethod;
     private static Method equalsMethod;
     private static Method toStringMethod;
-    private String className;
+    private Strings className;
     private Class<?>[] interfaces;
     private int accessFlags;
     private ConstantPool cp = new MyProxyGenerator.ConstantPool();
     private List<FieldInfo> fields = new ArrayList();
     private List<MethodInfo> methods = new ArrayList();
-    private Map<String, List<ProxyMethod>> proxyMethods = new HashMap();
+    private Map<Strings, List<ProxyMethod>> proxyMethods = new HashMap();
     private int proxyMethodCount = 0;
 
-    public static byte[] generateProxyClass(String var0, Class<?>[] var1) {
+    public static byte[] generateProxyClass(Strings var0, Class<?>[] var1) {
         return generateProxyClass(var0, var1, 49);
     }
 
-    public static byte[] generateProxyClass(final String var0, Class<?>[] var1, int var2) {
+    public static byte[] generateProxyClass(final Strings var0, Class<?>[] var1, int var2) {
         MyProxyGenerator var3 = new MyProxyGenerator(var0, var1, var2);
         final byte[] var4 = var3.generateClassFile();
         if (saveGeneratedFiles) {
@@ -118,7 +118,7 @@ public class MyProxyGenerator {
         return var4;
     }
 
-    private MyProxyGenerator(String var1, Class<?>[] var2, int var3) {
+    private MyProxyGenerator(Strings var1, Class<?>[] var2, int var3) {
         this.className = var1;
         this.interfaces = var2;
         this.accessFlags = var3;
@@ -234,11 +234,11 @@ public class MyProxyGenerator {
     }
 
     private void addProxyMethod(Method var1, Class<?> var2) {
-        String var3 = var1.getName();
+        Strings var3 = var1.getName();
         Class[] var4 = var1.getParameterTypes();
         Class var5 = var1.getReturnType();
         Class[] var6 = var1.getExceptionTypes();
-        String var7 = var3 + getParameterDescriptors(var4);
+        Strings var7 = var3 + getParameterDescriptors(var4);
         Object var8 = (List) this.proxyMethods.get(var7);
         if (var8 != null) {
             Iterator var9 = ((List) var8).iterator();
@@ -446,15 +446,15 @@ public class MyProxyGenerator {
         var2.writeShort(this.cp.getMethodRef("java/lang/Class", "forName", "(Ljava/lang/String;)Ljava/lang/Class;"));
     }
 
-    private static String dotToSlash(String var0) {
+    private static Strings dotToSlash(Strings var0) {
         return var0.replace('.', '/');
     }
 
-    private static String getMethodDescriptor(Class<?>[] var0, Class<?> var1) {
+    private static Strings getMethodDescriptor(Class<?>[] var0, Class<?> var1) {
         return getParameterDescriptors(var0) + (var1 == Void.TYPE ? "V" : getFieldType(var1));
     }
 
-    private static String getParameterDescriptors(Class<?>[] var0) {
+    private static Strings getParameterDescriptors(Class<?>[] var0) {
         StringBuilder var1 = new StringBuilder("(");
 
         for (int var2 = 0; var2 < var0.length; ++var2) {
@@ -465,15 +465,15 @@ public class MyProxyGenerator {
         return var1.toString();
     }
 
-    private static String getFieldType(Class<?> var0) {
+    private static Strings getFieldType(Class<?> var0) {
         if (var0.isPrimitive()) {
-            return MyProxyGenerator.PrimitiveTypeInfo.get(var0).baseTypeString;
+            return MyProxyGenerator.PrimitiveTypeInfo.get(var0).baseTypeStrings;
         } else {
             return var0.isArray() ? var0.getName().replace('.', '/') : "L" + dotToSlash(var0.getName()) + ";";
         }
     }
 
-    private static String getFriendlyMethodSignature(String var0, Class<?>[] var1) {
+    private static Strings getFriendlyMethodSignature(Strings var0, Class<?>[] var1) {
         StringBuilder var2 = new StringBuilder(var0);
         var2.append('(');
 
@@ -585,7 +585,7 @@ public class MyProxyGenerator {
             this.readOnly = false;
         }
 
-        public short getUtf8(String var1) {
+        public short getUtf8(Strings var1) {
             if (var1 == null) {
                 throw new NullPointerException();
             } else {
@@ -601,35 +601,35 @@ public class MyProxyGenerator {
             return this.getValue(new Float(var1));
         }
 
-        public short getClass(String var1) {
+        public short getClass(Strings var1) {
             short var2 = this.getUtf8(var1);
             return this.getIndirect(new MyProxyGenerator.ConstantPool.IndirectEntry(7, var2));
         }
 
-        public short getString(String var1) {
+        public short getString(Strings var1) {
             short var2 = this.getUtf8(var1);
             return this.getIndirect(new MyProxyGenerator.ConstantPool.IndirectEntry(8, var2));
         }
 
-        public short getFieldRef(String var1, String var2, String var3) {
+        public short getFieldRef(Strings var1, Strings var2, Strings var3) {
             short var4 = this.getClass(var1);
             short var5 = this.getNameAndType(var2, var3);
             return this.getIndirect(new MyProxyGenerator.ConstantPool.IndirectEntry(9, var4, var5));
         }
 
-        public short getMethodRef(String var1, String var2, String var3) {
+        public short getMethodRef(Strings var1, Strings var2, Strings var3) {
             short var4 = this.getClass(var1);
             short var5 = this.getNameAndType(var2, var3);
             return this.getIndirect(new MyProxyGenerator.ConstantPool.IndirectEntry(10, var4, var5));
         }
 
-        public short getInterfaceMethodRef(String var1, String var2, String var3) {
+        public short getInterfaceMethodRef(Strings var1, Strings var2, Strings var3) {
             short var4 = this.getClass(var1);
             short var5 = this.getNameAndType(var2, var3);
             return this.getIndirect(new MyProxyGenerator.ConstantPool.IndirectEntry(11, var4, var5));
         }
 
-        public short getNameAndType(String var1, String var2) {
+        public short getNameAndType(Strings var1, Strings var2) {
             short var3 = this.getUtf8(var1);
             short var4 = this.getUtf8(var2);
             return this.getIndirect(new MyProxyGenerator.ConstantPool.IndirectEntry(12, var3, var4));
@@ -743,9 +743,9 @@ public class MyProxyGenerator {
             }
 
             public void write(DataOutputStream var1) throws IOException {
-                if (this.value instanceof String) {
+                if (this.value instanceof Strings) {
                     var1.writeByte(1);
-                    var1.writeUTF((String) this.value);
+                    var1.writeUTF((Strings) this.value);
                 } else if (this.value instanceof Integer) {
                     var1.writeByte(3);
                     var1.writeInt((Integer) this.value);
@@ -784,10 +784,10 @@ public class MyProxyGenerator {
 
     private class FieldInfo {
         public int accessFlags;
-        public String name;
-        public String descriptor;
+        public Strings name;
+        public Strings descriptor;
 
-        public FieldInfo(String var2, String var3, int var4) {
+        public FieldInfo(Strings var2, Strings var3, int var4) {
             this.name = var2;
             this.descriptor = var3;
             this.accessFlags = var4;
@@ -805,15 +805,15 @@ public class MyProxyGenerator {
 
     private class MethodInfo {
         public int accessFlags;
-        public String name;
-        public String descriptor;
+        public Strings name;
+        public Strings descriptor;
         public short maxStack;
         public short maxLocals;
         public ByteArrayOutputStream code = new ByteArrayOutputStream();
         public List<MyProxyGenerator.ExceptionTableEntry> exceptionTable = new ArrayList();
         public short[] declaredExceptions;
 
-        public MethodInfo(String var2, String var3, int var4) {
+        public MethodInfo(Strings var2, Strings var3, int var4) {
             this.name = var2;
             this.descriptor = var3;
             this.accessFlags = var4;
@@ -861,11 +861,11 @@ public class MyProxyGenerator {
     }
 
     private static class PrimitiveTypeInfo {
-        public String baseTypeString;
-        public String wrapperClassName;
-        public String wrapperValueOfDesc;
-        public String unwrapMethodName;
-        public String unwrapMethodDesc;
+        public Strings baseTypeStrings;
+        public Strings wrapperClassName;
+        public Strings wrapperValueOfDesc;
+        public Strings unwrapMethodName;
+        public Strings unwrapMethodDesc;
         private static Map<Class<?>, MyProxyGenerator.PrimitiveTypeInfo> table = new HashMap();
 
         private static void add(Class<?> var0, Class<?> var1) {
@@ -875,11 +875,11 @@ public class MyProxyGenerator {
         private PrimitiveTypeInfo(Class<?> var1, Class<?> var2) {
             assert var1.isPrimitive();
 
-            this.baseTypeString = Array.newInstance(var1, 0).getClass().getName().substring(1);
+            this.baseTypeStrings = Array.newInstance(var1, 0).getClass().getName().substring(1);
             this.wrapperClassName = MyProxyGenerator.dotToSlash(var2.getName());
-            this.wrapperValueOfDesc = "(" + this.baseTypeString + ")L" + this.wrapperClassName + ";";
+            this.wrapperValueOfDesc = "(" + this.baseTypeStrings + ")L" + this.wrapperClassName + ";";
             this.unwrapMethodName = var1.getName() + "Value";
-            this.unwrapMethodDesc = "()" + this.baseTypeString;
+            this.unwrapMethodDesc = "()" + this.baseTypeStrings;
         }
 
         public static MyProxyGenerator.PrimitiveTypeInfo get(Class<?> var0) {
@@ -899,14 +899,14 @@ public class MyProxyGenerator {
     }
 
     private class ProxyMethod {
-        public String methodName;
+        public Strings methodName;
         public Class<?>[] parameterTypes;
         public Class<?> returnType;
         public Class<?>[] exceptionTypes;
         public Class<?> fromClass;
-        public String methodFieldName;
+        public Strings methodFieldName;
 
-        private ProxyMethod(String var2, Class<?>[] var3, Class<?> var4, Class<?>[] var5, Class<?> var6) {
+        private ProxyMethod(Strings var2, Class<?>[] var3, Class<?> var4, Class<?>[] var5, Class<?> var6) {
             this.methodName = var2;
             this.parameterTypes = var3;
             this.returnType = var4;
@@ -916,7 +916,7 @@ public class MyProxyGenerator {
         }
 
         private MyProxyGenerator.MethodInfo generateMethod() throws IOException {
-            String var1 = MyProxyGenerator.getMethodDescriptor(this.parameterTypes, this.returnType);
+            Strings var1 = MyProxyGenerator.getMethodDescriptor(this.parameterTypes, this.returnType);
             MyProxyGenerator.MethodInfo var2 = MyProxyGenerator.this.new MethodInfo(this.methodName, var1, 17);
             int[] var3 = new int[this.parameterTypes.length];
             int var4 = 1;

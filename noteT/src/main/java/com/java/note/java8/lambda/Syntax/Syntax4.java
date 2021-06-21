@@ -9,7 +9,7 @@ import com.java.note.java8.bean.Person;
  */
 public class Syntax4 {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         PersonCreater personCreater = () -> new Person();
 
         //构造方法的引用
@@ -29,7 +29,7 @@ interface PersonCreater {
 }
 
 interface PersonCreater2 {
-    Person getPerson(String name,int age);
+    Person getPerson(Strings name, int age);
 
 }
 

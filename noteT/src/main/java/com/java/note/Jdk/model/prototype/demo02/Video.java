@@ -1,7 +1,5 @@
 package com.java.note.Jdk.model.prototype.demo02;
 
-import lombok.Data;
-
 import java.util.Date;
 
 /**
@@ -14,7 +12,7 @@ import java.util.Date;
 public class Video implements Cloneable {
 
 
-    private String name;
+    private Strings name;
     private Date date;
 
     @Override
@@ -32,16 +30,16 @@ public class Video implements Cloneable {
     public Video() {
     }
 
-    public Video(String name, Date date) {
+    public Video(Strings name, Date date) {
         this.name = name;
         this.date = date;
     }
 
-    public String getName() {
+    public Strings getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Strings name) {
         this.name = name;
     }
 
@@ -54,7 +52,7 @@ public class Video implements Cloneable {
     }
 
     @Override
-    public String toString() {
+    public Strings toString() {
         return "Video{" +
                 "name='" + name + '\'' +
                 ", date=" + date +

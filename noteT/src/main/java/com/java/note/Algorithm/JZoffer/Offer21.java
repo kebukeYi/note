@@ -7,7 +7,7 @@ package com.java.note.Algorithm.JZoffer;
  * 需要保证奇数和奇数，偶数和偶数之间的相对位置不变，这和书本不太一样。
  */
 public class Offer21 {
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
         System.out.println();
     }
 

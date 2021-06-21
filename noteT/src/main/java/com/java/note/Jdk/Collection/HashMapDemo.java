@@ -1,7 +1,5 @@
 package com.java.note.Jdk.Collection;
 
-import lombok.Data;
-
 import java.util.HashSet;
 
 /**
@@ -28,13 +26,13 @@ public class HashMapDemo {
     }
 
 
-    public static void main(String[] args) {
-        String string = "a";
-        String b = "a";
-        String c = new String("a");
-        System.out.println(string == b);
+    public static void main(Strings[] args) {
+        Strings strings = "a";
+        Strings b = "a";
+        Strings c = new Strings("a");
+        System.out.println(strings == b);
         System.out.println(c == b);
-        System.out.println(c == string);
+        System.out.println(c == strings);
         System.out.println(tableSizeFor(32));
 
         System.out.println("===============================");
@@ -115,7 +113,7 @@ class Point {
     }
 
     @Override
-    public String toString() {
+    public Strings toString() {
         return "Point{" +
                 "lat=" + lat +
                 ", lng=" + lng +

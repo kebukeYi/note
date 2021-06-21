@@ -8,7 +8,7 @@ package com.java.note.Jdk.OOM;
  */
 public class UnableCreateThread {
 
-    public static void main(String[] args) {
+    public static void main(Strings[] args) {
 
     }
 }

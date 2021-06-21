@@ -1,8 +1,6 @@
 package com.java.note.Jdk.Ato;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author : kebukeyi
@@ -16,10 +14,10 @@ public final class FinalSmsInfo {
 
 
     private final Integer id;
-    private final String url;
+    private final Strings url;
     private final Long maxSize;
 
-    public FinalSmsInfo(Integer id, String url, Long maxSize) {
+    public FinalSmsInfo(Integer id, Strings url, Long maxSize) {
         this.id = id;
         this.url = url;
         this.maxSize = maxSize;
