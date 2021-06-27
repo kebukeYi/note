@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  */
 public class CollectorsService {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
         // Collectors: 是一个工具类，提供了若干个方法，返回一个Collec tor接口的实现类对象
         // toList, toSet， toMap

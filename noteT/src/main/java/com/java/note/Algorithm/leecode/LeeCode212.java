@@ -17,7 +17,7 @@ public class LeeCode212 {
     /*
     把word 都放到Trie 树中  在根据BFS 遍历二维数组
     */
-    public List<Strings> findWords(char[][] board, Strings[] words) {
+    public List<String> findWords(char[][] board, String[] words) {
 
         return null;
     }

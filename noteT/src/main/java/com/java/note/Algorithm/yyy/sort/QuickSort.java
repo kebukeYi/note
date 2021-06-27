@@ -8,7 +8,7 @@ package com.java.note.Algorithm.yyy.sort;
 public class QuickSort {
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int[] array = {1, 200, 3, 4, 1, 0, -1, 84, 31, 65};
 //        quickSort(array, 0, array.length - 1);
         quickTwo(array, 0, array.length - 1);

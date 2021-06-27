@@ -20,7 +20,7 @@ public class OrderResult {
 
     private int result;
     private int code;
-    private Strings message;
+    private String message;
 
 }
  

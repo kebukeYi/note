@@ -10,12 +10,12 @@ public class Five {
     /**
      * 以某个元素为中心,分别计算偶数长度的回文最大长度和奇数长度的回文最大长度。给大家大致花了个草图,不要嫌弃
      */
-    public static Strings longBackStr(Strings strings) {
+    public static String longBackStr(String String) {
 
-        return strings;
+        return String;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
     }
 }

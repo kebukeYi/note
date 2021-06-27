@@ -18,7 +18,7 @@ import io.netty.handler.logging.LoggingHandler;
 public class SimpleNettyServer {
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int port = 8080;
         oneNetty(port);
     }

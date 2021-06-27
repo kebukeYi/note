@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class EnumDemo {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         //创建枚举数组
         Day[] days = new Day[]{Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY,
                 Day.THURSDAY, Day.FRIDAY, Day.SATURDAY, Day.SUNDAY};

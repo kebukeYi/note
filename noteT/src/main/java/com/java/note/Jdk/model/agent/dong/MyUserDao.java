@@ -8,13 +8,13 @@ package com.java.note.Jdk.model.agent.dong;
  */
 public class MyUserDao implements IUserDao {
     @Override
-    public Strings save(Strings name) {
+    public String save(String name) {
         System.out.println("MyUserDao 我来保存用户" + name);
         return "success-2";
     }
 
     @Override
-    public Strings find(int id) {
+    public String find(int id) {
         System.out.println("MyUserDao 我来查找用户" + id);
         return "success-2";
     }

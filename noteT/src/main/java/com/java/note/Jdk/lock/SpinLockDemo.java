@@ -27,7 +27,7 @@ public class SpinLockDemo {
 
     }
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         SpinLockDemo spinLockDemo = new SpinLockDemo();
         new Thread(() -> {
             spinLockDemo.lock();

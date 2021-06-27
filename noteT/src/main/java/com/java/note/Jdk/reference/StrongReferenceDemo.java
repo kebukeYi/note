@@ -6,7 +6,7 @@ package com.java.note.Jdk.reference;
  * @Description
  */
 public class StrongReferenceDemo {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Object object = new Object();
         Object object_2 = object;
         object = null;

@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  **/
 public class Demo01Calculator {
 
-    public static void main(Strings[] args) throws IOException, IllegalAccessException, InstantiationException {
+    public static void main(String[] args) throws IOException, IllegalAccessException, InstantiationException {
 
         Class<Calculator> calculatorClass = Calculator.class;
         Calculator calculator = calculatorClass.newInstance();
@@ -51,7 +51,7 @@ public class Demo01Calculator {
     }
 
     //一个字符一个字符
-    public static void printByFileReaderChar(Strings pathName) throws IOException {
+    public static void printByFileReaderChar(String pathName) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(pathName));
         if (!bufferedReader.ready()) {
             System.out.println("文件流暂时无法读取");
@@ -66,7 +66,7 @@ public class Demo01Calculator {
     }
 
     //一行一行读取
-    public static void printByFileReaderLine(Strings filePath) throws IOException {
+    public static void printByFileReaderLine(String filePath) throws IOException {
         BufferedReader reader = new BufferedReader(
                 new FileReader(filePath)
         );
@@ -75,7 +75,7 @@ public class Demo01Calculator {
             return;
         }
         int size = 0;
-        Strings line;
+        String line;
         while ((line = reader.readLine()) != null) {
             System.out.print(line + "\n");
         }

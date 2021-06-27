@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  */
 public class ClosureDemo2 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int a = 10;
         Consumer<Integer> consumer = integer -> {
             System.out.println(a);//a 必须是final

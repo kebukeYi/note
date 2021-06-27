@@ -14,20 +14,20 @@ public class ThreadPoolTest {
     // 任务类
     static class MyTask implements Runnable {
 
-        private LinkedBlockingDeque<Strings> linkedBlockingDeque;
+        private LinkedBlockingDeque<String> linkedBlockingDeque;
         private CountDownLatch countDownLatch;
-        private Strings name;
+        private String name;
         private int channelId;
         private int count = 0;
         private Random r = new Random();
 
-        public MyTask(LinkedBlockingDeque<Strings> linkedBlockingDeque, Strings name, int channelId) {
+        public MyTask(LinkedBlockingDeque<String> linkedBlockingDeque, String name, int channelId) {
             this.channelId = channelId;
             this.linkedBlockingDeque = linkedBlockingDeque;
             this.name = name;
         }
 
-        public MyTask(CountDownLatch countDownLatch, Strings name) {
+        public MyTask(CountDownLatch countDownLatch, String name) {
             this.countDownLatch = countDownLatch;
             this.name = name;
         }
@@ -36,7 +36,7 @@ public class ThreadPoolTest {
         }
 
 
-        public Strings getName() {
+        public String getName() {
             return name;
         }
 
@@ -45,7 +45,7 @@ public class ThreadPoolTest {
             try {
 //                while (count < 10) {
                 //必要时阻塞
-                Strings str = linkedBlockingDeque.take();
+                String str = linkedBlockingDeque.take();
                 System.out.println("str: " + str + (count++));
 //                }
                 System.out.println(Thread.currentThread().getName() + " 任务" + name + " 完成");
@@ -58,13 +58,13 @@ public class ThreadPoolTest {
         }
     }
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 //        executor.execute(new MyTask());
 //        executor.submit(new MyTask());
         // 创建3个线程的线程池
         MyThreadPoolManager t = new MyThreadPoolManager(3);
         CountDownLatch countDownLatch = new CountDownLatch(5);
-        LinkedBlockingDeque<Strings> linkedBlockingDeque = new LinkedBlockingDeque<>();
+        LinkedBlockingDeque<String> linkedBlockingDeque = new LinkedBlockingDeque<>();
         linkedBlockingDeque.add("A");
         linkedBlockingDeque.add("B");
         linkedBlockingDeque.add("C");

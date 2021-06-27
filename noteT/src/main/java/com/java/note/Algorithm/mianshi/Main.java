@@ -26,7 +26,7 @@ public class Main {
     }
 
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 //        System.out.print(method(0));
 //        mainp();
 //        mainf();
@@ -85,8 +85,8 @@ public class Main {
     }
 
     public static void maink() {
-        Map<Strings, Object> map = new HashMap<>();
-        Strings str = "没人比我更懂java";
+        Map<String, Object> map = new HashMap<>();
+        String str = "没人比我更懂java";
         StrObject obj = new StrObject("没人比我更懂java");
         map.put("str", str);
         map.put("obj", obj);
@@ -100,28 +100,28 @@ public class Main {
     }
 
     static class StrObject {
-        Strings str;
+        String str;
 
-        public StrObject(Strings str) {
+        public StrObject(String str) {
             this.str = str;
         }
 
-        public void setStr(Strings str) {
+        public void setStr(String str) {
             this.str = str;
         }
 
         @Override
-        public Strings toString() {
+        public String toString() {
             return str;
         }
     }
 
     class Inner {
-        public Strings v1 = "Fake News";
-        public Strings v2 = "Go ahead";
+        public String v1 = "Fake News";
+        public String v2 = "Go ahead";
     }
 
-    private static Strings GetVal() {
+    private static String GetVal() {
         try {
             return Inner.class.newInstance().v1;
         } catch (Exception e) {
@@ -171,8 +171,8 @@ public class Main {
     }
 
     public static void gg() {
-        Strings s = new Strings(new char[]{'没', '人', '比', '我', '更', '懂', 'j', 'a', 'v', 'a'});
-        Strings si = "没人比我更懂java";
+        String s = new String(new char[]{'没', '人', '比', '我', '更', '懂', 'j', 'a', 'v', 'a'});
+        String si = "没人比我更懂java";
         System.out.println(s == si);
 
         System.out.println(s.intern() == "没人比我更懂java");
@@ -230,8 +230,8 @@ public class Main {
     @AllArgsConstructor
     @NoArgsConstructor
     static class ScoreVo {
-        Strings studentName;
-        Strings courseName;
+        String studentName;
+        String courseName;
         double score;
     }
 
@@ -239,7 +239,7 @@ public class Main {
     @AllArgsConstructor
     @NoArgsConstructor
     static class StudentVo {
-        private Strings name;
+        private String name;
         private double chineseScore;
         private double mathScore;
         private double englishScore;
@@ -284,7 +284,7 @@ public class Main {
     }
 
     public static void getAllData() {
-        ArrayList<Strings> catagloeList = new ArrayList<Strings>() {{
+        ArrayList<String> catagloeList = new ArrayList<String>() {{
             add("数学");
             add("语文");
             add("英语");
@@ -294,7 +294,7 @@ public class Main {
 
         List<ScoreVo> scoreList = getScoreList();
 
-        Map<Strings, List<ScoreVo>> listMap = scoreList.stream().collect(Collectors.groupingBy(ScoreVo::getStudentName));
+        Map<String, List<ScoreVo>> listMap = scoreList.stream().collect(Collectors.groupingBy(ScoreVo::getStudentName));
 
         int count = listMap.size();
 
@@ -321,7 +321,7 @@ public class Main {
 
         //默认 key 升序 排列
         //保存升序
-        Map<Integer, Strings> sumScoreAndNameMap = new TreeMap<>(new Comparator<Integer>() {
+        Map<Integer, String> sumScoreAndNameMap = new TreeMap<>(new Comparator<Integer>() {
             @Override
             public int compare(Integer a, Integer b) {
                 return b - a;
@@ -329,10 +329,10 @@ public class Main {
         });
 
         //对应 张三   【111  51  61  32】
-        Map<Strings, double[]> nameAndScoreMap = new HashMap<>();
+        Map<String, double[]> nameAndScoreMap = new HashMap<>();
 
 
-        for (Map.Entry<Strings, List<ScoreVo>> entry : listMap.entrySet()) {
+        for (Map.Entry<String, List<ScoreVo>> entry : listMap.entrySet()) {
 
             //每个人的总成绩
             int sumScore = 0;
@@ -387,8 +387,8 @@ public class Main {
         System.out.println("姓名" + "    " + "数学" + "   " + "语文" + "  " + "英语" + " " + "物理 " + "总成绩");
 
 
-        for (Map.Entry<Integer, Strings> entry : sumScoreAndNameMap.entrySet()) {
-            Strings nameKey = entry.getValue();
+        for (Map.Entry<Integer, String> entry : sumScoreAndNameMap.entrySet()) {
+            String nameKey = entry.getValue();
             double[] sortScoreList = nameAndScoreMap.get(nameKey);
             System.out.print(nameKey + "    ");
 

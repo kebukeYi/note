@@ -12,10 +12,10 @@ import java.util.Date;
  */
 public class Daojishi {
 
-    static final Strings pattern = "yyyy-MM-dd HH:mm:ss";
+    static final String pattern = "yyyy-MM-dd HH:mm:ss";
     static final SimpleDateFormat format = new SimpleDateFormat(pattern);
 
-    public void dateDiff(Strings startTime, Strings endTime, Strings format) {
+    public void dateDiff(String startTime, String endTime, String format) {
         //按照传入的格式生成一个simpledateformate对象
         SimpleDateFormat sd = new SimpleDateFormat(format);
         long nw = 1000 * 24 * 60 * 60 * 7;//一周的毫秒数
@@ -39,7 +39,7 @@ public class Daojishi {
         }
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Instant startCompletableFuture = Instant.now();
         new Daojishi().dateDiff(format.format(new Date()), "2021-02-29 17:24:22", pattern);
         Instant endCompletableFuture = Instant.now();

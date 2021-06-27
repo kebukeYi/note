@@ -29,7 +29,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
      * afterPropertiesSet-3  custom init-method-2   postProcessBeforeInitialization-1
      */
     @Override
-    public Object postProcessBeforeInitialization(Object arg0, Strings beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(Object arg0, String beanName) throws BeansException {
         System.out.println("[BeanPostProcessor]接口方法postProcessBeforeInitialization对属性进行更改！" + arg0 + " == beanName " + beanName);
         return arg0;
     }
@@ -39,7 +39,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
      * afterPropertiesSet-3  postProcessAfterInitialization-4
      */
     @Override
-    public Object postProcessAfterInitialization(Object bean, Strings beanName) throws BeansException {
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         System.out.println("[BeanPostProcessor]postProcessAfterInitialization！" + bean + " == beanName " + beanName);
         Object proxy = Proxy.newProxyInstance(bean.getClass().getClassLoader(), bean.getClass().getInterfaces(),
                 new InvocationHandler() {

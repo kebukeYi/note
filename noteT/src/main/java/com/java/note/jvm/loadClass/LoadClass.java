@@ -10,7 +10,7 @@ package com.java.note.jvm.loadClass;
 public class LoadClass {
 
     //-XX:+TraceClassLoading 可以看加载了哪些类
-    public static void main(Strings[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         ClassLoader classLoader = new ClassLoader() {
 //            @SneakyThrows
 //            @Override

@@ -10,7 +10,7 @@ public class Value {
 }
 
 class Test {
-    public static void main(Strings argv[]) {
+    public static void main(String argv[]) {
 //        Test1 t = new Test1();
 //        t.first();
     }

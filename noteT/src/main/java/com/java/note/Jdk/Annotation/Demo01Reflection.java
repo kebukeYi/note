@@ -17,14 +17,14 @@ import java.util.Objects;
 @pro(className = "com.java.note.Jdk.Annotation.Student", methodName = "studentMethod")
 public class Demo01Reflection {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         // 1.1 获取Demo01Reflection类的字节码文件对象
         Class<Demo01Reflection> demo01ReflectionClass = Demo01Reflection.class;
         pro annotation = demo01ReflectionClass.getAnnotation(pro.class);
         if (Objects.nonNull(annotation)) {
             try {
-                Strings className = annotation.className();
-                Strings methodName = annotation.methodName();
+                String className = annotation.className();
+                String methodName = annotation.methodName();
                 Class<?> aClass = Class.forName(className);
                 Object instance = aClass.newInstance();
                 Method method = aClass.getMethod(methodName);

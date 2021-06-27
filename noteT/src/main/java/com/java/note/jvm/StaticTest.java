@@ -10,10 +10,10 @@ package com.java.note.jvm;
 public class StaticTest {
 
     private final int aa = 123;
-    private final Strings ss = "123";
+    private final String ss = "123";
 
     //static 时期  new 关键字根本没有完成
-    private static final Strings bb = new StaticTest().ss;
+    private static final String bb = new StaticTest().ss;
     private static final int cc = new StaticTest().aa;
 
     public StaticTest() {
@@ -22,7 +22,7 @@ public class StaticTest {
         System.out.println("--------------");
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         new StaticTest();
     }
 }

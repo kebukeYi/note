@@ -37,7 +37,7 @@ public class MyCallable implements Callable<Integer> {
         return sum;
     }
 
-    public static void main(Strings[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         FutureTask<Integer> futureTask = new FutureTask<>(new MyCallable(20));
         Thread thread = new Thread(futureTask);
         thread.start();

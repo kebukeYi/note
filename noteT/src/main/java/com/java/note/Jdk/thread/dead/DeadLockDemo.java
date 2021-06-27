@@ -9,10 +9,10 @@ import lombok.SneakyThrows;
  */
 class HoldLockThread extends Thread {
 
-    private Strings lockA;
-    private Strings lockB;
+    private String lockA;
+    private String lockB;
 
-    public HoldLockThread(Strings lockA, Strings lockB) {
+    public HoldLockThread(String lockA, String lockB) {
         this.lockA = lockA;
         this.lockB = lockB;
     }
@@ -32,9 +32,9 @@ class HoldLockThread extends Thread {
 
 public class DeadLockDemo {
 
-    public static void main(Strings[] args) {
-        Strings lockA = "lockA";
-        Strings lockB = "lockB";
+    public static void main(String[] args) {
+        String lockA = "lockA";
+        String lockB = "lockB";
 
         new Thread(new HoldLockThread(lockA, lockB), "AAA").start();
 

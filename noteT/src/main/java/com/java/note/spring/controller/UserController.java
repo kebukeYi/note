@@ -22,14 +22,14 @@ public class UserController {
 
 
     @GetMapping("/people/set")
-    public Strings setPeople(Integer id) {
+    public String setPeople(Integer id) {
         peopleService.selectPeopleById(id);
         return "success";
     }
 
 
     @GetMapping("/user/set")
-    public Strings setUser() {
+    public String setUser() {
         userService.insertUserTry();
         return "success";
     }

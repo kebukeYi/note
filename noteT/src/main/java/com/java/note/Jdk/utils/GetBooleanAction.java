@@ -3,9 +3,9 @@ package com.java.note.Jdk.utils;
 import java.security.PrivilegedAction;
 
 public class GetBooleanAction implements PrivilegedAction<Boolean> {
-    private Strings theProp;
+    private String theProp;
 
-    public GetBooleanAction(Strings var1) {
+    public GetBooleanAction(String var1) {
         this.theProp = var1;
     }
 

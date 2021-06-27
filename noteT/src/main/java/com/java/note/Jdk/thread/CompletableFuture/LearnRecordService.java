@@ -7,9 +7,9 @@ package com.java.note.Jdk.thread.CompletableFuture;
  * @Description :
  * @Version :  0.0.1
  */
-public class LearnRecordService implements RemoteLoader {
+public class LearnRecordService implements com.java.note.Jdk.thread.CompletableFuture.RemoteLoader {
     @Override
-    public Strings load() {
+    public String load() {
         this.delay();
         return "成绩记录";
     }

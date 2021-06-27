@@ -13,32 +13,32 @@ public class Singleton3 {
 
     public static  Singleton3 SINGLETON3;
 
-    private Strings info;
+    private String info;
 
     static {
         try {
             Properties properties = new Properties();
             properties.load(Singleton3.class.getClassLoader().getResourceAsStream("single.properties"));
-            SINGLETON3 = new Singleton3((Strings) properties.get("info"));
+            SINGLETON3 = new Singleton3((String) properties.get("info"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Singleton3(Strings data) {
+    private Singleton3(String data) {
         this.info = data;
     }
 
-    public Strings getInfo() {
+    public String getInfo() {
         return info;
     }
 
-    public void setInfo(Strings info) {
+    public void setInfo(String info) {
         this.info = info;
     }
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "Singleton3{" +
                 "info='" + info + '\'' +
                 '}';

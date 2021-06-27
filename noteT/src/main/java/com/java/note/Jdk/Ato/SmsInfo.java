@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SmsInfo {
 
-    private Strings url;
+    private String url;
     private Long maxSize;
 
 }

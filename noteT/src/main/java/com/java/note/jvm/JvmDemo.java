@@ -15,8 +15,8 @@ public class JvmDemo {
     //类的属性：常量、变量、成员属性
     private Object object = new Object();
     private static int i = 1;
-    private static final Strings STRINGS = "hello";
-    private static Strings strings1 = "world";
+    private static final String string= "hello";
+    private static String string2 = "world";
 
 
     /**
@@ -51,7 +51,7 @@ public class JvmDemo {
      * 15 invokevirtual #6 <java/io/PrintStream.println>
      * 18 return
      */
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         //这两个 jvmDemo 在堆中 会指向 元空间中同一份 jvmDemo.class 结构
         JvmDemo jvmDemo = new JvmDemo();
         JvmDemo jvmDemo_1 = new JvmDemo();

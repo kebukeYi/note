@@ -61,15 +61,15 @@ public class ListSplitter implements Iterator<List<Message>> {
 
     private int calcMessageSize(Message message) {
         int tmpSize = message.getTopic().length() + message.getBody().length;
-        Map<Strings, Strings> properties = message.getProperties();
-        for (Map.Entry<Strings, Strings> entry : properties.entrySet()) {
+        Map<String, String> properties = message.getProperties();
+        for (Map.Entry<String, String> entry : properties.entrySet()) {
             tmpSize += entry.getKey().length() + entry.getValue().length();
         }
         tmpSize = tmpSize + 20; // 增加⽇日志的开销20字节
         return tmpSize;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         List<Message> messages = new ArrayList<>();
         DefaultMQProducer producer = new DefaultMQProducer("producer_group_name");
         producer.setNamesrvAddr(Remote.IP + ":" + Remote.PORT);

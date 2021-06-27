@@ -540,9 +540,9 @@ public final class String
 
     /**
      * Returns the length of this string.
-     * The length is equal to the number of <a href="Character.html#unicode">Unicode
-     * code units</a> in the string.
-     *
+     * The length is equal to the number of <a href="Character.html#unicode">Unicode code units</a> in the string.
+     * 返回值是 int 那么就是相当于有长度限制
+     * 整数在java中是有限制的，我们通过源码来看看int类型对应的包装类Integer可以看到，其长度最大限制为2^31 -1，那么说明了数组的长度是0~231-1，那么计算一下就是（231-1 = 2147483647 = 4GB）
      * @return the length of the sequence of characters represented by this
      * object.
      */

@@ -6,7 +6,7 @@ package com.java.note.Algorithm.JZoffer;
  * @Description 给定一个 double 类型的浮点数 base 和 int 类型的整数 exponent，求 base 的 exponent 次方。
  */
 public class Offer16 {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         System.out.println(get(2.3, 2));
     }
 

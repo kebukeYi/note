@@ -12,7 +12,7 @@ import java.util.Properties;
  **/
 public class DemoReflection {
 
-    public static void main(Strings[] args) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         // 1. 在程序中加载读取配置文件
         // 1.1 创建Properties对象
         Properties properties = new Properties();
@@ -24,8 +24,8 @@ public class DemoReflection {
         properties.load(inputStream);
         // 2. 获取配置文件中定义的数据
         // 2.1 获取类名称
-        Strings className = properties.getProperty("className");
-        Strings methodName = properties.getProperty("methodName");
+        String className = properties.getProperty("className");
+        String methodName = properties.getProperty("methodName");
         // 3. 加载该类进内存
         Class<?> aClass = Class.forName(className);
         // 4. 创建对象

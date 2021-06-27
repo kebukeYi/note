@@ -8,7 +8,7 @@ package com.java.note.java8.lambda.exercise;
 public class Exercise4 {
 
     //系统内置的一些函数式接口
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        IntPredicate              int                  boolean
 //         LongPredicate        long                boolean
 //        DoublePredicate     double            boolean

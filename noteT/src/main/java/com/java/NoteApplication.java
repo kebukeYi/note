@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //@EnableAsync
 public class NoteApplication {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(NoteApplication.class, args);
     }
 

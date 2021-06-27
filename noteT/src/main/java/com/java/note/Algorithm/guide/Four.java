@@ -7,7 +7,7 @@ package com.java.note.Algorithm.guide;
  */
 public class Four {
 
-    public static boolean isBackStr(Strings strings) {
+    public static boolean isBackStr(String strings) {
         int left = 0;
         int right = strings.length() - 1;
         while (left < right) {
@@ -29,7 +29,7 @@ public class Four {
         return true;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         System.out.println(isBackStr("A man, a plan, a canal: Panama"));
         System.out.println(isBackStr("race a car"));
     }

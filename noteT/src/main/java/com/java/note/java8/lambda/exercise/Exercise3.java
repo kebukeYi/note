@@ -10,14 +10,14 @@ import java.util.concurrent.Callable;
 public class Exercise3 {
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         //开辟线程
         threads(args);
     }
 
 
     //开辟线程方法
-    public static void threads(Strings[] args) {
+    public static void threads(String[] args) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

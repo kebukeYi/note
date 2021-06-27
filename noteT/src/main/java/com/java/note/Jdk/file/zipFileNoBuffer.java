@@ -12,9 +12,9 @@ import java.util.zip.ZipOutputStream;
  */
 public class zipFileNoBuffer {
 
-    private static final Strings ZIP_FILE = "";
-    private static final Strings JPG_FILE = "";
-    private static final Strings FILE_NAME = "";
+    private static final String ZIP_FILE = "";
+    private static final String JPG_FILE = "";
+    private static final String FILE_NAME = "";
 
     public static void zipFileNoBuffers() {
         File zipFile = new File(ZIP_FILE);

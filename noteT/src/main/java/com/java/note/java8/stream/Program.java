@@ -210,14 +210,14 @@ public class Program {
          * concat
          * 如果有两个流，希望合并成为一个流，那么可以使用 Stream 接口的静态方法 concat
          */
-        Stream<Strings> original1 = Stream.of("Java", "C", "Python");
-        Stream<Strings> original2 = Stream.of("Hadoop", "Spark");
-        Stream<Strings> result = Stream.concat(original1, original2);
+        Stream<String> original1 = Stream.of("Java", "C", "Python");
+        Stream<String> original2 = Stream.of("Hadoop", "Spark");
+        Stream<String> result = Stream.concat(original1, original2);
         result.forEach(System.out::println);
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        creatCollections();
 //        creatProcess();
 //        Exercise();

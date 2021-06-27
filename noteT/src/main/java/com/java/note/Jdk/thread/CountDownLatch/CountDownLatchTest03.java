@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class CountDownLatchTest03 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
         CountDownLatch latch = new CountDownLatch(2);
 

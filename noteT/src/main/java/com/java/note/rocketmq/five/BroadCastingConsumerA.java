@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class BroadCastingConsumerA {
 
-    public static void main(Strings[] args) throws InterruptedException, MQClientException {
+    public static void main(String[] args) throws InterruptedException, MQClientException {
 
         // 实例化消费者 天然是一个集群 消费模块
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("BroadCastingConsumer_group_name");
@@ -43,9 +43,9 @@ public class BroadCastingConsumerA {
 
                 try {
                     for (MessageExt msg : msgs) {
-                        Strings topic = msg.getTopic();
-                        Strings tags = msg.getTags();
-                        Strings result = new Strings(msg.getBody(), RemotingHelper.DEFAULT_CHARSET);
+                        String topic = msg.getTopic();
+                        String tags = msg.getTags();
+                        String result = new String(msg.getBody(), RemotingHelper.DEFAULT_CHARSET);
                         System.out.println("BroadCastingConsumerA消费消息-----topic : " + topic + " , tags : " + tags + " , result ： " + result);
                     }
                 } catch (UnsupportedEncodingException e) {

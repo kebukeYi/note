@@ -10,14 +10,14 @@ public enum EnumDemo3 {
     //枚举实例
     FIRST {
         @Override
-        public Strings getInfo() {
+        public String getInfo() {
             return "FIRST TIME";
         }
     },
 
     SECOND {
         @Override
-        public Strings getInfo() {
+        public String getInfo() {
             return "SECOND TIME";
         }
     };
@@ -28,12 +28,12 @@ public enum EnumDemo3 {
      *
      * @return
      */
-    public abstract Strings
+    public abstract String
 
     getInfo();
 
     //测试
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         System.out.println("F:" + EnumDemo3.FIRST.getInfo());
         System.out.println("S:" + EnumDemo3.SECOND.getInfo());
     }

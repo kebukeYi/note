@@ -18,10 +18,10 @@ public class LeeCode79 {
     private boolean[][] marked;
     private int[][] direction = {{-1, 0}, {-1, -1}, {1, 0}, {0, 1}};
     int m, n;
-    private Strings word;//apple
+    private String word;//apple
     private char[][] borad;
 
-    public boolean exist(char[][] board, Strings word) {
+    public boolean exist(char[][] board, String word) {
         n = board.length;
         if (n == 0) {
             return false;
@@ -67,7 +67,7 @@ public class LeeCode79 {
         return false;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
         char[][] board = {
                 {'A', 'B', 'C', 'E'},
@@ -75,7 +75,7 @@ public class LeeCode79 {
                 {'A', 'D', 'E', 'E'}
         };
 
-        Strings word = "ABCCEF";
+        String word = "ABCCEF";
 
 
 //        char[][] board = {{'a', 'b'}};

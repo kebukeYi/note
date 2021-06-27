@@ -61,7 +61,7 @@ public class Array2 {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int[] arr = {3, 1, 2, 4};
         int k = 4;
         System.out.println(creatMin(arr, k)[0]);

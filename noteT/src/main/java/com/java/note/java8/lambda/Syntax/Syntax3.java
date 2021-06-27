@@ -15,7 +15,7 @@ public class Syntax3 {
    语法：方法的隶属者   ::
    注意：参数数量 类型 一致 ；返回值的类型需要一致
   */
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
         LambdaSingleReSingleParamter lambdaSingleReSingleParamter = a -> a * 2;
 

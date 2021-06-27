@@ -28,7 +28,7 @@ public class CallableDemo {
             new ThreadPoolExecutor.CallerRunsPolicy());
 
 
-    public static void main(Strings[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 //        ExecutorService executorService = Executors.newFixedThreadPool(2);
         Future<Integer> f1 = executor.submit(new MyCallable(100));
         Future<Integer> f2 = executor.submit(new MyCallable(200));
@@ -57,7 +57,7 @@ public class CallableDemo {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
-    private static RejectedExecutionHandler createThreadFactory(Strings s, boolean b) {
+    private static RejectedExecutionHandler createThreadFactory(String s, boolean b) {
         return new RejectedExecutionHandler() {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {

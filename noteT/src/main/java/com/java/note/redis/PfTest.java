@@ -8,7 +8,7 @@ import redis.clients.jedis.Jedis;
  * @Description
  */
 public class PfTest {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Jedis jedis = new Jedis();
         for (int i = 0; i < 1000; i++) {
             jedis.pfadd("codehole", "user" + i);

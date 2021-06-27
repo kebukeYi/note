@@ -11,12 +11,12 @@ import java.util.List;
  */
 public class FileDemo07 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
         //    在此目录中找文件
-        Strings baseDIR = "F:\\Test-NIO";
+        String baseDIR = "F:\\Test-NIO";
         //    找扩展名为txt的文件
-        Strings fileName = "*.mp4";
+        String fileName = "*.mp4";
         List resultList = new ArrayList();
         findFiles(baseDIR, fileName, resultList);
         if (resultList.size() == 0) {
@@ -37,14 +37,14 @@ public class FileDemo07 {
      * @param targetFileName 需要查找的文件名
      * @param fileList       查找到的文件集合
      */
-    public static void findFiles(Strings baseDirName, Strings targetFileName, List fileList) {
+    public static void findFiles(String baseDirName, String targetFileName, List fileList) {
         // 创建一个File对象
         File baseDir = new File(baseDirName);
         // 判断目录是否存在
         if (!baseDir.exists() || !baseDir.isDirectory()) {
             System.out.println("文件查找失败：" + baseDirName + "不是一个目录！");
         }
-        Strings tempName = null;
+        String tempName = null;
         //判断目录是否存在
         File tempFile;
         File[] files = baseDir.listFiles();
@@ -69,7 +69,7 @@ public class FileDemo07 {
      * @param str     待匹配的字符串
      * @return 匹配成功则返回true，否则返回false
      */
-    private static boolean wildcardMatch(Strings pattern, Strings str) {
+    private static boolean wildcardMatch(String pattern, String str) {
         int patternLength = pattern.length();
         int strLength = str.length();
         int strIndex = 0;

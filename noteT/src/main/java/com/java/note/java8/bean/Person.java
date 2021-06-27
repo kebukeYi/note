@@ -14,7 +14,7 @@ import java.util.Objects;
 @Builder
 public class Person {
 
-    private Strings name;
+    private String name;
     private int age;
     private int score;
 
@@ -22,23 +22,23 @@ public class Person {
         System.out.println("无参方法执行");
     }
 
-    public Person(Strings name, int age) {
+    public Person(String name, int age) {
         this.name = name;
         this.age = age;
         System.out.println("有参方法执行");
     }
 
-    public Person(Strings name, int age, int score) {
+    public Person(String name, int age, int score) {
         this.name = name;
         this.age = age;
         this.score = score;
     }
 
-    public Strings getName() {
+    public String getName() {
         return name;
     }
 
-    public Person setName(Strings name) {
+    public Person setName(String name) {
         this.name = name;
         return this;
     }
@@ -79,7 +79,7 @@ public class Person {
     }
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +

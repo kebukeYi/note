@@ -14,22 +14,22 @@ import lombok.Data;
 public class User {
 
 
-    Strings id;
-    Strings name;
+    String id;
+    String name;
     int age;
 
 
     public User() {
     }
 
-    public User(Strings id, Strings name) {
+    public User(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +

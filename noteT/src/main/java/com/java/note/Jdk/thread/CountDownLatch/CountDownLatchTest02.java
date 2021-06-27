@@ -10,7 +10,7 @@ public class CountDownLatchTest02 {
 
     private static final int TASK_COUNT = 10;
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
 
         CountDownLatch startSignal = new CountDownLatch(1);

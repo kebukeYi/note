@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Two {
 
-    private static boolean chechStrs(Strings[] strs) {
+    private static boolean chechStrs(String[] strs) {
         boolean flag = false;
         if (strs != null) {
             // 遍历strs检查元素值
@@ -26,13 +26,13 @@ public class Two {
         return flag;
     }
 
-    public static Strings findLongPreStr(Strings[] strings) {
+    public static String findLongPreStr(String[] strings) {
         if (!chechStrs(strings)) return "";
         Arrays.sort(strings);
         int m = strings[0].length();
         int n = strings[strings.length - 1].length();
-        Strings a = strings[0];
-        Strings b = strings[strings.length - 1];
+        String a = strings[0];
+        String b = strings[strings.length - 1];
         int num = Math.min(m, n);
         int i = 0;
         for (; i < num; i++) {
@@ -42,14 +42,14 @@ public class Two {
                 break;
             }
         }
-        Strings result = a.substring(0, i);
+        String result = a.substring(0, i);
         return result;
 
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        String[] strs = { "customer", "car", "cat" };
-        Strings[] strs = {"flower", "flow", "flight"};
+        String[] strs = {"flower", "flow", "flight"};
         // String[] strs = { "customer", "car", null };//空串
         // String[] strs = {};//空串
         // String[] strs = null;//空串

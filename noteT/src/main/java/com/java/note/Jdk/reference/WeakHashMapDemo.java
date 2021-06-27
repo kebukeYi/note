@@ -13,9 +13,9 @@ public class WeakHashMapDemo {
 
 
     public static void getHashMap() throws InterruptedException {
-        Map<Strings, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         Integer integer = new Integer(1);
-        Strings key = "HashMap";
+        String key = "HashMap";
         map.put(key, integer);
         System.out.println("1  " + map);
         key = null;
@@ -27,9 +27,9 @@ public class WeakHashMapDemo {
     }
 
     public static void getWeakHashMap() throws InterruptedException {
-        WeakHashMap<Strings, Object> map = new WeakHashMap<>();
+        WeakHashMap<String, Object> map = new WeakHashMap<>();
         Integer integer = new Integer(2);
-        Strings key = "WeakHashMap";
+        String key = "WeakHashMap";
         map.put(key, integer);
         System.out.println("1  " + map);
 
@@ -43,7 +43,7 @@ public class WeakHashMapDemo {
         System.out.println("3  " + map + "\t " + map.size());
     }
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         getHashMap();
         System.out.println("=========================");
         getWeakHashMap();

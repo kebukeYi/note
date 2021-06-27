@@ -33,7 +33,7 @@ public class NIOClient {
      *
      * @throws IOException
      */
-    public void initClient(Strings ip, int port) throws IOException {
+    public void initClient(String ip, int port) throws IOException {
         //获得一个Socket通道
         SocketChannel channel = SocketChannel.open();
         //设置为非阻塞
@@ -74,7 +74,7 @@ public class NIOClient {
                     channel.configureBlocking(false);
                     //给服务端发送信息；
                     System.out.println("客户端已连接成功！");
-                     channel.write(ByteBuffer.wrap(new Strings("客户端已连接成功！" + channel.getLocalAddress()).getBytes("UTF-8")));
+                     channel.write(ByteBuffer.wrap(new String("客户端已连接成功！" + channel.getLocalAddress()).getBytes("UTF-8")));
                     //和服务器端连接成功后，为了可以接受到服务端的信息，需要给通道设置读的权限
                     channel.register(this.selector, SelectionKey.OP_READ);
                 } else if (key.isReadable()) {
@@ -98,12 +98,12 @@ public class NIOClient {
         ByteBuffer buffer = ByteBuffer.allocate(512);
         channel.read(buffer);
         byte[] data = buffer.array();
-        Strings msg = new Strings(data).trim();
+        String msg = new String(data).trim();
         System.out.println("客户端收到信息：" + msg);
         //System.out.println("请输入信息：");
         //Scanner scanne = new Scanner(System.in);
         //String text = scanne.nextLine();
-        Strings text = "我是客户端 " + channel.getLocalAddress() + " 发送 " + UUID.randomUUID();
+        String text = "我是客户端 " + channel.getLocalAddress() + " 发送 " + UUID.randomUUID();
         ByteBuffer outBuffer = ByteBuffer.wrap(text.getBytes("utf-8"));
         executorService.scheduleWithFixedDelay(() -> {
             try {
@@ -124,7 +124,7 @@ public class NIOClient {
      * @throws IOException
      */
 
-    public static void main(Strings args[]) throws IOException {
+    public static void main(String args[]) throws IOException {
         NIOClient client = new NIOClient();
         client.initClient("127.0.0.1", 8080);
         client.connect();

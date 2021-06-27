@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
  */
 public class SemaphoreDemo {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Semaphore semaphore = new Semaphore(3);
         for (int i = 0; i <= 5; i++) {
             new Thread(() -> {
@@ -28,7 +28,7 @@ public class SemaphoreDemo {
                 } finally {
                     semaphore.release();
                 }
-            }, Strings.valueOf(i)).start();
+            }, String.valueOf(i)).start();
         }
 
     }

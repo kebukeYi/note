@@ -10,17 +10,17 @@ import redis.clients.jedis.Pipeline;
  */
 public class redisPipline {
 
-    private static final Strings HOST = "127.0.0.1";
+    private static final String HOST = "127.0.0.1";
     private static final int PORT = 6800;
 
     // 批量插入数据到Redis，正常使用
     public static void batchSetNotUsePipeline() {
         Jedis jedis = JedisUtil6800.getJedis();
-        Strings keyPrefix = "normal";
+        String keyPrefix = "normal";
         long begin = System.currentTimeMillis();
         for (int i = 0; i < 10000; i++) {
-            Strings key = keyPrefix + "_" + i;
-            Strings value = Strings.valueOf(i);
+            String key = keyPrefix + "_" + i;
+            String value = String.valueOf(i);
             jedis.set(key, value);
         }
         jedis.close();
@@ -31,12 +31,12 @@ public class redisPipline {
 
     public static void batchSetUsePipeline() {
         long begin = System.currentTimeMillis();
-        Strings keyPrefix = "pipeline";
+        String keyPrefix = "pipeline";
         Jedis jedis = JedisUtil6800.getJedis();
         Pipeline pipelined = jedis.pipelined();
         for (int i = 0; i < 10000; i++) {
-            Strings key = keyPrefix + "_" + i;
-            Strings value = Strings.valueOf(i);
+            String key = keyPrefix + "_" + i;
+            String value = String.valueOf(i);
             pipelined.set(key, value);
         }
         // 只执行同步但不返回结果
@@ -47,7 +47,7 @@ public class redisPipline {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         batchSetNotUsePipeline();
 //        batchSetUsePipeline();
     }

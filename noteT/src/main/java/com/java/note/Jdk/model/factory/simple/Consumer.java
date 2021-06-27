@@ -7,7 +7,7 @@ package com.java.note.Jdk.model.factory.simple;
  * @Description
  */
 public class Consumer {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         //1 .接口，所有的实现类！
 //        Car wuling = new Wuling();
 //        Car tesla = new Tesla();

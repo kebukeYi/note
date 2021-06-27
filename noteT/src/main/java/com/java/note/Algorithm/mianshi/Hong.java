@@ -30,7 +30,7 @@ import java.util.TreeMap;
  */
 public class Hong {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         TreeMap<Integer, Integer> map1 = new TreeMap<Integer, Integer>();  //默认的TreeMap升序排列
         TreeMap<Integer, Integer> map2 = new TreeMap<Integer, Integer>(new Comparator<Integer>() {
             /*
@@ -57,7 +57,7 @@ public class Hong {
         System.out.println("map1=" + map1);
     }
 
-    public static void main1(Strings[] args) {
+    public static void main1(String[] args) {
 
 
         System.out.println(1 % 3);

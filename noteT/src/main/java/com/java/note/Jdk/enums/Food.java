@@ -29,7 +29,7 @@ public interface Food {
 
 
     class TypeOfFood {
-        public static void main(Strings[] args) {
+        public static void main(String[] args) {
             Food food = Appetizer.SALAD;
             food = MainCourse.LASAGNE;
             food = Dessert.GELATO;

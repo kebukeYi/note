@@ -100,7 +100,7 @@ public class Bfprt {
         return getMinKthByBFPRT(nums, nums.length - k + 1);
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int[] a = {1, 1, -1, -1, -1, -2, -1, 2, 3, 3, 4, 5, 6};
 //        int[] a = {1, -1, 2, 3, 3, 4, 5, 6};
         // -1 -1 -2 1 1 2 3 3 4 5 6

@@ -21,7 +21,7 @@ public class ReactorServer implements Runnable {
     private ServerSocketChannel serverSocketChannel;
     private Selector selector;
     private DispatchHandler dispatchHandler;
-    private static final Strings IP = "127.0.0.1";
+    private static final String IP = "127.0.0.1";
     private static final Integer PORT = 8848;
 
     /**
@@ -104,7 +104,7 @@ class ReadHandler {
             BUFFER = ByteBuffer.allocate(1024);
             int read = socketChannel.read(BUFFER);
             if (read > 0) {
-                Strings message = new Strings(BUFFER.array());
+                String message = new String(BUFFER.array());
                 log.info("服务器接收到的信息是：{}", message);
                 writeHandler = new WriteHandler();
                 writeHandler.write(socketChannel, message, selector);
@@ -119,7 +119,7 @@ class ReadHandler {
 
 @Slf4j
 class WriteHandler {
-    public void write(SocketChannel channel, Strings message, Selector selector) {
+    public void write(SocketChannel channel, String message, Selector selector) {
         log.info("服务器转发消息中...");
         log.info("服务器转发数据给客户端线程: {}", Thread.currentThread().getName());
 

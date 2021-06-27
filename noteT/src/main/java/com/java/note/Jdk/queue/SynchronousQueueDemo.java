@@ -9,7 +9,7 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class SynchronousQueueDemo {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         SynchronousQueue synchronousQueue = new SynchronousQueue();
 
         new Thread(() -> {

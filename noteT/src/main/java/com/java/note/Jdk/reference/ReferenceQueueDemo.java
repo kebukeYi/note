@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference;
 public class ReferenceQueueDemo {
 
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Object o = new Object();
         ReferenceQueue<Object> referenceQueue = new ReferenceQueue<>();
         WeakReference<Object> weakReference = new WeakReference<>(o, referenceQueue);

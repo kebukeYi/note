@@ -11,14 +11,14 @@ package com.java.note.jvm.loadClass;
  **/
 public class LoadString {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         loadString();
     }
 
     public static void loadString() {
         //自定义 String 类
-        Strings strings = new Strings();
-        System.out.println(strings);
+        String String = new String();
+        System.out.println(String);
     }
 }
  

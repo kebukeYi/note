@@ -16,8 +16,8 @@ import java.util.Enumeration;
 public class MySQLLoad {
 
 
-    public static void main(Strings[] args) throws SQLException {
-        Strings url = "jdbc:mysql://127.0.0.1:3306/test?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
+    public static void main(String[] args) throws SQLException {
+        String url = "jdbc:mysql://127.0.0.1:3306/test?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
 //        String url = "jdbc:mysql://39.96.63.187:3306/test?characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai";
         Connection connection = DriverManager.getConnection(url, "root", "123456");
         // null -> BootstrapClassLoader 根加载器

@@ -47,7 +47,7 @@ public class HttpServer {
         }
     }
 
-    public static void main(Strings[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         HttpServer server = new HttpServer();
         server.start(8000);
     }

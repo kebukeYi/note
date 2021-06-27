@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 public class ServerSocketChannelDemo {
     private static ExecutorService executorService = Executors.newCachedThreadPool();
 
-    public static void main(Strings[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         // 实例化
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();

@@ -11,13 +11,13 @@ public class HashUtils {
 
     public static void getString() {
         //常量池中 新建 abc
-        Strings str1 = "abc";
-        Strings str2 = new Strings("abc");
-        Strings str3 = "abc";
+        String str1 = "abc";
+        String str2 = new String("abc");
+        String str3 = "abc";
 
-        Strings str4 = "xxx";
-        Strings str5 = "abc" + "xxx";
-        Strings str6 = str3 + str4;
+        String str4 = "xxx";
+        String str5 = "abc" + "xxx";
+        String str6 = str3 + str4;
 
         System.out.println(str1 == str2);
         System.out.println(str1.hashCode() + "\t" + str2.hashCode());
@@ -43,15 +43,15 @@ public class HashUtils {
 
 
     public static void getHash() {
-        Strings strings = new Strings("123");
-        Strings str = new Strings("123");
+        String String = new String("123");
+        String str = new String("123");
 
-        System.out.println(str == strings);
-        System.out.println(str.hashCode() + "\t" + strings.hashCode());
+        System.out.println(str == String);
+        System.out.println(str.hashCode() + "\t" + String.hashCode());
     }
 
     public static void getHashMap() {
-        HashMap<Strings, Double> map = new HashMap(16);
+        HashMap<String, Double> map = new HashMap(16);
         map.put("K1", 1.0);
         map.put("K2", 2.0);
         map.put("K3", 3.0);
@@ -71,7 +71,7 @@ public class HashUtils {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         getString();
 
     }

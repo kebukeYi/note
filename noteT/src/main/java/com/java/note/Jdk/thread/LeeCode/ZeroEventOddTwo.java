@@ -55,7 +55,7 @@ public class ZeroEventOddTwo {
         }
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         ZeroEventOddTwo zeroEvenOdd = new ZeroEventOddTwo(6);
         new Thread(() -> {
             try {

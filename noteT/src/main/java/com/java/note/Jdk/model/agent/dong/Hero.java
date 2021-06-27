@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Hero {
 
-    Strings price;
+    String price;
 
 
 }

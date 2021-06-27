@@ -8,7 +8,7 @@ package com.java.note.Algorithm.JZoffer;
  * ，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
  */
 public class Offer03 {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        int[] nums = new int[]{2, 3, 5, 0, 2, 5, 5};
         int[] nums = new int[]{2, 3, 5, 0, 1, 4, 6};
         // 5 3 2 0 2 5 5

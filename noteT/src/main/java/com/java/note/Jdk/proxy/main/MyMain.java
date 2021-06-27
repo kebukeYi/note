@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  */
 public class MyMain {
 
-    public static void main(Strings[] args) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
         MyController myController = new MyController();
         MyService myService = new MyService();
@@ -24,10 +24,10 @@ public class MyMain {
         //设置属性
         myService1.setAccessible(true);
 
-        Strings name = myService1.getName();
+        String name = myService1.getName();
         //MyService
         name = name.substring(0, 1).toUpperCase() + name.substring(1, name.length());
-        Strings methodName = "set" + name;
+        String methodName = "set" + name;
         //名字 和参数
         Method method = aClass.getMethod(methodName, MyService.class);
         //执行setMyService 方法

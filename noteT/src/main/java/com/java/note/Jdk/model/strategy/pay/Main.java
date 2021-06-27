@@ -9,7 +9,7 @@ package com.java.note.Jdk.model.strategy.pay;
  **/
 public class Main {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int type = 2;
         PayType payType = PayType.getPayTypeByType(type);
         OrderMessage orderMessage = payType.getOrderService().creatOrderMessage(1, type);

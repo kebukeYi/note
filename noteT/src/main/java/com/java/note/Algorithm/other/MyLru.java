@@ -10,12 +10,12 @@ import java.util.HashMap;
 public class MyLru {
 
     static class ListNode {
-        Strings key;//这里存储key便于元素满时，删除尾节点时可以快速从HashMap删除键值对
+        String key;//这里存储key便于元素满时，删除尾节点时可以快速从HashMap删除键值对
         Integer value;
         ListNode pre = null;
         ListNode next = null;
 
-        ListNode(Strings key, Integer value) {
+        ListNode(String key, Integer value) {
             this.key = key;
             this.value = value;
         }
@@ -25,9 +25,9 @@ public class MyLru {
     ListNode last;
     int limit = 4;
 
-    HashMap<Strings, ListNode> hashMap = new HashMap<Strings, ListNode>();
+    HashMap<String, ListNode> hashMap = new HashMap<String, ListNode>();
 
-    public void add(Strings key, Integer val) {
+    public void add(String key, Integer val) {
         ListNode existNode = hashMap.get(key);
         if (existNode != null) {
 
@@ -81,11 +81,11 @@ public class MyLru {
 
     }
 
-    public ListNode get(Strings key) {
+    public ListNode get(String key) {
         return hashMap.get(key);
     }
 
-    public void remove(Strings key) {
+    public void remove(String key) {
         ListNode deleteNode = hashMap.get(key);
         ListNode preNode = deleteNode.pre;
         ListNode nextNode = deleteNode.next;
@@ -104,7 +104,7 @@ public class MyLru {
         hashMap.remove(key);
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
 
     }

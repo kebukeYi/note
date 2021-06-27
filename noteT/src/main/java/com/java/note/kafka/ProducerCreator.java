@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class ProducerCreator {
 
-    public static Producer<Strings, Strings> createProducer() {
+    public static Producer<String, String> createProducer() {
         Properties properties = new Properties();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.BROKER_LIST);
         properties.put(ProducerConfig.CLIENT_ID_CONFIG, KafkaConstants.CLIENT_ID);
@@ -22,11 +22,11 @@ public class ProducerCreator {
         return new KafkaProducer<>(properties);
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
-        Strings TOPIC = "test-topic";
-        Producer<Strings, Strings> producer = ProducerCreator.createProducer();
-        ProducerRecord<Strings, Strings> record =
+        String TOPIC = "test-topic";
+        Producer<String, String> producer = ProducerCreator.createProducer();
+        ProducerRecord<String, String> record =
                 new ProducerRecord<>(TOPIC, "hello, Kafka!");
         try {
             //send message

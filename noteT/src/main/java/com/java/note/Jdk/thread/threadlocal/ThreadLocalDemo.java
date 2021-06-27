@@ -4,18 +4,18 @@ package com.java.note.Jdk.thread.threadlocal;
 public class ThreadLocalDemo {
 
     //外部的 ThreadLocal_1  变量
-    static ThreadLocal<Strings> localVar_1 = new ThreadLocal<>();
-    static ThreadLocal<Strings> localVar_2 = new ThreadLocal<>();
-    static ThreadLocal<Strings> localVar_3 = new ThreadLocal<>();
+    static ThreadLocal<String> localVar_1 = new ThreadLocal<>();
+    static ThreadLocal<String> localVar_2 = new ThreadLocal<>();
+    static ThreadLocal<String> localVar_3 = new ThreadLocal<>();
 
-    static void print(Strings str) {
+    static void print(String str) {
         //打印当前线程中本地内存中本地变量的值
         System.out.println(str + " :" + localVar_1.get());
         //清除本地内存中的本地变量
         localVar_1.remove();
     }
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {

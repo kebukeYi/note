@@ -6,7 +6,7 @@ import java.util.Arrays;
  *希尔排序
  */
 public class ShellSort {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int[] arr = {1, 4, 2, 7, 9, 8, 3, 6};
         sort(arr);
         System.out.println(Arrays.toString(arr));

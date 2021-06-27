@@ -14,7 +14,7 @@ import java.util.List;
 public interface PeopleMapper {
 
     @Select("select * from people  where age=#{age}")
-    Strings selectById(Integer age);
+    String selectById(Integer age);
 
     Integer insertPeople(PeopleDto peopleDto);
 

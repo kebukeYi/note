@@ -15,7 +15,7 @@ public class CreateThreadTest {
      * <p>
      * 链接：https://www.jianshu.com/p/5d88b122a050
      */
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         System.out.println("主线程执行开始");
         Thread threadA = new Thread(new RunnableTest(), "线程A");
         threadA.start();

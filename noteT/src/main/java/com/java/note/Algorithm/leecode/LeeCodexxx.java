@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class LeeCodexxx {
 
-    public static Strings replaceSpace(Strings[] strs) {
+    public static String replaceSpace(String[] strs) {
         // 如果检查值不合法及就返回空串
         if (!chechStrs(strs)) {
             return "";
@@ -21,7 +21,7 @@ public class LeeCodexxx {
         StringBuilder res = new StringBuilder();
         // 给字符串数组的元素按照升序排序(包含数字的话，数字会排在前⾯)
         Arrays.sort(strs);
-        for(Strings str:strs){
+        for(String str:strs){
             System.out.println(str);
         }
         int m = strs[0].length();
@@ -37,7 +37,7 @@ public class LeeCodexxx {
         return res.toString();
     }
 
-    private static boolean chechStrs(Strings[] strs) {
+    private static boolean chechStrs(String[] strs) {
         boolean flag = false;
         if (strs != null) {
             // 遍历strs检查元素值
@@ -54,8 +54,8 @@ public class LeeCodexxx {
     }
 
     // 测试
-    public static void main(Strings[] args) {
-        Strings[] strs = {"customer", "arcc", "cat"};
+    public static void main(String[] args) {
+        String[] strs = {"customer", "arcc", "cat"};
         // String[] strs = { "customer", "car", null };//空串
         // String[] strs = {};//空串
         // String[] strs = null;//空串

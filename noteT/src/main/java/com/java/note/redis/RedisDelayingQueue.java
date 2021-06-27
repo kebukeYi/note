@@ -23,7 +23,7 @@ import java.util.UUID;
 public class RedisDelayingQueue<T> {
 
     static class TaskItem<T> {
-        public Strings id;
+        public String id;
         public T msg;
     }
 
@@ -32,9 +32,9 @@ public class RedisDelayingQueue<T> {
     }.getType();
 
     private Jedis jedis;
-    private Strings queueKey;
+    private String queueKey;
 
-    public RedisDelayingQueue(Jedis jedis, Strings queueKey) {
+    public RedisDelayingQueue(Jedis jedis, String queueKey) {
         this.jedis = jedis;
         this.queueKey = queueKey;
     }
@@ -43,7 +43,7 @@ public class RedisDelayingQueue<T> {
         TaskItem<T> task = new TaskItem<T>();
         task.id = UUID.randomUUID().toString(); // 分配唯⼀的 uuid
         task.msg = msg;
-        Strings s = JSON.toJSONString(task); //fastjson 序列化
+        String s = JSON.toJSONString(task); //fastjson 序列化
         jedis.zadd(queueKey, System.currentTimeMillis() + 5000, s); // 塞⼊延时队列, 5 s 后再试
     }
 
@@ -51,7 +51,7 @@ public class RedisDelayingQueue<T> {
         //循环查询取出
         while (!Thread.interrupted()) {
             // 只取⼀条
-            Set<Strings> values = jedis.zrangeByScore(queueKey, 0, System.currentTimeMillis(), 0, 1);
+            Set<String> values = jedis.zrangeByScore(queueKey, 0, System.currentTimeMillis(), 0, 1);
             if (values.isEmpty()) {
                 try {
                     Thread.sleep(500); // 歇会继续
@@ -60,14 +60,14 @@ public class RedisDelayingQueue<T> {
                 }
                 continue;
             }
-            Strings s = values.iterator().next();
+            String s = values.iterator().next();
             //   被成功删除的成员数量
             if (jedis.zrem(queueKey, s) > 0) { // 抢到了
                 TaskItem<T> task = JSON.parseObject(s, TaskType); // fastjson 反序列化
                 this.handleMsg(task.msg);
             }
 
-            Strings luaScript = "local resultArray = redis.call('zrangebyscore', KEYS[1], 0, ARGV[1], 'limit' , 0, 1)\n" +
+            String luaScript = "local resultArray = redis.call('zrangebyscore', KEYS[1], 0, ARGV[1], 'limit' , 0, 1)\n" +
                     "if #resultArray > 0 then\n" +
                     "    if redis.call('zrem', KEYS[1], resultArray[1]) > 0 then\n" +
                     "        return resultArray[1]\n" +
@@ -78,7 +78,7 @@ public class RedisDelayingQueue<T> {
                     "    return ''\n" +
                     "end";
 
-            jedis.eval(luaScript, 0, queueKey, Strings.valueOf(System.currentTimeMillis()));
+            jedis.eval(luaScript, 0, queueKey, String.valueOf(System.currentTimeMillis()));
         }
     }
 
@@ -87,9 +87,9 @@ public class RedisDelayingQueue<T> {
         System.out.println("延迟处理任务：" + msg);
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Jedis jedis = new Jedis("127.0.0.1", 6379);
-        RedisDelayingQueue<Strings> queue = new RedisDelayingQueue<>(jedis, "q-demo");
+        RedisDelayingQueue<String> queue = new RedisDelayingQueue<>(jedis, "q-demo");
 
         Thread producer = new Thread() {
             public void run() {

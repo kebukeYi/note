@@ -7,7 +7,7 @@ package com.java.note.rocketmq.setting;
  */
 public class Remote {
 
-    public static final Strings IP = "47.95.5.81";
+    public static final String IP = "47.95.5.81";
 
     public static final int PORT = 9876;
 

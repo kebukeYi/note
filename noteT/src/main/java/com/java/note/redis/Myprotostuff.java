@@ -15,7 +15,7 @@ public class Myprotostuff {
 
     private static RuntimeSchema<User> schema = RuntimeSchema.createFrom(User.class);
 
-    public static User getProtostuff(Strings key) {
+    public static User getProtostuff(String key) {
         Jedis jedis = JedisUtil6800.getJedis();
         byte[] bytes = jedis.get(key.getBytes());
         jedis.close();
@@ -27,17 +27,17 @@ public class Myprotostuff {
         return null;
     }
 
-    public static Strings setSchema(User user, Strings key) {
+    public static String setSchema(User user, String key) {
         Jedis jedis = JedisUtil6800.getJedis();
         byte[] bytes = ProtobufIOUtil.toByteArray(user, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
-        Strings result = jedis.set(key.getBytes(), bytes);
+        String result = jedis.set(key.getBytes(), bytes);
         jedis.close();
         return result;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         User user = new User("kkk", "2");
-        Strings key = "mmy";
+        String key = "mmy";
         System.out.println(setSchema(user, key));
         System.out.println(getProtostuff(key));
     }

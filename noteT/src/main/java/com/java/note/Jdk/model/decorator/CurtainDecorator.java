@@ -20,7 +20,7 @@ public class CurtainDecorator extends BaseDecorator {
         super.decorate();
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         IDecorator decorator = new Decorator();
         IDecorator curtainDecorator = new CurtainDecorator(decorator);
         curtainDecorator.decorate();

@@ -7,11 +7,11 @@ package com.java.note.Algorithm.JZoffer;
  *
  */
 public class Offer05 {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         replaceSpace("We are happy.");
     }
 
-    public static Strings replaceSpace(Strings s) {
+    public static String replaceSpace(String s) {
 //        s = s.replaceAll(" ", "%20");
 
         char[] chars = s.toCharArray();
@@ -27,7 +27,7 @@ public class Offer05 {
                 chars1[size++] = r;
             }
         }
-        Strings newStr = new Strings(chars1, 0, size);
+        String newStr = new String(chars1, 0, size);
         return newStr;
     }
 }

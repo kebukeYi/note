@@ -14,10 +14,10 @@ public final class FinalSmsInfo {
 
 
     private final Integer id;
-    private final Strings url;
+    private final String url;
     private final Long maxSize;
 
-    public FinalSmsInfo(Integer id, Strings url, Long maxSize) {
+    public FinalSmsInfo(Integer id, String url, Long maxSize) {
         this.id = id;
         this.url = url;
         this.maxSize = maxSize;

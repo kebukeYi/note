@@ -20,7 +20,7 @@ import java.nio.channels.SocketChannel;
  * @since 1.0.0
  */
 public class BufferDemo {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         compactBuffer();
     }
 
@@ -104,7 +104,7 @@ public class BufferDemo {
         ByteBuffer.allocateDirect(1024).flip();
 
         // 4. 另一个经常使用的方法，直接返回Buffer内部的byte[]数组
-        Strings str = new Strings(byteBuffer.array());
+        String str = new String(byteBuffer.array());
 
 
         // 5.

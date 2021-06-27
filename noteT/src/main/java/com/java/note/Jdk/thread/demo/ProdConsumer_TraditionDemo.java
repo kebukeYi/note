@@ -61,7 +61,7 @@ class ShareData {
 public class ProdConsumer_TraditionDemo {
     static ShareData shareData = new ShareData();
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         new Thread(() -> {
             for (int i = 0; i < 5; i++) {
                 try {

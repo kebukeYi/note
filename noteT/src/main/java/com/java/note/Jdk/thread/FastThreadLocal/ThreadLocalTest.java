@@ -18,7 +18,7 @@ public class ThreadLocalTest {
         }
     };
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         new Thread(() -> {
             try {
                 for (int i = 0; i < 10; i++) {

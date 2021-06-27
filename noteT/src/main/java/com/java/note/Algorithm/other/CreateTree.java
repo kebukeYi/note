@@ -44,15 +44,15 @@ public class CreateTree {
         return node;
     }
 
-    public static void preCreateTree(Strings[] args) {
+    public static void preCreateTree(String[] args) {
 
     }
 
-    public static void postCreateTree(Strings[] args) {
+    public static void postCreateTree(String[] args) {
 
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         TreeNode treeNode = new TreeNode();
         treeNode = inCreateTree(index, treeNode);
 

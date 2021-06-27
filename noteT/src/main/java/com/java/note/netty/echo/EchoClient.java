@@ -40,13 +40,13 @@ public final class EchoClient {
 
     static final boolean SSL = System.getProperty("ssl") != null;
     //    static final String HOST = System.getProperty("host", "127.0.0.1");
-    static final Strings HOST = "localhost";
+    static final String HOST = "localhost";
     //    static final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
     static final int PORT = 61019;
     static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
     private static final int MAX_RETRY = 3;
 
-    public static void main(Strings[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         // Configure SSL.git
         final SslContext sslCtx;
         if (SSL) {
@@ -80,7 +80,7 @@ public final class EchoClient {
                 if (future.isSuccess()) {
                     System.out.println("连接成功");
                 } else {
-                    main(new Strings[]{""});
+                    main(new String[]{""});
                 }
             });
             // Wait until the connection is closed.
@@ -97,7 +97,7 @@ public final class EchoClient {
                 if (channel.isActive()) {
                     System.out.println("输入消息发送至服务端: ");
                     Scanner scanner = new Scanner(System.in);
-                    Strings message = scanner.nextLine();
+                    String message = scanner.nextLine();
                     channel.writeAndFlush(message);
                 }
             }
@@ -105,7 +105,7 @@ public final class EchoClient {
 
     }
 
-    private static void connect(Bootstrap bootstrap, Strings host, int port, int retry) {
+    private static void connect(Bootstrap bootstrap, String host, int port, int retry) {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
                 System.out.println("连接成功!");

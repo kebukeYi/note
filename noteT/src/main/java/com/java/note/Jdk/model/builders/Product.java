@@ -7,45 +7,45 @@ package com.java.note.Jdk.model.builders;
  */
 public class Product {
 
-    private Strings buildA;
-    private Strings buildB;
-    private Strings buildC;
-    private Strings buildD;
+    private String buildA;
+    private String buildB;
+    private String buildC;
+    private String buildD;
 
-    public Strings getBuildA() {
+    public String getBuildA() {
         return buildA;
     }
 
-    public void setBuildA(Strings buildA) {
+    public void setBuildA(String buildA) {
         this.buildA = buildA;
     }
 
-    public Strings getBuildB() {
+    public String getBuildB() {
         return buildB;
     }
 
-    public void setBuildB(Strings buildB) {
+    public void setBuildB(String buildB) {
         this.buildB = buildB;
     }
 
-    public Strings getBuildC() {
+    public String getBuildC() {
         return buildC;
     }
 
-    public void setBuildC(Strings buildC) {
+    public void setBuildC(String buildC) {
         this.buildC = buildC;
     }
 
-    public Strings getBuildD() {
+    public String getBuildD() {
         return buildD;
     }
 
-    public void setBuildD(Strings buildD) {
+    public void setBuildD(String buildD) {
         this.buildD = buildD;
     }
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "Product{" +
                 "buildA='" + buildA + '\'' +
                 ", buildB='" + buildB + '\'' +

@@ -7,19 +7,19 @@ package com.java.note.Jdk.Annotation;
  **/
 public class Person {
 
-    private Strings name;
+    private String name;
     private int age;
 
     public Person() {
     }
 
-    public Person(Strings name, int age) {
+    public Person(String name, int age) {
         this.name = name;
         this.age = age;
     }
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
@@ -30,11 +30,11 @@ public class Person {
         System.out.println("我是Person中的方法！！！");
     }
 
-    public Strings getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Strings name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -48,19 +48,19 @@ public class Person {
 }
 
 class Student {
-    private Strings name;
+    private String name;
     private int age;
 
     public Student() {
     }
 
-    public Student(Strings name, int age) {
+    public Student(String name, int age) {
         this.name = name;
         this.age = age;
     }
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
@@ -71,11 +71,11 @@ class Student {
         System.out.println("我是Student中的方法！！！");
     }
 
-    public Strings getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Strings name) {
+    public void setName(String name) {
         this.name = name;
     }
 

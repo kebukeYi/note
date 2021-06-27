@@ -9,7 +9,7 @@ import org.apache.rocketmq.common.message.Message;
  * @Description
  */
 public class ScheduledMessageProducer {
-    public static void main(Strings[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         // 实例化一个生产者来产生延时消息
         DefaultMQProducer producer = new DefaultMQProducer("ExampleProducerGroup");
         // 启动生产者

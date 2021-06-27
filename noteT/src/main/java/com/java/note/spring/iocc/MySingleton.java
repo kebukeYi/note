@@ -14,9 +14,9 @@ import java.util.Map;
 public class MySingleton {
 
     //一级缓存
-    private static Map<Strings, Object> cacheMap = new HashMap<>(2);
+    private static Map<String, Object> cacheMap = new HashMap<>(2);
 
-    public static void main(Strings[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         // 假装扫描出来的对象
         Class[] classes = {A.class, B.class};
         // 假装项目初始化实例化所有bean
@@ -30,7 +30,7 @@ public class MySingleton {
 
     private static <T> T getBean(Class<T> beanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // 本文用类名小写 简单代替bean的命名规则
-        Strings beanName = beanClass.getSimpleName().toLowerCase();
+        String beanName = beanClass.getSimpleName().toLowerCase();
         // 如果已经是一个bean，则直接返回
         if (cacheMap.containsKey(beanName)) {
             return (T) cacheMap.get(beanName);
@@ -45,7 +45,7 @@ public class MySingleton {
             field.setAccessible(true);
             // 获取需要注入字段的class
             Class<?> fieldClass = field.getType();
-            Strings s = fieldClass.getSimpleName().toLowerCase();
+            String s = fieldClass.getSimpleName().toLowerCase();
             // 如果需要注入的bean，已经在缓存Map中，那么把缓存Map中的值注入到该field即可
             // 如果缓存没有 继续创建
             field.set(newInstance, cacheMap.containsKey(s) ? cacheMap.get(s) : getBean(fieldClass));

@@ -9,7 +9,7 @@ package com.java.note.Jdk.model.agent.mutal;
 public class Duck implements Cooking {
 
     @Override
-    public Strings barbecue(Strings food) {
+    public String barbecue(String food) {
         System.out.println("大火焖烤[ " + food + " ] 肥而不腻 甜咸刚好");
         return "zhenneidao";
     }

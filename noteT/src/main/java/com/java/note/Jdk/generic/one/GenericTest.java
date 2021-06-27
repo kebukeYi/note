@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class GenericTest {
 
     public static void one() {
-        ArrayList<Strings> list1 = new ArrayList<Strings>();
+        ArrayList<String> list1 = new ArrayList<String>();
         list1.add("abc");
 
         ArrayList<Integer> list2 = new ArrayList<Integer>();
@@ -51,24 +51,24 @@ public class GenericTest {
     //因为类型检查就是编译时完成的，new ArrayList()只是在内存中开辟了一个存储空间，可以存储任何类型对象
     //而真正设计类型检查的是它的引用，因为我们是使用它引用list1来调用它的方法，比如说调用add方法，所以list1引用能完成泛型类型的检查。而引用list2没有使用泛型，所以不行
     public static void four() {
-        ArrayList<Strings> list1 = new ArrayList();
+        ArrayList<String> list1 = new ArrayList();
         list1.add("1"); //编译通过
         // list1.add(1); //编译错误
-        Strings str1 = list1.get(0); //返回类型就是String
+        String str1 = list1.get(0); //返回类型就是String
 
-        ArrayList list2 = new ArrayList<Strings>();
+        ArrayList list2 = new ArrayList<String>();
         list2.add("1"); //编译通过
         list2.add(1); //编译通过
         Object object = list2.get(0); //返回类型就是Object
 
-        new ArrayList<Strings>().add("11"); //编译通过
+        new ArrayList<String>().add("11"); //编译通过
         //new ArrayList<String>().add(22); //编译错误
 
-        Strings str2 = new ArrayList<Strings>().get(0); //返回类型就是String
+        String str2 = new ArrayList<String>().get(0); //返回类型就是String
     }
 
     public static void five() {
-        ArrayList arrayList = new ArrayList<Strings>();
+        ArrayList arrayList = new ArrayList<String>();
         arrayList.add(22);
         //因为类型擦除之后(运行时), ArrayList也并不知道自己存储的是什么类型(ArrayList内部使用了一个Object数组存储的元素), 所以在取出元素时, 要进行强制类型转换.
         arrayList.get(3);
@@ -77,7 +77,7 @@ public class GenericTest {
         }
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         five();
     }
 }

@@ -36,7 +36,7 @@ public class main {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         List<Man> manArrayList = new ArrayList<>();
         List<Woman> womanList = new ArrayList<>();
         List<People> peopleList = new ArrayList<>();

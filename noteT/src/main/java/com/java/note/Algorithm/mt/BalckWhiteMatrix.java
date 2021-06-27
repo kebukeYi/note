@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class BalckWhiteMatrix {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int m = 0;//列数
         int n = 0;//行数
         Scanner scanner = new Scanner(System.in);

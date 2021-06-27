@@ -14,21 +14,21 @@ import java.util.Scanner;
  */
 public class BIOClient {
 
-    static final Strings HOST_NAME = "127.0.0.1";
+    static final String HOST_NAME = "127.0.0.1";
     static int PORT = 32222;
 
 
-    public static void main(Strings[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Socket client = new Socket(HOST_NAME, PORT);
         Scanner scan = new Scanner(client.getInputStream());//流中的数据流
         scan.useDelimiter("\n");
         PrintStream out = new PrintStream(client.getOutputStream());
         boolean flag = true;
         while (flag) {
-            Strings inputData = InputUtil.getString("请输入要发送的内容：").trim();
+            String inputData = InputUtil.getString("请输入要发送的内容：").trim();
             out.println(inputData);
             if (scan.hasNext()) {
-                Strings str = scan.next();
+                String str = scan.next();
                 System.out.println("服务器应答 ： " + str);
             }
             if ("byebye".equalsIgnoreCase(inputData)) {
@@ -45,9 +45,9 @@ class InputUtil {
 
     private static final BufferedReader KEYBOARD_INPUT = new BufferedReader(new InputStreamReader(System.in));
 
-    public static Strings getString(Strings prompt) {
+    public static String getString(String prompt) {
         boolean flag = true;    //数据接受标记
-        Strings str = null;
+        String str = null;
         while (flag) {
             System.out.println(prompt);
             try {

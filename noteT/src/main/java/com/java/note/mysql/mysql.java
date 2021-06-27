@@ -6,7 +6,7 @@ package com.java.note.mysql;
  * @Description
  */
 public class mysql {
-    public static void main(Strings[] args) throws ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
     }
 }

@@ -11,7 +11,7 @@ import java.lang.reflect.Proxy;
  */
 public class JdkClient {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         User user = new User("111", "2");
         UserProxyServiceImpl us = new UserProxyServiceImpl();
         UserProxyServiceInterceptor usi = new UserProxyServiceInterceptor(us);

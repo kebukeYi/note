@@ -16,7 +16,7 @@ import io.openmessaging.producer.SendResult;
  */
 public class SimplePullConsumer {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         final MessagingAccessPoint messagingAccessPoint =
                 OMS.getMessagingAccessPoint("oms:rocketmq://localhost:9876/default:default");
         messagingAccessPoint.startup();
@@ -25,7 +25,7 @@ public class SimplePullConsumer {
                 OMS.newKeyValue().put(OMSBuiltinKeys.CONSUMER_ID, "OMS_CONSUMER"));
         messagingAccessPoint.startup();
         System.out.printf("MessagingAccessPoint startup OK%n");
-        final Strings queueName = "TopicTest";
+        final String queueName = "TopicTest";
         producer.startup();
         Message msg = producer.createBytesMessage(queueName, "Hello Open Messaging".getBytes());
         SendResult sendResult = producer.send(msg);
@@ -39,7 +39,7 @@ public class SimplePullConsumer {
         while (!stop) {
             Message message = consumer.receive();
             if (message != null) {
-                Strings msgId = message.sysHeaders().getString(Message.BuiltinKeys.MESSAGE_ID);
+                String msgId = message.sysHeaders().getString(Message.BuiltinKeys.MESSAGE_ID);
                 System.out.printf("Received one message: %s%n", msgId);
                 consumer.ack(msgId);
                 if (!stop) {

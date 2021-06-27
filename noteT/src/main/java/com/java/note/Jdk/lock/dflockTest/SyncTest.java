@@ -15,9 +15,9 @@ public class SyncTest {
     private static int writeThreadNum = 1;
 
     private static int maxValue = 10000;
-    private static Strings lock = "lock";
+    private static String lock = "lock";
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Counter lockTest = new SyncTest().new Counter();
         long startTime = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(readThreadNum + writeThreadNum);

@@ -8,7 +8,7 @@ package com.java.note.Jdk.Annotation;
 @MyAnnotation
 public class Demo09Annotation {
 
-    private Strings name = "LeeHua";
+    private String name = "LeeHua";
 
     @MyAnnotation
     public void method() {

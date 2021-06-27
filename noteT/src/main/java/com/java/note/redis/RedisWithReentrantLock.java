@@ -12,23 +12,23 @@ import java.util.Map;
  */
 public class RedisWithReentrantLock {
 
-    private ThreadLocal<Map<Strings, Integer>> lockers = new ThreadLocal<>();
+    private ThreadLocal<Map<String, Integer>> lockers = new ThreadLocal<>();
     private Jedis jedis;
 
     public RedisWithReentrantLock(Jedis jedis) {
         this.jedis = jedis;
     }
 
-    private boolean _lock(Strings key) {
+    private boolean _lock(String key) {
         return jedis.set(key, "", "nx", "ex", 5L) != null;
     }
 
-    private void _unlock(Strings key) {
+    private void _unlock(String key) {
         jedis.del(key);
     }
 
-    private Map<Strings, Integer> currentLockers() {
-        Map<Strings, Integer> refs = lockers.get();
+    private Map<String, Integer> currentLockers() {
+        Map<String, Integer> refs = lockers.get();
         if (refs != null) {
             return refs;
         }
@@ -36,8 +36,8 @@ public class RedisWithReentrantLock {
         return lockers.get();
     }
 
-    public boolean lock(Strings key) {
-        Map<Strings, Integer> refs = currentLockers();
+    public boolean lock(String key) {
+        Map<String, Integer> refs = currentLockers();
         Integer refCnt = refs.get(key);
         if (refCnt != null) {
             refs.put(key, refCnt + 1);
@@ -51,8 +51,8 @@ public class RedisWithReentrantLock {
         return true;
     }
 
-    public boolean unlock(Strings key) {
-        Map<Strings, Integer> refs = currentLockers();
+    public boolean unlock(String key) {
+        Map<String, Integer> refs = currentLockers();
         Integer refCnt = refs.get(key);
         if (refCnt == null) {
             return false;
@@ -67,7 +67,7 @@ public class RedisWithReentrantLock {
         return true;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Jedis jedis = new Jedis();
         RedisWithReentrantLock redis = new RedisWithReentrantLock(jedis);
         System.out.println(redis.lock("codehole"));

@@ -7,11 +7,11 @@ package com.java.note.kafka;
  */
 public class KafkaConstants {
 
-    public static final Strings BROKER_LIST = "47.95.5.81:9092";
+    public static final String BROKER_LIST = "47.95.5.81:9092";
 
-    public static final Strings CLIENT_ID = "client1";
+    public static final String CLIENT_ID = "client1";
 
-    public static Strings GROUP_ID_CONFIG = "consumerGroup1";
+    public static String GROUP_ID_CONFIG = "consumerGroup1";
 
     private KafkaConstants() {
     }

@@ -35,7 +35,7 @@ public class LeeCode33 {
         return left == right && nums[left] == target ? left : -1;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int[] nums = {9, 10, 11, 12, 1, 2, 5, 8};
         System.out.println(search(nums, 5));
     }

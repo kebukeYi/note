@@ -19,7 +19,7 @@ import com.java.note.Jdk.utils.MyProxyGenerator;
  */
 public class DynamicProxyTest {
 
-    public static void main(Strings[] args) throws NoSuchFieldException, IllegalAccessException, IOException {
+    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException, IOException {
         //1.首先原生接口的实现类准备好  或者占好坑位
         Operate operate = new Operator();
         //2.新建好自己的 加强类（传入原生的实现类 是为了调用原生实现类方法）
@@ -37,7 +37,7 @@ public class DynamicProxyTest {
         // Operate operationProxy = (Operate) Proxy.newProxyInstance(Operate.class.getClassLoader(), new Class<?>[]{Operate.class}, handler1);
 
         //生成代理类字节码
-        Strings proxyName = "OperateService5";
+        String proxyName = "OperateService5";
         // byte[] bytes4 = ProxyGenerator.generateProxyClass(proxyName, new Class<?>[]{operaionProxy.getClass()});
         byte[] bytes4 = MyProxyGenerator.generateProxyClass(proxyName, new Class<?>[]{Operate.class});
         Path path4 = new File("F:\\" + proxyName + "$myproxy1.class").toPath();
@@ -46,7 +46,7 @@ public class DynamicProxyTest {
         operate.doSomething("【operate】 deal with ");
         //增强完成
         //调用操作方法
-        Strings deal_with = operationProxy.doSomething("【operationProxy】 deal with");
+        String deal_with = operationProxy.doSomething("【operationProxy】 deal with");
         System.out.println("deal_with ：" + deal_with);
         System.out.println("==============================");
         System.out.println(operate);
@@ -54,13 +54,13 @@ public class DynamicProxyTest {
         System.out.println("==============================");
 
 
-        Strings s1 = "hello";
+        String s1 = "hello";
         //s所指向的内存地址是在堆内存中
-        Strings s = new Strings("hello");
+        String s = new String("hello");
         //s1是在字符串常量池中
         // String s1 = "hello";
         //从常量池中获取
-        Strings intern = s.intern();
+        String intern = s.intern();
 
         System.out.println(s == intern);//false
         System.out.println(s1 == intern);//true

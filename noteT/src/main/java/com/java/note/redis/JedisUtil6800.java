@@ -21,7 +21,7 @@ public class JedisUtil6800 {
     protected static Logger logger = LogManager.getLogger(JedisUtil6800.class);
 
     //Redis服务器IP
-    private static Strings ADDR_ARRAY = "127.0.0.1";
+    private static String ADDR_ARRAY = "127.0.0.1";
 
     //Redis的端口号
     private static int PORT = 6491;
@@ -106,7 +106,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString0(Strings key, Strings value) {
+    public static void setString0(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -122,7 +122,7 @@ public class JedisUtil6800 {
         }
     }
 
-    public static void setPipelineString0(Strings key, Strings value) {
+    public static void setPipelineString0(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -138,9 +138,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString0(Strings key) {
+    public static String getString0(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(0);
@@ -155,7 +155,7 @@ public class JedisUtil6800 {
     }
 
     //*是否存在此组
-    public static boolean existsString6(Strings key) {
+    public static boolean existsString6(String key) {
         Jedis jedis = null;
         boolean result = false;
         try {
@@ -173,7 +173,7 @@ public class JedisUtil6800 {
     }
 
     //*是否存在此目录
-    public static boolean existsString7(Strings key) {
+    public static boolean existsString7(String key) {
         Jedis jedis = null;
         boolean result = false;
         try {
@@ -190,7 +190,7 @@ public class JedisUtil6800 {
     }
 
     //*是否存在此用户
-    public static boolean existsString9(Strings key) {
+    public static boolean existsString9(String key) {
         Jedis jedis = null;
         boolean result = false;
         try {
@@ -207,7 +207,7 @@ public class JedisUtil6800 {
     }
 
     //*是否存在此车牌号
-    public static boolean existsString13(Strings key) {
+    public static boolean existsString13(String key) {
         Jedis jedis = null;
         boolean result = false;
         try {
@@ -230,7 +230,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString1(Strings key, Strings value) {
+    public static void setString1(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -248,7 +248,7 @@ public class JedisUtil6800 {
     /*
     增添时间
      */
-    public static void setString1SetLoncationTime(Strings key, Strings field, LinkedList linkedList) {
+    public static void setString1SetLoncationTime(String key, String field, LinkedList linkedList) {
         Jedis jedis = null;
         try {
             jedis = getJedis();
@@ -276,9 +276,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString1(Strings key) {
+    public static String getString1(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(1);
@@ -298,7 +298,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString2(Strings key, Strings value) {
+    public static void setString2(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -314,9 +314,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString2(Strings key) {
+    public static String getString2(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(2);
@@ -337,7 +337,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString3(Strings key, Strings value) {
+    public static void setString3(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -353,9 +353,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString3(Strings key) {
+    public static String getString3(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             //getJedis().set(key, value);
             //addby wanglei
@@ -379,7 +379,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString4(Strings key, Strings value) {
+    public static void setString4(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -396,9 +396,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString4(Strings key) {
+    public static String getString4(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(4);
@@ -419,7 +419,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString5(Strings key, Strings value) {
+    public static void setString5(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -438,9 +438,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString5(Strings key) {
+    public static String getString5(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(5);
@@ -461,8 +461,8 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString6(Strings key, Strings value) {
-        Strings x = key.substring(0, 10);
+    public static void setString6(String key, String value) {
+        String x = key.substring(0, 10);
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -472,8 +472,8 @@ public class JedisUtil6800 {
             Iterator it = s.iterator();
             int w = 0;
             while (it.hasNext()) {
-                Strings key1 = (Strings) it.next();
-                Strings value1 = jedis.get(key1);
+                String key1 = (String) it.next();
+                String value1 = jedis.get(key1);
                 if (value1.contains(value)) {
                     w = 1;
                 }
@@ -489,9 +489,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString6(Strings key) {
+    public static String getString6(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(6);
@@ -505,7 +505,7 @@ public class JedisUtil6800 {
         return str;
     }
 
-    public static void setString6Ex(Strings key, int t, Strings value) {
+    public static void setString6Ex(String key, int t, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -520,16 +520,16 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings delString6(Strings key) {
+    public static String delString6(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(6);
             Set s = jedis.keys(key + "*");
             Iterator it = s.iterator();
             while (it.hasNext()) {
-                Strings key1 = (Strings) it.next();
+                String key1 = (String) it.next();
                 //Todo 返回再删除
                 jedis.del(key1);
             }
@@ -542,8 +542,8 @@ public class JedisUtil6800 {
         return str;
     }
 
-    public static List<Strings> getAllCommd6(Strings IMEI) {
-        List<Strings> list = new ArrayList<>();
+    public static List<String> getAllCommd6(String IMEI) {
+        List<String> list = new ArrayList<>();
         Jedis jedis = null;
         try {
             jedis = getJedis();
@@ -551,8 +551,8 @@ public class JedisUtil6800 {
             Set s = jedis.keys(IMEI + "*");
             Iterator it = s.iterator();
             while (it.hasNext()) {
-                Strings key = (Strings) it.next();
-                Strings value = jedis.get(key);
+                String key = (String) it.next();
+                String value = jedis.get(key);
                 //Todo 返回再删除
 //                 jedis.del(key);
                 list.add(value);
@@ -572,7 +572,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString7(Strings key, Strings value) {
+    public static void setString7(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -587,9 +587,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString7(Strings key) {
+    public static String getString7(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(7);
@@ -609,7 +609,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString8(Strings key, Strings value) {
+    public static void setString8(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -624,9 +624,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString8(Strings key) {
+    public static String getString8(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(8);
@@ -646,7 +646,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString9(Strings key, Strings value) {
+    public static void setString9(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -661,9 +661,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString9(Strings key) {
+    public static String getString9(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(9);
@@ -683,7 +683,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString10(Strings key, Strings value) {
+    public static void setString10(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -699,9 +699,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString10(Strings key) {
+    public static String getString10(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(10);
@@ -721,7 +721,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString11(Strings key, Strings value) {
+    public static void setString11(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -737,9 +737,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString11(Strings key) {
+    public static String getString11(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(11);
@@ -759,7 +759,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString12(Strings key, Strings value) {
+    public static void setString12(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -775,9 +775,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString12(Strings key) {
+    public static String getString12(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(12);
@@ -797,7 +797,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString13(Strings key, Strings value) {
+    public static void setString13(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -813,9 +813,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString13(Strings key) {
+    public static String getString13(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(13);
@@ -835,7 +835,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString14(Strings key, Strings value) {
+    public static void setString14(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -851,9 +851,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString14(Strings key) {
+    public static String getString14(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(14);
@@ -873,7 +873,7 @@ public class JedisUtil6800 {
      * @param key
      * @param value
      */
-    public static void setString15(Strings key, Strings value) {
+    public static void setString15(String key, String value) {
         Jedis jedis = null;
         try {
             value = StringUtils.isEmpty(value) ? "" : value;
@@ -889,9 +889,9 @@ public class JedisUtil6800 {
         }
     }
 
-    public static Strings getString15(Strings key) {
+    public static String getString15(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(15);
@@ -905,7 +905,7 @@ public class JedisUtil6800 {
         return str;
     }
 
-    public static void delStringByKeyAndDbNum(Strings key, int dbNum) {
+    public static void delStringByKeyAndDbNum(String key, int dbNum) {
         Jedis jedis = null;
         try {
             jedis = getJedis();
@@ -923,9 +923,9 @@ public class JedisUtil6800 {
     /*
    指令库 6
     */
-    public static Map<Strings, Strings> getAllCommdMap() {
-        Map<Strings, Strings> aMap = new HashMap<Strings, Strings>();
-        List<Strings> list = new ArrayList<>();
+    public static Map<String, String> getAllCommdMap() {
+        Map<String, String> aMap = new HashMap<String, String>();
+        List<String> list = new ArrayList<>();
         Jedis jedis = null;
         try {
             jedis = getJedis();
@@ -933,8 +933,8 @@ public class JedisUtil6800 {
             Set s = jedis.keys("*");
             Iterator it = s.iterator();
             while (it.hasNext()) {
-                Strings key = (Strings) it.next();
-                Strings value = jedis.get(key);
+                String key = (String) it.next();
+                String value = jedis.get(key);
                 key = key.split(":")[0];
                 aMap.put(key, value);
             }
@@ -950,32 +950,32 @@ public class JedisUtil6800 {
     /*
     指令库 6
      */
-    public static Strings getAllCommd(Strings IMEI) {
-        Strings xStrings = "";
+    public static String getAllCommd(String IMEI) {
+        String String = "";
         Jedis jedis = null;
         try {
             jedis = getJedis();
             jedis.select(6);
-            xStrings = jedis.get(IMEI);
+            String = jedis.get(IMEI);
             returnResource(jedis);
         } catch (Exception e) {
             returnResource(jedis);
             e.printStackTrace();
             logger.error(" getAllComd error : " + e);
         }
-        return xStrings;
+        return String;
     }
 
-    public static Strings delString7(Strings key) {
+    public static String delString7(String key) {
         Jedis jedis = null;
-        Strings str = null;
+        String str = null;
         try {
             jedis = getJedis();
             jedis.select(7);
             Set s = jedis.keys(key + "*");
             Iterator it = s.iterator();
             while (it.hasNext()) {
-                Strings key1 = (Strings) it.next();
+                String key1 = (String) it.next();
                 //Todo 返回再删除
                 jedis.del(key1);
             }

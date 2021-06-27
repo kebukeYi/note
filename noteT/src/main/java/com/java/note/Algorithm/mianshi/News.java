@@ -43,7 +43,7 @@ public class News {
         }
 
         @Override
-        public Strings toString() {
+        public String toString() {
             return "Message{" +
                     "startTime=" + startTime +
                     ", endTime=" + endTime +
@@ -152,7 +152,7 @@ public class News {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         //链表方式
         // merge();
 

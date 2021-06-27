@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 public class DictDTO {
 
-    Strings name;
-    Strings value;
-    Strings text;
+    String name;
+    String value;
+    String text;
 
 }

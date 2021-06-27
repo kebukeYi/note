@@ -11,11 +11,11 @@ import com.rabbitmq.client.QueueingConsumer;
 public class Consumer2 {
 
     //与交换机进行了绑定
-    private final static Strings QUEUE_NAME = "test_queue_topic_2";
+    private final static String QUEUE_NAME = "test_queue_topic_2";
 
-    private final static Strings EXCHANGE_NAME = "test_exchange_topic";
+    private final static String EXCHANGE_NAME = "test_exchange_topic";
 
-    public static void main(Strings[] argv) throws Exception {
+    public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("127.0.0.1");
         factory.setPort(5672);
@@ -41,7 +41,7 @@ public class Consumer2 {
         while (true) {
             Thread.sleep(500);
             QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-            Strings message = new Strings(delivery.getBody());
+            String message = new String(delivery.getBody());
             System.out.println(" [物流系统] Received '" + message + "'");
             Thread.sleep(10);
 

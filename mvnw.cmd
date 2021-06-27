@@ -143,7 +143,7 @@ if exist %WRAPPER_JAR% (
 
     powershell -Command "&{"^
 		"$webclient = new-object System.Net.WebClient;"^
-		"if (-not ([strings]::IsNullOrEmpty('%MVNW_USERNAME%') -and [strings]::IsNullOrEmpty('%MVNW_PASSWORD%'))) {"^
+		"if (-not ([String]::IsNullOrEmpty('%MVNW_USERNAME%') -and [String]::IsNullOrEmpty('%MVNW_PASSWORD%'))) {"^
 		"$webclient.Credentials = new-object System.Net.NetworkCredential('%MVNW_USERNAME%', '%MVNW_PASSWORD%');"^
 		"}"^
 		"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $webclient.DownloadFile('%DOWNLOAD_URL%', '%WRAPPER_JAR%')"^

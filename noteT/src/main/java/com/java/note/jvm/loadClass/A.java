@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class A {
 
-    Strings name;
+    String name;
 }
  

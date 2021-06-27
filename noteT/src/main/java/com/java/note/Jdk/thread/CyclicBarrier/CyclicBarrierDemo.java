@@ -10,7 +10,7 @@ import java.util.concurrent.CyclicBarrier;
  */
 public class CyclicBarrierDemo {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(7, () -> {
             System.out.println("开始");
         });
@@ -26,7 +26,7 @@ public class CyclicBarrierDemo {
                 } catch (BrokenBarrierException e) {
                     e.printStackTrace();
                 }
-            }, Strings.valueOf(i)).start();
+            }, String.valueOf(i)).start();
         }
     }
 

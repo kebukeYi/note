@@ -11,16 +11,16 @@ import java.util.function.Supplier;
  **/
 public class Demo01Supplier {
 
-    public static void main(Strings[] args) {
-        Strings msgA = "Hello ";
-        Strings msgB = "World ";
+    public static void main(String[] args) {
+        String msgA = "Hello ";
+        String msgB = "World ";
         System.out.println(
                 getString(() -> msgA + msgB)
 //                getString(() -> System.out.println(msgA + msgB);)
         );
     }
 
-    private static Strings getString(Supplier<Strings> stringSupplier) {
+    private static String getString(Supplier<String> stringSupplier) {
         return stringSupplier.get();
     }
 }

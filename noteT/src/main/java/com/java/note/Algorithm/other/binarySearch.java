@@ -24,7 +24,7 @@ public class binarySearch {
         return left;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int[] ad = new int[]{1, 2, 3, 4, 5, 6};
         System.out.println(findFirstEqualLarger(ad, 3.5));
     }

@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class StringCast {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         /**
          * JVM 首先会检查该对象是否在字符串常量池中，如果在，就返回该对象引用，否则新的字符串将在常量池中被创建。
          * 这种方式可以减少同一个值的字符串对象的重复创建，节约内存。
@@ -58,7 +58,7 @@ public class StringCast {
 //        15 invokestatic #4 <java/lang/Integer.valueOf>	获取栈帧类型 并且要满足入参 随后创建新帧入栈	执行静态方法java/lang/Integer.valueOf 弹出栈顶元素 1 并入栈新 1
 //        18 aastore	将栈顶引用型值 存入 数组的指定索引位置 数组引用、索引、值依次弹出	数组g 存入 1 全部弹出
 //        19 return		返回
-        Strings[] h = new Strings[2];
+        String[] h = new String[2];
         Object[] g = h;
         h[0] = "ff";
         // g[1] = new Integer(2);
@@ -71,14 +71,22 @@ public class StringCast {
         map.put("21", 21);
         map.put(22, "22");
 
-        print((Strings) map.get(22));
-        print((Strings) map.get(21));
-        while (true) {
-
-        }
+        print((String) map.get(22));
+        print((String) map.get(21));
+        System.out.println("========================");
+        aVoid(12);
     }
 
-    public static void print(Strings a) {
+    public static void print(String a) {
         System.out.println(a);
+
+    }
+
+
+    public static void aVoid(int b) {
+        System.out.println("b1 : " + b);
+        int a = 10 / 0;
+        System.out.println("b2 : " + b);
+        throw new RuntimeException();
     }
 }

@@ -10,7 +10,7 @@ import java.util.concurrent.*;
  */
 public class CollectionDemo {
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
         CopyOnWriteArrayList copyOnWriteArrayList = new CopyOnWriteArrayList();
 
@@ -20,7 +20,6 @@ public class CollectionDemo {
         LinkedList linkedList = new LinkedList();
 
         List<Integer> synchronizedList = Collections.synchronizedList(linkedList);
-
 
         HashSet hashSet = new HashSet();
         LinkedHashSet linkedHashSet = new LinkedHashSet();
@@ -51,7 +50,7 @@ public class CollectionDemo {
     public static void setNoSafe() {
 //        HashSet<String> set = new HashSet<>();
 //        Set<String> set = Collections.synchronizedSet(new HashSet<>());
-        Set<Strings> set = new CopyOnWriteArraySet<>();
+        Set<String> set = new CopyOnWriteArraySet<>();
         for (int i = 0; i < 30; i++) {
             new Thread(() -> {
                 set.add(UUID.randomUUID().toString().substring(0, 8));
@@ -72,33 +71,31 @@ public class CollectionDemo {
 //        ArrayList<String> arrayList = new ArrayList();
 //        List<String> arrayList = Collections.synchronizedList(new ArrayList<>());
 //        List<String> arrayList = new Vector<String>();
-        List<Strings> arrayList = new CopyOnWriteArrayList<>();
+        List<String> arrayList = new CopyOnWriteArrayList<>();
         for (int i = 0; i < 30; i++) {
             new Thread(() -> {
                 arrayList.add(UUID.randomUUID().toString().substring(0, 8));
                 System.out.println(arrayList);
             }, i + "").start();
         }
-
-
     }
 
 
     public FutureTask getFutureTask() {
-        Callable<Strings> callable = new Callable() {
+        Callable<String> callable = new Callable() {
             @Override
             public Object call() throws Exception {
                 return "OK";
             }
         };
-        ConcurrentHashMap<Strings, FutureTask<?>> concurrentHashMap = new ConcurrentHashMap();
-        FutureTask<Strings> futureTask = new FutureTask(callable);
+        ConcurrentHashMap<String, FutureTask<?>> concurrentHashMap = new ConcurrentHashMap();
+        FutureTask<String> futureTask = new FutureTask(callable);
         Future future = concurrentHashMap.putIfAbsent("key", futureTask);
         return futureTask;
     }
 
     public static void delHashMap() {
-        HashMap<Strings, Object> HashMap = new HashMap();
+        HashMap<String, Object> HashMap = new HashMap();
         HashMap.put("1", "Object");
         HashMap.put("2", "Object");
         HashMap.put("3", "Object");
@@ -108,8 +105,8 @@ public class CollectionDemo {
         HashMap.put("7", "Object");
 
         try {
-            for (Map.Entry<Strings, Object> entry : HashMap.entrySet()) {
-                Strings key = entry.getKey();
+            for (Map.Entry<String, Object> entry : HashMap.entrySet()) {
+                String key = entry.getKey();
                 if (key.equals("3")) {
                     HashMap.remove(entry.getKey());
                 }
@@ -118,20 +115,14 @@ public class CollectionDemo {
         } catch (ConcurrentModificationException e) {
             e.printStackTrace();
         }
-
-
         HashMap.put("3", "Object");
-        Iterator<Map.Entry<Strings, Object>> iterator = HashMap.entrySet().iterator();
+        Iterator<Map.Entry<String, Object>> iterator = HashMap.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Strings, Object> entry = iterator.next();
+            Map.Entry<String, Object> entry = iterator.next();
             if (entry.getKey().equals("3")) {
                 iterator.remove();
             }
             System.out.println("2-当前HashMap是" + HashMap + " 当前entry是" + entry);
         }
-
-
     }
-
-
 }

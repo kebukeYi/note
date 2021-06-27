@@ -16,10 +16,10 @@ public class JVMCase {
     //准备阶段会为类的静态变量分配内存，初始化为系统的初始值
 
     // 常量  方法区
-    public final static Strings MAN_SEX_TYPE = "man";
+    public final static String MAN_SEX_TYPE = "man";
 
     // 静态变量  方法区
-    public static Strings WOMAN_SEX_TYPE = "woman";
+    public static String WOMAN_SEX_TYPE = "woman";
 
     /**
      * 方法区
@@ -33,7 +33,7 @@ public class JVMCase {
      * 成员方法 名称以及描述符
      */
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         //堆中是实例，对象引用 student 就存放在栈中
         Student stu = new Student();
         stu.setName("nick");
@@ -64,23 +64,23 @@ public class JVMCase {
 }
 
 class Student {
-    Strings name;
-    Strings sexType;
+    String name;
+    String sexType;
     int age;
 
-    public Strings getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Strings name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Strings getSexType() {
+    public String getSexType() {
         return sexType;
     }
 
-    public void setSexType(Strings sexType) {
+    public void setSexType(String sexType) {
         this.sexType = sexType;
     }
 

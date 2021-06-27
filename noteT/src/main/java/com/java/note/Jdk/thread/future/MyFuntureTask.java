@@ -15,7 +15,7 @@ public class MyFuntureTask {
 
     public static ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-    public static void main(Strings[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
         Runnable runnable = new Runnable() {
             @SneakyThrows

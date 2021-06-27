@@ -12,18 +12,18 @@ import java.util.Set;
  */
 public class Offer38 {
 
-    private Set<Strings> set = new HashSet<>(); // 去重
-    private ArrayList<Strings> ret = new ArrayList<>(); // 返回
+    private Set<String> set = new HashSet<>(); // 去重
+    private ArrayList<String> ret = new ArrayList<>(); // 返回
 
-    public Strings[] Permutation(Strings str) {
-        if (str == null) return new Strings[]{};
+    public String[] Permutation(String str) {
+        if (str == null) return new String[]{};
         boolean[] visited = new boolean[str.length()];
         dfs(str, "", visited);
-        return set.toArray(new Strings[ret.size()]);
+        return set.toArray(new String[ret.size()]);
     }
 
 
-    public void dfs(Strings str, Strings ch, boolean[] v) {
+    public void dfs(String str, String ch, boolean[] v) {
         if (str.length() == ch.length()) {
             set.add(ch);
             return;

@@ -15,16 +15,16 @@ class ShareData2 {
     //默认是 生产+消费
     private volatile boolean flag = true;
     private AtomicInteger atomicInteger = new AtomicInteger(0);
-    BlockingQueue<Strings> blockingDeque = null;
+    BlockingQueue<String> blockingDeque = null;
 
     //细节落地 传接口
-    public ShareData2(BlockingQueue<Strings> blockingDeque) {
+    public ShareData2(BlockingQueue<String> blockingDeque) {
         this.blockingDeque = blockingDeque;
         System.out.println(blockingDeque.getClass().getName());
     }
 
     public void myProd() throws Exception {
-        Strings data = null;
+        String data = null;
         boolean reValue = true;
         while (flag) {
             data = atomicInteger.incrementAndGet() + "";
@@ -41,7 +41,7 @@ class ShareData2 {
 
 
     public void myConsumer() throws Exception {
-        Strings data = null;
+        String data = null;
         while (flag) {
             data = blockingDeque.poll(2, TimeUnit.SECONDS);
             if (data == null || data.equalsIgnoreCase("")) {
@@ -61,7 +61,7 @@ class ShareData2 {
 
 public class ProdConsumer_BlockQueueDemo {
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         ShareData2 shareData2 = new ShareData2(new ArrayBlockingQueue<>(10));
 
         new Thread(() -> {

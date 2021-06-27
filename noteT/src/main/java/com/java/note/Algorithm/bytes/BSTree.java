@@ -105,7 +105,7 @@ public class BSTree {
         return (int) (min + Math.random() * (max - min + 1));
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        BSTree bsTre = new BSTree();
 //        int[] possAtr = {2, 4, 3, 6, 8, 7, 5};
 //        Node node = bsTre.processOne(possAtr, 0, possAtr.length - 1);

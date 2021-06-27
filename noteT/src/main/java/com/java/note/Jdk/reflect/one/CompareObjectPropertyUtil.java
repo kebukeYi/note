@@ -1,6 +1,7 @@
 package com.java.note.Jdk.reflect.one;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.cj.jdbc.MysqlXAConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +29,7 @@ public class CompareObjectPropertyUtil {
      * @param newObj 新对象
      * @return java.util.List<com.sdyy.staff.utils.ModifiedPropertyInfo>
      */
-    public static <T> List<ModifiedPropertyInfo> getDifferentProperty(T oldObj, T newObj, Strings... ignoreProperties) {
+    public static <T> List<ModifiedPropertyInfo> getDifferentProperty(T oldObj, T newObj, String... ignoreProperties) {
         if (oldObj != null && newObj != null) {
             // 比较全部字段
             if (ignoreProperties == null || ignoreProperties.length > 0) {
@@ -44,19 +45,19 @@ public class CompareObjectPropertyUtil {
                 List<ModifiedPropertyInfo> modifiedPropertyInfos = new ArrayList<>(oldObjectPropertyValue.size());
                 //获取new实体类的键值对
                 List<PropertyModelInfo> newObjectPropertyValue = getObjectPropertyValue(newObj, ignoreProperties);
-                Map<Strings, Object> objectMap = new HashMap<>(newObjectPropertyValue.size());
+                Map<String, Object> objectMap = new HashMap<>(newObjectPropertyValue.size());
 
                 // 获取新对象所有属性值
                 for (PropertyModelInfo propertyModelInfo : newObjectPropertyValue) {
-                    Strings propertyName = propertyModelInfo.getPropertyName();
+                    String propertyName = propertyModelInfo.getPropertyName();
                     Object value = propertyModelInfo.getValue();
                     objectMap.put(propertyName, value);
                 }
 
                 //遍历旧属性键值对
                 for (PropertyModelInfo propertyModelInfo : oldObjectPropertyValue) {
-                    Strings propertyName = propertyModelInfo.getPropertyName();
-                    Strings propertyComment = propertyModelInfo.getPropertyComment();
+                    String propertyName = propertyModelInfo.getPropertyName();
+                    String propertyComment = propertyModelInfo.getPropertyComment();
                     Object oldValue = propertyModelInfo.getValue();
 
                     //newMap是否存在
@@ -99,7 +100,7 @@ public class CompareObjectPropertyUtil {
      * @param ignoreProperties 可忽略比对的属性
      * @return java.util.List<com.sdyy.staff.utils.PropertyModelInfo>
      */
-    public static <T> List<PropertyModelInfo> getObjectPropertyValue(T obj, Strings... ignoreProperties) {
+    public static <T> List<PropertyModelInfo> getObjectPropertyValue(T obj, String... ignoreProperties) {
         if (obj != null) {
             Class<?> objClass = obj.getClass();
             //获得此类的各个属性的多个描述
@@ -109,12 +110,12 @@ public class CompareObjectPropertyUtil {
             //各个属性数组
             Field[] fields = objClass.getDeclaredFields();
             //忽视属性的集合
-            List<Strings> ignoreList = (ignoreProperties != null ? Arrays.asList(ignoreProperties) : null);
+            List<String> ignoreList = (ignoreProperties != null ? Arrays.asList(ignoreProperties) : null);
             //开始遍历
             for (Field field : fields) {
                 //设置可编辑
                 field.setAccessible(true);
-                Strings fieldName = field.getName();
+                String fieldName = field.getName();
                 //如果此属性没有被忽视
                 if (ignoreList == null || !ignoreList.contains(fieldName)) {
                     //新建自己的属性实体类
@@ -134,7 +135,7 @@ public class CompareObjectPropertyUtil {
                             List<DictDTO> dictList = JSONObject.parseArray(JSONObject.toJSONString(DictionaryConstant.dictionaryMap.get(fieldName)), DictDTO.class);
                             Object finalFieldValue = fieldValue;
                             if (finalFieldValue != null && !"".equals(finalFieldValue)) {
-                                Optional<DictDTO> first = dictList.stream().filter(dictDTO -> dictDTO.getValue().equals(Strings.valueOf(finalFieldValue))).findFirst();
+                                Optional<DictDTO> first = dictList.stream().filter(dictDTO -> dictDTO.getValue().equals(String.valueOf(finalFieldValue))).findFirst();
                                 if (first.isPresent()) {
                                     fieldValue = first.get().getText();
                                 }
@@ -152,11 +153,11 @@ public class CompareObjectPropertyUtil {
         return Collections.emptyList();
     }
 
-    private static Object getFieldValueByName(Strings fieldName, Object o) {
+    private static Object getFieldValueByName(String fieldName, Object o) {
         try {
             //id中的 i 大写 Id
-            Strings firstLetter = fieldName.substring(0, 1).toUpperCase();
-            Strings getter = "get" + firstLetter + fieldName.substring(1);
+            String firstLetter = fieldName.substring(0, 1).toUpperCase();
+            String getter = "get" + firstLetter + fieldName.substring(1);
             //getId();
             Method method = o.getClass().getMethod(getter, new Class[]{});
             Object value = method.invoke(o, new Object[]{});
@@ -168,7 +169,7 @@ public class CompareObjectPropertyUtil {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         // 修改前数据
         StaffBaseInfo oldStaff = new StaffBaseInfo("");
         oldStaff.setName("张三");

@@ -13,7 +13,7 @@ import java.util.Map;
  * @Description
  */
 public class RedMain {
-    public static void main(Strings[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         Order order = new Order();
         init(order);
 

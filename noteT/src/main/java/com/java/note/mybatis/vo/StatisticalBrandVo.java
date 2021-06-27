@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StatisticalBrandVo {
 
-    private Strings cityName;
-    private Strings district;
-    private Strings comarea;
+    private String cityName;
+    private String district;
+    private String comarea;
     private Long brandId;
-    private Strings brandName;
+    private String brandName;
 }

@@ -12,7 +12,7 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
  */
 public class OnewayProducer {
 
-    public static void main(Strings[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
         // 实例化消息生产者Producer
         DefaultMQProducer producer = new DefaultMQProducer("onewayProducer_group_name");

@@ -10,7 +10,7 @@ import java.util.Stack;
  */
 public class Offer09 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
     }
 

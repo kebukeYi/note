@@ -10,7 +10,7 @@ import java.util.Date;
 public class Consumer {
 
 
-    public static void main(Strings[] args) throws CloneNotSupportedException {
+    public static void main(String[] args) throws CloneNotSupportedException {
         Date date = new Date();
 
         Video video = new Video("name01", date);

@@ -19,9 +19,9 @@ import java.util.List;
  */
 public class MyBatisMain {
 
-    public static void main(Strings[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
-        Strings resource = "static/mybatis/mybatis-config.xml";
+        String resource = "static/mybatis/mybatis-config.xml";
         InputStream inputStream = Resources.getResourceAsStream(resource);
         //当我们单独使用Mybatis时，需要创建一个SqlSessionFactory，然而当MyBatis和Spring整合时，却需要一个SqlSessionFactoryBean, 细节 之前想过吗???
         //怎么实现的mapper 代理对象的???

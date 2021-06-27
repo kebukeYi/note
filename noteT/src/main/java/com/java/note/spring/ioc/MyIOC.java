@@ -12,7 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class MyIOC {
 
     @SuppressWarnings("resource")
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(MainConfig.class);
 //        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(MainConfigOfAOP.class);
 //        String[] beanNamesForType = ac.getBeanDefinitionNames();

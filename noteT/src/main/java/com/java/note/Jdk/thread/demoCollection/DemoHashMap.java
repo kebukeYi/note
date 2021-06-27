@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class DemoHashMap {
 
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         HashMap hashMap = new HashMap();
 
         new Thread(() -> {

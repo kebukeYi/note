@@ -10,7 +10,7 @@ import java.util.Calendar;
 public class Consumer {
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
         MiFactory miFactory = new MiFactory();
         IRouterProduct iRouterProduct = miFactory.getIRouterProduct();

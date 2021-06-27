@@ -15,7 +15,7 @@ import java.lang.ref.ReferenceQueue;
  */
 public class PhantomReferenceDemo {
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Object o = new Object();
         PhantomReferenceDemo phantomReferenceDemo = new PhantomReferenceDemo();
         ReferenceQueue<PhantomReferenceDemo> referenceQueue = new ReferenceQueue<>();

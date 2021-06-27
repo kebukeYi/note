@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 public class MyUnsafeTest {
 
     //直接操作内存举例
-    public static void main(Strings[] args) throws NoSuchFieldException, IllegalAccessException, InstantiationException {
+    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException, InstantiationException {
         Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
         theUnsafe.setAccessible(true);
         // 因为theUnsafe字段在Unsafe类中是一个静态字段，所以通过Field.get()获取字段值时，可以传null获取

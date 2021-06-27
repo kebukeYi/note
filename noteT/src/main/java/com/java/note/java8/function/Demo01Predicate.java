@@ -9,12 +9,12 @@ import java.util.function.Predicate;
  **/
 public class Demo01Predicate {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         //判断逻辑
         method(s -> s.length() > 5);
     }
 
-    private static void method(Predicate<Strings> predicate) {
+    private static void method(Predicate<String> predicate) {
         boolean veryLong = predicate.test("HelloWorld");
         System.out.println("字符串很长吗:" + veryLong);
     }

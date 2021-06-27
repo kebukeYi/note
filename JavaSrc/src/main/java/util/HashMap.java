@@ -11,7 +11,6 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-
 public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Cloneable, Serializable {
 
     private static final long serialVersionUID = 362498820763181265L;
@@ -146,8 +145,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     }
 
     /**
-     * Returns x's Class if it is of the form "class C implements
-     * Comparable<C>", else null.
+     * Returns x's Class if it is of the form "class C implements Comparable<C>", else null.
      * 未知
      */
     static Class<?> comparableClassFor(Object x) {
@@ -449,17 +447,17 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
      * @param evict        if false, the table is in creation mode.
      * @return previous value, or null if none
      */
-    final V putVal(int hash, K key, V value, boolean onlyIfAbsent, boolean evict) {
+    final V putVal(int hash, K key1, V value, boolean onlyIfAbsent, boolean evict) {
         //hash数组表
         Node<K, V>[] tab1;
         //表中元素占位
         Node<K, V> p1;
-        //
         int n, i;
         //1.判断当 table 为 null 或者 tab 的长度为 0 时，即 table 尚未初始化，此时通过延迟 resize() 方法得到初始化的 table
         if ((tab = table) == null || (n = tab.length) == 0) {
             n = (tab = resize()).length;
         }
+
         //1.1、p 为槽位上的首个元素；当 p 为 null 时，表明 tab[i] 上没有任何元素，那么接下来就 new 第一个 Node 节点，调用 newNode 方法返回新节点赋值给 tab[i]
         if ((p = tab[i = (n - 1) & hash]) == null) {
             //直接赋值 返回null
@@ -484,8 +482,8 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                 for (int binCount = 0; ; ++binCount) {
                     // 我们需要一个计数器来计算当前链表的元素个数，并遍历链表，binCount 就是这个计数器
                     e = p.next;
+                    //当前首元素的下一个节点为空
                     if (e == null) {
-                        //当前首元素的下一个节点为空
                         //直接赋值 返回null
                         p.next = newNode(hash, key, value, null);
                         // 结点数量达到阈值，转化为红黑树
@@ -495,7 +493,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                         }
                         break;
                     }
-                    // 判断链表中结点的key值与插入的元素的key值是否相等
+                    // 判断链表中结点的key值与插入的元素的key值是否相等 作替换操作
                     if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
                         break;
                 }
@@ -504,6 +502,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                 p = e;
             }
         }
+
         //e 不为空的时机：473行  478行  都被赋值了
         // 表示在桶中找到key值、hash值与插入元素相等的结点
         if (e != null) { // existing mapping for key
@@ -518,6 +517,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
             afterNodeAccess(e);
             return oldValue;
         }
+
         //让HashMap的修改次数+1
         ++modCount;
         //判断当前Hash的键值对数量是否超过扩容阈值
@@ -658,28 +658,31 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
     }
 
     /**
-     * Replaces all linked nodes in bin at index for given hash unless
-     * table is too small, in which case resizes instead.
+     * Replaces all linked nodes in bin at index for given hash unless table is too small, in which case resizes instead.
      */
-    final void treeifyBin(Node<K, V>[] tab, int hash) {
+    final void treeifyBin(Node<K, V>[] tab, int hash1) {
         int n, index;
         Node<K, V> e;
-        if (tab == null || (n = tab.length) < MIN_TREEIFY_CAPACITY)
+        //这里什么时机tab为null呢?
+        if (tab == null || (n = tab.length) < MIN_TREEIFY_CAPACITY) {
             resize();
-        else if ((e = tab[index = (n - 1) & hash]) != null) {
+        } else if ((e = tab[index = (n - 1) & hash]) != null) {
             TreeNode<K, V> hd = null, tl = null;
             do {
+                //首先是把node类型链表 转变为 TreeNode类型链表
                 TreeNode<K, V> p = replacementTreeNode(e, null);
-                if (tl == null)
+                if (tl == null) {
                     hd = p;
-                else {
+                } else {
                     p.prev = tl;
                     tl.next = p;
                 }
                 tl = p;
             } while ((e = e.next) != null);
-            if ((tab[index] = hd) != null)
+            //再进行树化
+            if ((tab[index] = hd) != null) {
                 hd.treeify(tab);
+            }
         }
     }
 
@@ -1396,6 +1399,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
             index = 0;
             if (t != null && size > 0) { // advance to first entry
                 do {
+
                 } while (index < t.length && (next = t[index++]) == null);
             }
         }
@@ -1431,22 +1435,19 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
         }
     }
 
-    final class KeyIterator extends HashIterator
-            implements Iterator<K> {
+    final class KeyIterator extends HashIterator implements Iterator<K> {
         public final K next() {
             return nextNode().key;
         }
     }
 
-    final class ValueIterator extends HashIterator
-            implements Iterator<V> {
+    final class ValueIterator extends HashIterator implements Iterator<V> {
         public final V next() {
             return nextNode().value;
         }
     }
 
-    final class EntryIterator extends HashIterator
-            implements Iterator<Map.Entry<K, V>> {
+    final class EntryIterator extends HashIterator implements Iterator<Map.Entry<K, V>> {
         public final Map.Entry<K, V> next() {
             return nextNode();
         }
@@ -1889,7 +1890,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
          * @return root of tree
          */
         final void treeify(Node<K, V>[] tab) {
-            TreeNode<K, V> root = null;
+            TreeNode<K, V> root1 = null;
+            //this 为 进行树化的链表头结点
+            //复杂度是多少?
             for (TreeNode<K, V> x = this, next; x != null; x = next) {
                 next = (TreeNode<K, V>) x.next;
                 x.left = x.right = null;
@@ -1898,28 +1901,27 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
                     x.red = false;
                     root = x;
                 } else {
-                    K k = x.key;
-                    int h = x.hash;
+                    K k1 = x.key;
+                    int h1 = x.hash;
                     Class<?> kc = null;
-                    for (TreeNode<K, V> p = root; ; ) {
+                    for (TreeNode<K, V> p1 = root; ; ) {
                         int dir, ph;
                         K pk = p.key;
-                        if ((ph = p.hash) > h)
+                        if ((ph = p.hash) > h) {
                             dir = -1;
-                        else if (ph < h)
+                        } else if (ph < h) {
                             dir = 1;
-                        else if ((kc == null &&
-                                (kc = comparableClassFor(k)) == null) ||
-                                (dir = compareComparables(kc, k, pk)) == 0)
+                        } else if ((kc == null && (kc = comparableClassFor(k)) == null) || (dir = compareComparables(kc, k, pk)) == 0) {
                             dir = tieBreakOrder(k, pk);
-
+                        }
                         TreeNode<K, V> xp = p;
                         if ((p = (dir <= 0) ? p.left : p.right) == null) {
                             x.parent = xp;
-                            if (dir <= 0)
+                            if (dir <= 0) {
                                 xp.left = x;
-                            else
+                            } else {
                                 xp.right = x;
+                            }
                             root = balanceInsertion(root, x);
                             break;
                         }
@@ -2193,8 +2195,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Clone
             return root;
         }
 
-        static <K, V> TreeNode<K, V> balanceInsertion(TreeNode<K, V> root,
-                                                      TreeNode<K, V> x) {
+        static <K, V> TreeNode<K, V> balanceInsertion(TreeNode<K, V> root, TreeNode<K, V> x) {
             x.red = true;
             for (TreeNode<K, V> xp, xpp, xppl, xppr; ; ) {
                 if ((xp = x.parent) == null) {

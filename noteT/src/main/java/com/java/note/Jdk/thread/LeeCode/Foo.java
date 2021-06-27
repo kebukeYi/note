@@ -46,7 +46,7 @@ public class Foo {
         }
     }
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Foo foo = new Foo();
         synchronized (foo.lock) {
             foo.first(() -> System.out.println("one"));

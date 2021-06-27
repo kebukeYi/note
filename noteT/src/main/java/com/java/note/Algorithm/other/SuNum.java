@@ -48,7 +48,7 @@ public class SuNum {
         return count;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         System.out.println(getSuNumbers(20000));
         System.out.println(getSuNumber(20000));
     }

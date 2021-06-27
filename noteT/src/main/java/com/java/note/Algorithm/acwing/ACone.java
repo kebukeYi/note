@@ -7,7 +7,7 @@ package com.java.note.Algorithm.acwing;
  */
 public class ACone {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int N = 20;
         int n = 6;
         Integer[][] array = new Integer[N][N];

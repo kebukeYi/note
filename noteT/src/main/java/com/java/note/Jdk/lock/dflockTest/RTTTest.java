@@ -18,7 +18,7 @@ public class RTTTest {
     private static int maxValue = 1000;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Counter lockTest = new RTTTest().new Counter();
         long startTime = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(readThreadNum + writeThreadNum);

@@ -12,7 +12,7 @@ import java.util.List;
 public class LeeCode416 {
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        int[] a = new int[]{1, 11, 5, 2, 3};
 //        int[] a = new int[]{1, 3, 4, 4};
 //        int[] a = new int[]{1, 2};

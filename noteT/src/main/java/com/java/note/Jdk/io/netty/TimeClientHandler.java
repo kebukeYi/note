@@ -15,7 +15,7 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("shoudaol");
-        Strings firstMessage = "hello";
+        String firstMessage = "hello";
         ctx.writeAndFlush(firstMessage.getBytes());
     }
 

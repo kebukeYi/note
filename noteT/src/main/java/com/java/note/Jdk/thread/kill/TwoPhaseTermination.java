@@ -68,7 +68,7 @@ public class TwoPhaseTermination {
         thread.interrupt();
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        v1();
 //        v2();
         v3();

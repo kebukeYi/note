@@ -20,10 +20,10 @@ public class SoftReferenceWork {
      */
 
     public static void getImagesData() {
-        Map<Strings, SoftReference<Object>> stringSoftReferenceMap = new HashMap<>();
+        Map<String, SoftReference<Object>> stringSoftReferenceMap = new HashMap<>();
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
     }
 }

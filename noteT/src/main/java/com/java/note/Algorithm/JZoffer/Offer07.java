@@ -24,7 +24,7 @@ public class Offer07 {
         }
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
     }
 

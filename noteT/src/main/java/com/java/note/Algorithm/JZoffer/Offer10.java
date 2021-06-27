@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class Offer10 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 //        System.out.println(fbnq(3));
         System.out.println(JumpFloorII(5));
         System.out.println(JumpFloorIII(5));

@@ -14,7 +14,7 @@ import io.openmessaging.consumer.PushConsumer;
  * @Description 以下示范如何将 OMS PushConsumer 添加到指定的队列，并通过 MessageListener 消费这些消息。
  */
 public class SimplePushConsumer {
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         final MessagingAccessPoint messagingAccessPoint = OMS
                 .getMessagingAccessPoint("oms:rocketmq://localhost:9876/default:default");
         final PushConsumer consumer = messagingAccessPoint.

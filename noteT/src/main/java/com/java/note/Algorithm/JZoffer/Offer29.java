@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Offer29 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         System.out.println();
     }
 

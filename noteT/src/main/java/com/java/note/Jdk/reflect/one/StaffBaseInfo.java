@@ -21,79 +21,79 @@ import java.io.Serializable;
 public class StaffBaseInfo implements Serializable {
 
     @TableId
-    private Strings id;
+    private String id;
     /**
      * 单位号
      */
     @PropertyName(name = "单位号")
-    private Strings deptNumber;
+    private String deptNumber;
     /**
      * 工号
      */
     @PropertyName(name = "工号")
-    private Strings workNumber;
+    private String workNumber;
     /**
      * 姓名
      */
     @PropertyName(name = "姓名")
     @Size
-    private Strings name;
+    private String name;
     /**
      * 性别
      */
     @PropertyName(name = "性别")
-    private Strings gender;
+    private String gender;
     /**
      * 出生日期
      */
     @PropertyName(name = "出生日期")
-    private Strings birthday;
+    private String birthday;
     /**
      * 身份证件类型
      */
     @PropertyName(name = "身份证件类型")
-    private Strings idType;
+    private String idType;
     /**
      * 身份证件号码
      */
     @PropertyName(name = "身份证件号码")
-    private Strings idNumber;
+    private String idNumber;
     /**
      * 民族
      */
     @PropertyName(name = "民族")
-    private Strings nation;
+    private String nation;
     /**
      * 政治面貌
      */
     @PropertyName(name = "政治面貌")
-    private Strings politicsStatus;
+    private String politicsStatus;
 
     /**
      * 出生地
      */
     @PropertyName(name = "出生地")
     @NonNull
-    private Strings BirthPlace;
+    private String BirthPlace;
 
     /**
      * 参加工作时间
      */
     @PropertyName(name = "参加工作时间")
-    private Strings workTime;
+    private String workTime;
     /**
      * 到校（院）工作时间
      */
     @PropertyName(name = "到校（院）工作时间")
-    private Strings schoolWorkTime;
+    private String schoolWorkTime;
     /**
      * 最高学历
      */
     @PropertyName(name = "最高学历")
-    private Strings highestEducation;
+    private String highestEducation;
     /**
      * 最高学位
      */
     @PropertyName(name = "最高学位", isDict = false)
-    private Strings highestDegree;
+    private String highestDegree;
 }

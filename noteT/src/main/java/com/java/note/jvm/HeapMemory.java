@@ -12,7 +12,7 @@ class HeapMemory {
 
 
     //-XX:+TraceClassLoading 可以看加载了哪些类
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Object obj = new Object();
         MyItem myItem = new MyItem();
         System.out.println(ClassLayout.parseInstance(obj).toPrintable());

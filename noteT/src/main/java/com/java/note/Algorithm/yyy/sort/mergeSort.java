@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class mergeSort {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int[] arr = {9, 8, 7, 6, 5, 4, 3, 2, 1};
 //        int[] arr = {9, 8, 7};
         sort(arr, 0, arr.length);

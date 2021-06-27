@@ -1,7 +1,7 @@
 package com.java.note.Jdk.model.agent.dong;
 
 public interface IUserDao {
-    Strings save(Strings name);
+    String save(String name);
 
-    Strings find(int id);
+    String find(int id);
 }

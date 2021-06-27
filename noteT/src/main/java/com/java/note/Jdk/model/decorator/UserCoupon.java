@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class UserCoupon {
     private int id; // 优惠券 ID
     private int userId; // 领取优惠券用户 ID
-    private Strings sku; // 商品 SKU
+    private String sku; // 商品 SKU
     private BigDecimal coupon; // 优惠金额
 }

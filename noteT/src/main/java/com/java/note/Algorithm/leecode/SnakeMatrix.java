@@ -13,7 +13,7 @@ public class SnakeMatrix {
 
     final static int N = 110;
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int m = 0;//列数
         int n = 0;//行数
         int[][] res = new int[N][N];

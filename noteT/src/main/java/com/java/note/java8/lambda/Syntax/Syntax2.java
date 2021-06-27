@@ -19,7 +19,7 @@ import com.java.note.java8.lambda.interfaces.LambdaNoReturnMutipleParamters;
  */
 public class Syntax2 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         LambdaNoReturnMutipleParamters lambdaNoReturnMutipleParamters = (a, b, c) -> {
             System.out.println("LambdaNoReturnMutipleParamters " + (a + b + c));
         };

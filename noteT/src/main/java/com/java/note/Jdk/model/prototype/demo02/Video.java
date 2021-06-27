@@ -12,7 +12,7 @@ import java.util.Date;
 public class Video implements Cloneable {
 
 
-    private Strings name;
+    private String name;
     private Date date;
 
     @Override
@@ -30,16 +30,16 @@ public class Video implements Cloneable {
     public Video() {
     }
 
-    public Video(Strings name, Date date) {
+    public Video(String name, Date date) {
         this.name = name;
         this.date = date;
     }
 
-    public Strings getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Strings name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -52,7 +52,7 @@ public class Video implements Cloneable {
     }
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "Video{" +
                 "name='" + name + '\'' +
                 ", date=" + date +

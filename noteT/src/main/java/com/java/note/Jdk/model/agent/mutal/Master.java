@@ -10,7 +10,7 @@ import java.lang.reflect.Proxy;
  **/
 public class Master {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Duck duck = new Duck();
         JavaDynamicProxy javaDynamicProxy = new JavaDynamicProxy(duck);
         Cooking proxyInstance = (Cooking) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), Duck.class.getInterfaces(), javaDynamicProxy);

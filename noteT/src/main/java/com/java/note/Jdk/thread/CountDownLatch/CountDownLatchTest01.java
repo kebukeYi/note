@@ -13,7 +13,7 @@ public class CountDownLatchTest01 {
     private static final int TASK_COUNT = 8;
     private static final int THREAD_CORE_SIZE = 10;
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
         Integer integer = new Integer(225);
         Integer integer2 = new Integer(225);

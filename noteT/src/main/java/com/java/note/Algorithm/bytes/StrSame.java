@@ -10,14 +10,14 @@ public class StrSame {
 
 
     //暴力法 O(N^3 * logN)
-    public static int containExactlyOne(Strings s, Strings a) {
+    public static int containExactlyOne(String s, String a) {
         return -1;
     }
 
     // 假设aim 的长度为 M
     //枚举str 子串中所有 长度为M 的字符串是否为 同源异词
     //O（M*N）
-    public static int containExactlyTwo(Strings s, Strings a) {
+    public static int containExactlyTwo(String s, String a) {
         char[] str1 = a.toCharArray();
         char[] str2 = s.toCharArray();
 
@@ -28,7 +28,7 @@ public class StrSame {
     }
 
     //最优解
-    public static int containExactlyThree(Strings str, Strings aim) {
+    public static int containExactlyThree(String str, String aim) {
         if (str.length() == 0 || aim.length() == 0 || str.length() < aim.length()) {
             return -1;
         }
@@ -67,7 +67,7 @@ public class StrSame {
     /*
     是否 同源异构词
      */
-    public static boolean isTY(Strings A, Strings B) {
+    public static boolean isTY(String A, String B) {
         if (A.length() != B.length()) {
             return false;
         }
@@ -90,7 +90,7 @@ public class StrSame {
         return true;
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
     }
 }

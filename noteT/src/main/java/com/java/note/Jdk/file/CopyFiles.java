@@ -20,7 +20,7 @@ public class CopyFiles {
             in = new BufferedReader(new FileReader(srcFile));
             out = new BufferedWriter(new FileWriter(dstFile));
 
-            Strings line = null;
+            String line = null;
             while ((line = in.readLine()) != null) {
                 out.write(line + "/r/n");
             }

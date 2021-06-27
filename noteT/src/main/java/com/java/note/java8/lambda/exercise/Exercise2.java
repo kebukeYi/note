@@ -13,7 +13,7 @@ import java.util.TreeSet;
  */
 public class Exercise2 {
 
-    public static void treeSet(Strings[] args) {
+    public static void treeSet(String[] args) {
         //使用lambda 实现compar接口 并实例化一个对象
         TreeSet<Person> set = new TreeSet<Person>(((o1, o2) -> {
             if (o1.getAge() >= o2.getAge()) {
@@ -38,7 +38,7 @@ public class Exercise2 {
         System.out.println(set);
     }
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         List<Person> list = new ArrayList<>();
         list.add(new Person("小明", 18, 96));
         list.add(new Person("小兰", 23, 98));

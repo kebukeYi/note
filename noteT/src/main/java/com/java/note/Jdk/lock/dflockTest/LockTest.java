@@ -18,7 +18,7 @@ public class LockTest {
     private static int maxValue = 10000;
     private final Lock lock = new ReentrantLock();
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         Counter lockTest = new LockTest().new Counter();
         long startTime = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(readThreadNum + writeThreadNum);

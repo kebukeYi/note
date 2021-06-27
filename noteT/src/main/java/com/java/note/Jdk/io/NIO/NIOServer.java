@@ -69,7 +69,7 @@ public class NIOServer {
                     // 设置成非阻塞
                     channel.configureBlocking(false);
                     //在这里可以给客户端发送信息哦
-                    channel.write(ByteBuffer.wrap(new Strings("与服务器连接成功").getBytes()));
+                    channel.write(ByteBuffer.wrap(new String("与服务器连接成功").getBytes()));
                     //在和客户端连接成功之后，为了可以接收到客户端的信息，需要给通道设置读的权限
                     channel.register(this.selector, SelectionKey.OP_READ);
                     // 获得了可读的事件
@@ -94,12 +94,12 @@ public class NIOServer {
 
         channel.read(buffer);
         byte[] data = buffer.array();
-        Strings msg = new Strings(data).trim();
+        String msg = new String(data).trim();
         System.out.println("服务端收到信息：" + msg);
         //   System.out.println("请输入信息：");
         // Scanner scanne = new Scanner(System.in);
         // String text = scanne.nextLine();
-        Strings text = "我是服务端对 " + channel.getRemoteAddress() + "  回应  " + UUID.randomUUID();
+        String text = "我是服务端对 " + channel.getRemoteAddress() + "  回应  " + UUID.randomUUID();
         ByteBuffer outBuffer = ByteBuffer.wrap(text.getBytes());
         channel.write(outBuffer);// 将消息回送给客户端
     }
@@ -109,7 +109,7 @@ public class NIOServer {
      *
      * @throws IOException
      */
-    public static void main(Strings[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         NIOServer server = new NIOServer();
         server.initServer(8080);
         server.listen();

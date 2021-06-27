@@ -14,7 +14,7 @@ public class CountDownLatchDemo {
     public static final int NUM = 6;
     public static int count = 0;
 
-    public static void main(Strings[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         closeDoor();
     }
 

@@ -12,12 +12,12 @@ import lombok.val;
 public class Producer {
 
     //交换机
-    private final static Strings EXCHANGE_NAME = "test_exchange_topic";
-    private final static Strings QUEUE_NAME_1 = "test_queue_topic_1";
-    private final static Strings QUEUE_NAME_2 = "test_queue_topic_2";
+    private final static String EXCHANGE_NAME = "test_exchange_topic";
+    private final static String QUEUE_NAME_1 = "test_queue_topic_1";
+    private final static String QUEUE_NAME_2 = "test_queue_topic_2";
 
 
-    public static void main(Strings[] argv) throws Exception {
+    public static void main(String[] argv) throws Exception {
         // 获取到连接以及mq通道
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("127.0.0.1");
@@ -33,7 +33,7 @@ public class Producer {
 
         int count = 1;
         // 消息内容  模拟 有人购物下订单
-        Strings message = "新增订单:id=";
+        String message = "新增订单:id=";
         while (true) {
             if (count++ == 200) break;
             Thread.sleep(1000);

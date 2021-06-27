@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class DEMO {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         int num = 1;
         int i = 0;
         ArrayList<Integer> list = new ArrayList<>();

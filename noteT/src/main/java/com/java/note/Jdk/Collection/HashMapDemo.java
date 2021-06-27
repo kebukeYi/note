@@ -26,13 +26,13 @@ public class HashMapDemo {
     }
 
 
-    public static void main(Strings[] args) {
-        Strings strings = "a";
-        Strings b = "a";
-        Strings c = new Strings("a");
-        System.out.println(strings == b);
+    public static void main(String[] args) {
+        String String = "a";
+        String b = "a";
+        String c = new String("a");
+        System.out.println(String == b);
         System.out.println(c == b);
-        System.out.println(c == strings);
+        System.out.println(c == String);
         System.out.println(tableSizeFor(32));
 
         System.out.println("===============================");
@@ -113,7 +113,7 @@ class Point {
     }
 
     @Override
-    public Strings toString() {
+    public String toString() {
         return "Point{" +
                 "lat=" + lat +
                 ", lng=" + lng +

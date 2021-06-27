@@ -14,10 +14,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 class MyCache {
 
     //共享变量
-    private volatile Map<Strings, Object> map = new HashMap<>();
+    private volatile Map<String, Object> map = new HashMap<>();
     private ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
 
-    public void put(Strings key, Object value) throws InterruptedException {
+    public void put(String key, Object value) throws InterruptedException {
         rwlock.writeLock().lock();
         System.out.println(Thread.currentThread().getName() + "\t" + "   正在写入  " + key);
         Thread.sleep(300);
@@ -26,7 +26,7 @@ class MyCache {
         rwlock.writeLock().unlock();
     }
 
-    public Object get(Strings key) throws InterruptedException {
+    public Object get(String key) throws InterruptedException {
         try {
             rwlock.readLock().lock();
             System.out.println(Thread.currentThread().getName() + "\t" + "正在读取");
@@ -41,7 +41,7 @@ class MyCache {
 
 public class ReadWriteLockDemo {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         MyCache myCache = new MyCache();
         for (int i = 0; i < 5; i++) {
             final int temp = i;

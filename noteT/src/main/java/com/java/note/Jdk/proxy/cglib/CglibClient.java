@@ -10,7 +10,7 @@ import org.springframework.cglib.proxy.Enhancer;
  */
 public class CglibClient {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         User user = new User("1", "2");
         Enhancer enhancer = new Enhancer();
         //设置 动态代理的 父类

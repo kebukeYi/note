@@ -18,7 +18,7 @@ public class CompletableFutureTest {
     如果任务是有频繁的I/O或者网络连接等操作，那么推荐使用CompletableFuture，采用自定义线程池的方式，根据服务器的情况设置线程池的大小，尽可能的让CPU忙碌起来
      */
 
-    public static void main(Strings[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 //        runWithSync();
         runWithFuture();
 //        runWithParalleStream();
@@ -32,7 +32,7 @@ public class CompletableFutureTest {
         long start = System.currentTimeMillis();
         List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(),
                 new LearnRecordService());
-        List<Strings> collect = remoteLoaders.stream().map(RemoteLoader::load).collect(Collectors.toList());
+        List<String> collect = remoteLoaders.stream().map(RemoteLoader::load).collect(Collectors.toList());
         System.out.println(collect);
         long end = System.currentTimeMillis();
         System.out.println("总共花费时间:" + (end - start));
@@ -42,8 +42,8 @@ public class CompletableFutureTest {
         long start = System.currentTimeMillis();
         ExecutorService executorService = Executors.newFixedThreadPool(2);
         List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new LearnRecordService());
-        List<Future<Strings>> futures = remoteLoaders.stream().map(remoteLoader -> executorService.submit(remoteLoader::load)).collect(Collectors.toList());
-        List<Strings> list = futures.stream().map(future -> {
+        List<Future<String>> futures = remoteLoaders.stream().map(remoteLoader -> executorService.submit(remoteLoader::load)).collect(Collectors.toList());
+        List<String> list = futures.stream().map(future -> {
             try {
                 return future.get();
             } catch (InterruptedException | ExecutionException e) {
@@ -60,7 +60,7 @@ public class CompletableFutureTest {
     public static void runWithParalleStream() {
         long start = System.currentTimeMillis();
         List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new LearnRecordService(), new WatchRecordService(), new LabelService(), new LabelService());
-        List<Strings> collect = remoteLoaders.parallelStream().map(RemoteLoader::load).collect(Collectors.toList());
+        List<String> collect = remoteLoaders.parallelStream().map(RemoteLoader::load).collect(Collectors.toList());
         System.out.println(collect);
         long end = System.currentTimeMillis();
         System.out.println("总共花费时间:" + (end - start));
@@ -100,9 +100,9 @@ public class CompletableFutureTest {
     public static void runWithCompletableFuture3() {
         long start = System.currentTimeMillis();
         List<RemoteLoader> remoteLoaders = Arrays.asList(new CustomerInfoService(), new LearnRecordService(), new LabelService(), new OrderService(), new WatchRecordService());
-        List<CompletableFuture<Strings>> completableFutures = remoteLoaders.stream().map(loader -> CompletableFuture.supplyAsync(loader::load)).collect(Collectors.toList());
+        List<CompletableFuture<String>> completableFutures = remoteLoaders.stream().map(loader -> CompletableFuture.supplyAsync(loader::load)).collect(Collectors.toList());
 //        List<CompletableFuture<String>> completableFutures2 = remoteLoaders.parallelStream().map(loader -> CompletableFuture.supplyAsync(loader::load)).collect(Collectors.toList());
-        List<Strings> customerDetail = completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+        List<String> customerDetail = completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 //        List<String> customerDetail2 = completableFutures2.parallelStream().map(CompletableFuture::join).collect(Collectors.toList());
         System.out.println(customerDetail);
 //        System.out.println(customerDetail2);
@@ -119,9 +119,9 @@ public class CompletableFutureTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(Math.min(remoteLoaders.size(), 50));
 
-        List<CompletableFuture<Strings>> completableFutures = remoteLoaders.parallelStream().map(loader -> CompletableFuture.supplyAsync(loader::load, executorService)).collect(Collectors.toList());
+        List<CompletableFuture<String>> completableFutures = remoteLoaders.parallelStream().map(loader -> CompletableFuture.supplyAsync(loader::load, executorService)).collect(Collectors.toList());
 
-        List<Strings> customerDetail = completableFutures.parallelStream().map(CompletableFuture::join).collect(Collectors.toList());
+        List<String> customerDetail = completableFutures.parallelStream().map(CompletableFuture::join).collect(Collectors.toList());
 
         System.out.println(customerDetail);
         executorService.shutdown();

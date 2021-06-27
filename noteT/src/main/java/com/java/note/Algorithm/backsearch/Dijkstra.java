@@ -117,7 +117,7 @@ public class Dijkstra {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         // 构建图
         Graph graph = new Graph(7);
         graph.addEdge(1, 2, 60);

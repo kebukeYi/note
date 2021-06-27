@@ -100,7 +100,7 @@ public class MiNiArrayBlockingQueue implements BlockingQueue {
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
         MiNiArrayBlockingQueue queue = new MiNiArrayBlockingQueue(10);
 

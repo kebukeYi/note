@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Exercise1 {
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         List<Person> list = new ArrayList<>();
         list.add(new Person("小明", 18, 96));
         list.add(new Person("小兰", 23, 98));

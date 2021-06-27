@@ -37,7 +37,7 @@ public class MyFactoryBean {
                 if (Object.class.equals(method.getDeclaringClass())) {
                     return method.invoke(this, args);
                 }
-                Strings[] value = method.getAnnotation(Select.class).value();
+                String[] value = method.getAnnotation(Select.class).value();
                 return null;
             }
         });

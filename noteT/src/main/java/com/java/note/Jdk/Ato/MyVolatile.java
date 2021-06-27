@@ -9,7 +9,7 @@ public class MyVolatile {
 
     public static volatile Object object;
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
 
     }
 }

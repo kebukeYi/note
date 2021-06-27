@@ -15,14 +15,14 @@ public enum Day2 {
     SATURDAY("星期六"),
     SUNDAY("星期日");//记住要用分号结束
 
-    private Strings desc;//中文描述
+    private String desc;//中文描述
 
     /**
      * 私有构造,防止被外部调用
      *
      * @param name
      */
-    Day2(Strings name) {
+    Day2(String name) {
         this.desc = name;
     }
 
@@ -31,7 +31,7 @@ public enum Day2 {
      *
      * @return
      */
-    public Strings getDesc() {
+    public String getDesc() {
         return desc;
     }
 
@@ -41,12 +41,12 @@ public enum Day2 {
      * @return
      */
     @Override
-    public Strings toString() {
+    public String toString() {
         return desc;
     }
 
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         for (Day2 day : Day2.values()) {
             System.out.println("name:" + day.name() + ", desc:" + day.getDesc() + ",day.toString()" + day.toString());
         }
