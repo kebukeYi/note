@@ -709,7 +709,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         //获取后置节点的第一个节点
         Node s = node.next;
 
-        //1.后置节点为null ?   1. cas 设置新节点为 tail 调用此方法时 那么后继节点就是null   2. 入队逻辑中  pred.next = node 还未赋值 为 null
+        //1.后置节点为null ?   1. cas 设置新节点为 tail 调用此方法时 那么后继节点就是null   2. 入队逻辑中   652行   pred.next = node 还未赋值 为 null
         // 2.说明 node节点 为取消状态，得找一个合适的可以被唤醒的节点
         if (s == null || s.waitStatus > 0) {
             s = null;
@@ -778,8 +778,9 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                     // t3 线程在 if(h == head) 返回false时，t3 会继续自旋. 参与到 唤醒下一个 head.next 的逻辑..
                     // t3 此时执行到 CAS WaitStatus(h,Node.SIGNAL, 0) 成功.. t4 在 t3 修改成功之前，也进入到 if (ws == Node.SIGNAL) 里面了，
                     //但是 t4 修改 CAS WaitStatus(h,Node.SIGNAL, 0) 会失败，因为 t3 改过了...
-                    if (!compareAndSetWaitStatus(h, Node.SIGNAL, 0))
-                        continue;            // loop to recheck cases
+                    if (!compareAndSetWaitStatus(h, Node.SIGNAL, 0)) {
+                        continue; // loop to recheck cases
+                    }
                     // 唤醒后继节点
                     unparkSuccessor(h);
                 } else if (ws == 0 && !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
@@ -841,8 +842,9 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      */
     private void cancelAcquire(Node node) {
         // Ignore if node doesn't exist
-        if (node == null)
+        if (node == null) {
             return;
+        }
 
         //取消排队了，取消内置的 node 节点
         node.thread = null; //help GC
@@ -850,15 +852,16 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         // 获得当前取消排队的 node 的前驱
         Node pred = node.prev;
         //如果仍然是 取消状态 那么就循环找
-        while (pred.waitStatus > 0)
+        while (pred.waitStatus > 0) {
             node.prev = pred = pred.prev;
+        }
 
         // 拿到当前节点的 后继 节点
         // 1. 可能还是当前 node 节点
         //2. 可能获得的 node节点 的 ws>0
         Node predNext = pred.next;
 
-        // 执行这一步的情况有：doAcquireInterruptibly 方法中 ：线程被唤醒后 检查中断标记 ：是 true 的话 就执行此方法 随后设置节点状态 为 取消状态；
+        // 执行这一步的情况有：doAcquireInterruptibly() 方法中 ：线程被唤醒后 检查中断标记 ：是 true 的话 就执行此方法 随后设置节点状态 为 取消状态
         //将当前的 node 设置为取消状态
         node.waitStatus = Node.CANCELLED;
 
@@ -873,7 +876,6 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         if (node == tail && compareAndSetTail(node, pred)) {
             //断掉pred.next 指针 指向空
             compareAndSetNext(pred, predNext, null);
-
         } else {
             //保存节点状态的
             int ws;
@@ -895,7 +897,6 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 //3. 当前 node 是 head.next 节点
                 //类似情况2  后继节点被唤醒后，调用 shouldParkAfterFailedAcquire 会让 node.next 节点越过取消状态的节点
                 //队列的第三个节点 会 直接 与 head 建立双重指向的关系
-                //
                 unparkSuccessor(node);
             }
             //出队的节点 让其后指针指向自己 帮助gc
@@ -1013,7 +1014,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         try {
             //当前线程是否 被中断
             boolean interrupted = false;
-            // 无限for循环
+            // 无限for循环 没有锁 就是多个线程可进入
             for (; ; ) {
                 //什么时候会执行到这里？
                 //1.进入for循环后 当前线程未被 park 前会执行这
@@ -1127,18 +1128,22 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 }
                 //判断是否等待超时，如果超时，则返回false
                 nanosTimeout = deadline - System.nanoTime();
-                if (nanosTimeout <= 0L)
+                if (nanosTimeout <= 0L) {
                     return false;
+                }
                 //这里判断是否可以阻塞线程并做相应操作，跟之前分析的几个方法不一样的是，这里的阻塞多了一个判断，并且是在有限时间内阻塞，
                 // 类似于sleep
-                if (shouldParkAfterFailedAcquire(p, node) && nanosTimeout > spinForTimeoutThreshold)
+                if (shouldParkAfterFailedAcquire(p, node) && nanosTimeout > spinForTimeoutThreshold) {
                     LockSupport.parkNanos(this, nanosTimeout);
-                if (Thread.interrupted())
+                }
+                if (Thread.interrupted()) {
                     throw new InterruptedException();
+                }
             }
         } finally {
-            if (failed)
+            if (failed) {
                 cancelAcquire(node);
+            }
         }
     }
 
@@ -1472,7 +1477,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      */
     public final boolean tryAcquireNanos(int arg, long nanosTimeout) throws InterruptedException {
         if (Thread.interrupted()) throw new InterruptedException();
-        //尝试获取锁，如果成功则返回true，失败则调用doAcquireNanos进行等待
+        //尝试获取锁，如果成功则返回true，失败则调用 doAcquireNanos() 进行等待
         return tryAcquire(arg) || doAcquireNanos(arg, nanosTimeout);
     }
 

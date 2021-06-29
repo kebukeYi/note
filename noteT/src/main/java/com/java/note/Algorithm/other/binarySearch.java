@@ -11,7 +11,6 @@ public class binarySearch {
     static int findFirstEqualLarger(int[] array, double key) {
         int left = 0;
         int right = array.length - 1;
-
         // 这里必须是 <=
         while (left <= right) {
             int mid = (left + right) / 2;

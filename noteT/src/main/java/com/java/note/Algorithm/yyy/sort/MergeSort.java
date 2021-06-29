@@ -7,12 +7,14 @@ import java.util.Arrays;
  * @Creat Time : 2020/5/3  8:38
  * @Description 归并算法 分治思想
  */
-public class mergeSort {
+public class MergeSort {
 
     public static void main(String[] args) {
         int[] arr = {9, 8, 7, 6, 5, 4, 3, 2, 1};
-//        int[] arr = {9, 8, 7};
-        sort(arr, 0, arr.length);
+        sort(arr, 0, arr.length - 1);
+        System.out.println(Arrays.toString(arr));
+        arr = new int[]{9, 8, 7, 6, 5, 4, 3, 2, 1};
+        sorts(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(arr));
     }
 
@@ -71,5 +73,39 @@ public class mergeSort {
             k++;
         }
 
+    }
+
+    public static void sorts(int[] array, int left, int right) {
+        //如果只有⼀个元素，那就不⽤排序了
+        if (left < right) {
+            int mid = (left + right) / 2;
+            sorts(array, left, mid);
+            sorts(array, mid + 1, right);
+            merges(left, mid, right, array);
+        }
+    }
+
+
+    public static void merges(int start, int mid, int end, int[] array) {
+        int[] arrayNew = new int[end - start + 1];
+        int p1 = start;
+        int p2 = mid + 1;
+        int p = 0;
+        while (p1 <= mid && p2 <= end) {
+            if (array[p1] <= array[p2]) {
+                arrayNew[p++] = array[p1++];
+            } else {
+                arrayNew[p++] = array[p2++];
+            }
+        }
+        while (p1 <= mid) {
+            arrayNew[p++] = array[p1++];
+        }
+        while (p2 <= end) {
+            arrayNew[p++] = array[p2++];
+        }
+        for (int i = 0; i < arrayNew.length; i++) {
+            array[i + start] = arrayNew[i];
+        }
     }
 }

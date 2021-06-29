@@ -1,27 +1,3 @@
-/*
- * Copyright (c) 2013, 2015, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
 package java.lang;
 
 import java.io.InputStream;
@@ -80,7 +56,7 @@ import sun.security.util.SecurityConstants;
  * type; if the element type is a primitive type, then the array class has no
  * class loader.
  *
- * <p> Applications implement subclasses of <tt>ClassLoader</tt> in order to
+ *  Applications implement subclasses of  ClassLoader in order to
  * extend the manner in which the Java virtual machine dynamically loads
  * classes.
  *
@@ -453,8 +429,7 @@ public abstract class ClassLoader {
     }
 
     // This method is invoked by the virtual machine to load a class.
-    private Class<?> loadClassInternal(String name)
-            throws ClassNotFoundException {
+    private Class<?> loadClassInternal(String name) throws ClassNotFoundException {
         // For backward compatibility, explicitly lock on 'this' when
         // the current class loader is not parallel capable.
         if (parallelLockMap == null) {
