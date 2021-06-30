@@ -8,7 +8,7 @@ package com.java.note.Algorithm.acwing;
 public class ACone {
 
     public static void main(String[] args) {
-        int N = 20;
+        int N = 6;
         int n = 6;
         Integer[][] array = new Integer[N][N];
         printMain(n, array);
@@ -54,16 +54,5 @@ public class ACone {
             bottom--;
         }
     }
-
-
-    /**
-     * 1.出界
-     * 2. 判断重复格子
-     */
-    public static void ACwing(int n, Integer[][] arrays) {
-
-
-    }
-
 
 }
