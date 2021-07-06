@@ -14,8 +14,10 @@ import java.util.Scanner;
  */
 public class BIOClient {
 
-    static final String HOST_NAME = "127.0.0.1";
+//    static final String HOST_NAME = "127.0.0.1";
+    static final String HOST_NAME = "192.168.1.9";
     static int PORT = 32222;
+//    static int PORT = 8081;
 
 
     public static void main(String[] args) throws Exception {

@@ -27,7 +27,6 @@ public class SimpleBIOClient {
         // 这里是每隔3秒钟向服务端发送一条消息
         executorService.scheduleAtFixedRate(() -> {
             try {
-
                 OutputStream outputStream = socket.getOutputStream();
                 // 向服务端发送消息（消息内容为：客户端的ip+端口+Hello World，示例：/127.0.0.1:999999 Hello World）
                 String message = socket.getLocalSocketAddress().toString() + " Hello World";
@@ -39,7 +38,6 @@ public class SimpleBIOClient {
                 //会阻塞
                 val read = inputStream.read(bytes);
                 System.out.println("read : " + new String(bytes, 0, read));
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
