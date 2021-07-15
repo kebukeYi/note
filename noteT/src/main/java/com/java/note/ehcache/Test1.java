@@ -1,11 +1,10 @@
 package com.java.note.ehcache;
 
-import com.java.note.java8.bean.Person;
+import com.java.note.Java_8.bean.Person;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 
 /**
  * @Author : mmy

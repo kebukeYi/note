@@ -1423,6 +1423,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      */
     //总结：只有当线程获取到锁时，acquire()方法才会结束；如果线程没有获取到锁，那么它就会一直阻塞在acquireQueued()方法中，那么acquire()方法就一直不结束。
     public final void acquire(int arg) {
+        //tryAcquire() 返回 true -> 获取资源成功  !true=false   函数直接退出
+        //tryAcquire() 返回 false -> 获取资源失败  !false=true  函数进行入队争抢资源
         //acquireQueued 挂起当前线程  和 唤醒之后的逻辑
         //acquireQueued() 返回 true : 表示 挂起线程过程中 线程被中断处理过 ; 否则表示未被中断过 , 是正常唤醒
         if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg)) {

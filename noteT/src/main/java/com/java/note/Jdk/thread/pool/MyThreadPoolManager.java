@@ -27,6 +27,7 @@ public class MyThreadPoolManager implements MyThreadPool {
      * 完成任务数，volatile表示线程可见
      */
     private static volatile int taskNums = 0;
+
     /**
      * 任务队列 先进先出 linkedlist的 头尾插入删除效率高
      */
@@ -176,7 +177,7 @@ public class MyThreadPoolManager implements MyThreadPool {
                     //而外部则为notifyAll()
                     while (isWork && taskQueue.isEmpty()) {
                         try {
-//                            Thread.sleep(20); 不释放锁
+                            //Thread.sleep(20); 不释放锁
                             taskQueue.wait(1000);//释放了锁
                             System.out.println(Thread.currentThread().getName()+"  执行了wait  ");
                         } catch (InterruptedException e) {
@@ -187,8 +188,7 @@ public class MyThreadPoolManager implements MyThreadPool {
                     //取值 运行任务 计数器+1 把任务置空
                     if (isWork && !isInterrupted() && !taskQueue.isEmpty()) {
                         try {
-//                            r = taskQueue.take();
-
+                            //  r = taskQueue.take();
                             r = taskQueue.remove();
                         } catch (Exception e) {
                             e.printStackTrace();

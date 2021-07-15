@@ -8,6 +8,7 @@
         <module>JavaSrc</module>
         <module>guice</module>
         <module>EffectiveJava</module>
+        <module>GeeK_GOF</module>
     </modules>
 
     <parent>

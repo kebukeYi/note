@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent;
 
 import java.util.Collection;
@@ -195,7 +160,7 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws NullPointerException     if the specified element is null
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this queue
-     *                                  如果满的话 就抛出异常
+     * 如果满的话 就抛出异常
      */
     boolean add(E e);
 
@@ -229,7 +194,7 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws NullPointerException     if the specified element is null
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this queue
-     *                                  插入会阻塞
+     *  插入会阻塞
      */
     void put(E e) throws InterruptedException;
 
@@ -260,7 +225,7 @@ public interface BlockingQueue<E> extends Queue<E> {
      *
      * @return the head of this queue
      * @throws InterruptedException if interrupted while waiting
-     *                              取出会阻塞
+     *  取出会阻塞
      */
     E take() throws InterruptedException;
 

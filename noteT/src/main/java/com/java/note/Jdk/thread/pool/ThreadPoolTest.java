@@ -10,7 +10,6 @@ import java.util.concurrent.*;
  */
 public class ThreadPoolTest {
 
-
     // 任务类
     static class MyTask implements Runnable {
 
@@ -35,7 +34,6 @@ public class ThreadPoolTest {
         public MyTask() {
         }
 
-
         public String getName() {
             return name;
         }
@@ -46,7 +44,7 @@ public class ThreadPoolTest {
 //                while (count < 10) {
                 //必要时阻塞
                 String str = linkedBlockingDeque.take();
-                System.out.println("str: " + str + (count++));
+                System.out.println("str : " + str + (count++));
 //                }
                 System.out.println(Thread.currentThread().getName() + " 任务" + name + " 完成");
 //                Thread.sleep(1000);
@@ -65,17 +63,17 @@ public class ThreadPoolTest {
         MyThreadPoolManager t = new MyThreadPoolManager(3);
         CountDownLatch countDownLatch = new CountDownLatch(5);
         LinkedBlockingDeque<String> linkedBlockingDeque = new LinkedBlockingDeque<>();
-        linkedBlockingDeque.add("A");
-        linkedBlockingDeque.add("B");
-        linkedBlockingDeque.add("C");
+        linkedBlockingDeque.add("任务A");
+        linkedBlockingDeque.add("任务B");
+        linkedBlockingDeque.add("任务C");
         for (int i = 0; i < 3; i++) {
-            t.excute(new MyTask(linkedBlockingDeque, "testA", i));
+            t.excute(new MyTask(linkedBlockingDeque, "testA"+i, i));
         }
 
-//        t.excute(new MyTask(countDownLatch, "testB"));
-//        t.excute(new MyTask(countDownLatch, "testC"));
-//        t.excute(new MyTask(countDownLatch, "testD"));
-//        t.excute(new MyTask(countDownLatch, "testE"));
+        t.excute(new MyTask(countDownLatch, "testB"));
+        t.excute(new MyTask(countDownLatch, "testC"));
+        t.excute(new MyTask(countDownLatch, "testD"));
+        t.excute(new MyTask(countDownLatch, "testE"));
 
 //        countDownLatch.await();
         Thread.sleep(1000);

@@ -74,7 +74,13 @@ public class StringCast {
         print((String) map.get(22));
         print((String) map.get(21));
         System.out.println("========================");
-        aVoid(12);
+        try {
+            aVoid(12);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("========================");
+        bVoid(22);
     }
 
     public static void print(String a) {
@@ -84,9 +90,21 @@ public class StringCast {
 
 
     public static void aVoid(int b) {
-        System.out.println("b1 : " + b);
+        System.out.println("a1 : " + b);
         int a = 10 / 0;
-        System.out.println("b2 : " + b);
+        System.out.println("a2 : " + b);
         throw new RuntimeException();
+    }
+
+    public static void bVoid(int b) {
+        System.out.println("b1 : " + b);
+        //try 进行捕获 处理 然后代码继续执行
+        try {
+            int a = 10 / 0;
+            System.out.println("b2 : " + b);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("b3 : " + b);
     }
 }
