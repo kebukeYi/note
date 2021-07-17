@@ -1,5 +1,7 @@
 package com.java.note.Algorithm.leecode;
 
+import lombok.Data;
+
 /**
  * @Author : mmy
  * @Creat Time : 2020/4/24  15:26
@@ -16,5 +18,28 @@ public class LeeCode493 {
         return 1;
     }
 
+    @Data
+    class Node {
+        private Node next;
+        private Integer value;
+    }
 
+
+    public Node trancforLinked(Node root) {
+        if (root == null) return null;
+        if (root.next == null) {
+            return root;
+        }
+        //1->2->3->4
+        //1<-2<-3<-4
+        while (root.next != null) {
+            Node cur = root;
+            final Node second = root.next;
+            final Node third = root.next.next;
+            cur = second.next;
+            root = second;
+        }
+
+        return root;
+    }
 }
