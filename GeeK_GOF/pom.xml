@@ -12,17 +12,26 @@
     <artifactId>GeeK_GOF</artifactId>
     <version>0.0.1</version>
     <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>5.1.6.RELEASE</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>com.rocketmq</groupId>
             <artifactId>onerocket</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
     </dependencies>
 
 

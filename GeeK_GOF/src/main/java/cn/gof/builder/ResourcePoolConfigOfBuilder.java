@@ -6,8 +6,9 @@ import org.apache.commons.lang3.StringUtils;
  * @author : kebukeyi
  * @date :  2021-07-17 09:52
  * @description: 建造者模式 主要解决必填项参数过多、参数之间依赖/约束检验、控制对象创建后不可变、对象的状态可用 的问题
- *                          缺点: 使用建造者模式来构建对象，代码实际上是有点重复的，ResourcePoolConfig 类中的成员变量，要在 Builder 类中重新再定义一遍
- * @question:
+ * @description: 区别:工厂模式与建造者模式的区别： 工厂模式是用来创建不同但是相关类型的对象（继承同一父类或者接口的一组子类），
+ *                          由给定的参数来决定创建哪种类型的对象。建造者模式是用来创建一种类型的复杂对象，通过设置不同的可选参数，“定制化”地创建不同的对象。
+ * @question: 缺点: 使用建造者模式来构建对象，代码实际上是有点重复的，ResourcePoolConfig 类中的成员变量，要在 Builder 类中重新再定义一遍
  * @link:
  **/
 public class ResourcePoolConfigOfBuilder {
@@ -86,6 +87,7 @@ public class ResourcePoolConfigOfBuilder {
 
     public static void main(String[] args) {
         final ResourcePoolConfigOfBuilder configOfBuilder = new Builder().setMaxIdle(1).setMinIdle(2).setName("").setMaxTotal(1).build();
+
     }
 }
  

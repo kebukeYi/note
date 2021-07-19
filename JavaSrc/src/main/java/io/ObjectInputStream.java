@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 1996, 2018, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
 package java.io;
 
 import java.io.ObjectStreamClass.WeakClassKey;
@@ -221,8 +196,8 @@ public class ObjectInputStream
     private static final Object unsharedMarker = new Object();
 
     /** table mapping primitive type names to corresponding class objects */
-    private static final HashMap<String, Class<?>> primClasses
-        = new HashMap<>(8, 1.0F);
+    private static final HashMap<String, Class<?>> primClasses = new HashMap<>(8, 1.0F);
+
     static {
         primClasses.put("boolean", boolean.class);
         primClasses.put("byte", byte.class);
