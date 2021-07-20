@@ -1,6 +1,4 @@
-package cn.gof.Proxy;
-
-import org.apache.ibatis.annotations.Param;
+package cn.gof.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

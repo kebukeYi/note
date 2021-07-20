@@ -1,4 +1,4 @@
-package cn.gof.Proxy;
+package cn.gof.proxy;
 
 /**
  * @author : kebukeyi
