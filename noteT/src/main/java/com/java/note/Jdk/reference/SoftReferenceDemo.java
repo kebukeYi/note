@@ -45,6 +45,6 @@ public class SoftReferenceDemo {
 
     public static void main(String[] args) throws InterruptedException {
         softMemoryEnough();
-//        softMemoryNotEnough();
+        softMemoryNotEnough();
     }
 }
