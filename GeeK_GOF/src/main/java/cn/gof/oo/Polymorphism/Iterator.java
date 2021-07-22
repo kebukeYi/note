@@ -8,9 +8,11 @@ package cn.gof.oo.Polymorphism;
  * @usinglink :
  **/
 public interface Iterator {
+
     boolean hasNext();
 
     String next();
 
     String remove();
+
 }

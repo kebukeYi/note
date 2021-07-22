@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 1997, 2017, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
 package java.util;
 
 import java.util.function.Consumer;
@@ -269,7 +244,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
     }
 
     private static int hugeCapacity(int minCapacity) {
-        if (minCapacity < 0){ // overflow
+        if (minCapacity < 0) { // overflow
             throw new OutOfMemoryError();
         }
         return (minCapacity > MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
@@ -500,10 +475,12 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
         modCount++;
         E oldValue = elementData(index);
         int numMoved = size - index - 1;
-        //删除其实跟新增是⼀样的，不过叫是叫删除，但是在代码⾥⾯我们发现，他还是在copy⼀个数组。
+        //删除其实跟新增是⼀样的，不过叫是叫删除，但是在代码⾥⾯我们发现，他还是在copy⼀个数组
         // 那代码他就复制⼀个index5+1开始到最后的数组，然后把它放到index开始的位置
-        if (numMoved > 0)
+        if (numMoved > 0) {
             System.arraycopy(elementData, index + 1, elementData, index, numMoved);
+        }
+        //这块size 主动--  会跟 迭代器的 cursor 相遇 so 不会报错 当出现删除倒数第二个元素后
         elementData[--size] = null; // clear to let GC do its work
 
         return oldValue;
@@ -847,7 +824,10 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
      * An optimized version of AbstractList.Itr
      */
     private class Itr implements Iterator<E> {
+        //当前迭代器指向的索引
         int cursor;       // index of next element to return
+        //只删除 刚刚返回的
+        //游标指向的前一个元素
         int lastRet = -1; // index of last element returned; -1 if no such
         int expectedModCount = modCount;
 
@@ -861,22 +841,29 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
         @SuppressWarnings("unchecked")
         public E next() {
             checkForComodification();
+            //当前游标指的值
             int i = cursor;
-            if (i >= size)
+            if (i >= size) {
                 throw new NoSuchElementException();
+            }
             Object[] elementData = ArrayList.this.elementData;
             if (i >= elementData.length)
                 throw new ConcurrentModificationException();
+            //游标下移
             cursor = i + 1;
+            //lastRet 不忘赋值
             return (E) elementData[lastRet = i];
         }
 
         public void remove() {
-            if (lastRet < 0)
+            if (lastRet < 0) {
                 throw new IllegalStateException();
+            }
             checkForComodification();
-
             try {
+                //调用了 外部删除api
+                // lastRet 最新返回的新值 当前游标指向的前一个元素
+                //此处 会修改ArrayList中的modCount
                 ArrayList.this.remove(lastRet);
                 cursor = lastRet;
                 lastRet = -1;

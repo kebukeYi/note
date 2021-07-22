@@ -96,7 +96,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements List<E>,
      * Pointer to last node.
      * Invariant: (first == null && last == null) ||
      * (last.next == null && last.item != null)
-     * 我们在序列化的时候不会只对头尾进行序列化，所以 LinkedList 也是自行实现 readObject 和 writeObject 进行序列化与反序列化。
+     * 我们在序列化的时候不会只对头尾进行序列化，所以 LinkedList 也是自行实现 readObject 和 writeObject 进行序列化与反序列化
      */
     transient Node<E> last;
 
