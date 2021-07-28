@@ -12,6 +12,7 @@ public abstract class AbstractFat {
     //抽象类无法实例化
     int abstractNum = 0;
 
+    static int staticAbstractNum = 0;
 
     protected Server server = new Server();
 
