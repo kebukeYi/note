@@ -15,7 +15,7 @@ public class JvmDemo {
     //类的属性：常量、变量、成员属性
     private Object object = new Object();
     private static int i = 1;
-    private static final String string= "hello";
+    private static final String string = "hello";
     private static String string2 = "world";
 
 
@@ -59,5 +59,6 @@ public class JvmDemo {
         //  int add = this.add();
         int add = JvmDemo.add();
         System.out.println(add);
+        System.out.println("done");
     }
 }

@@ -25,7 +25,7 @@ public class ProxyTest {
         enhancer.setCallback(methodInterceptorImpl);
         //创建代理对象
         Operator operationProxy = (Operator) enhancer.create();
-        //和intercept 方法的入参
+        //和 intercept 方法的入参
         System.out.println("operationProxy:" + operationProxy.getClass());
         //调用加强后的操作方法 Object obj 相同地址
         operationProxy.doSomething("deal with");

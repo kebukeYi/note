@@ -72,7 +72,7 @@ public class ObserverRegistry {
         List<Method> annotatedMethods = new ArrayList<>();
         //所有方法
         for (Method method : clazz.getDeclaredMethods()) {
-            //
+            //找到对应的注解方法
             if (method.isAnnotationPresent(Subscribe.class)) {
                 //方法参数类型
                 Class<?>[] parameterTypes = method.getParameterTypes();
