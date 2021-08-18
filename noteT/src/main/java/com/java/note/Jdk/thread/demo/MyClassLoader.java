@@ -10,8 +10,9 @@ import java.lang.reflect.Method;
 /**
  * @Author : mmy
  * @Creat Time : 2020/4/26  10:08
- * @Description 1.为什么要自定义ClassLoader
- * 因为系统的ClassLoader只会加载指定目录下的class文件,如果你想加载自己的class文件,那么就可以自定义一个ClassLoader.
+ * @Description ；
+ * 1.为什么要自定义ClassLoader
+ * 因为系统的ClassLoader只会加载指定目录下的class文件,如果你想加载自己的class文件,那么就可以自定义一个ClassLoader
  * 2.如何自定义ClassLoader
  * 2.1
  * 新建一个类继承自java.lang.ClassLoader,重写它的findClass方法。
@@ -27,7 +28,6 @@ public class MyClassLoader extends ClassLoader {
         Class log = null;
         // 获取该class文件字节码数组
         byte[] classData = getData();
-
         if (classData != null) {
             // 将class的字节码数组转换成Class类的实例
             log = defineClass(name, classData, 0, classData.length);

@@ -7,7 +7,8 @@ package com.java.note.kafka;
  */
 public class KafkaConstants {
 
-    public static final String BROKER_LIST = "47.95.5.81:9092";
+    //    public static final String BROKER_LIST = "47.95.5.81:9092";
+    public static final String BROKER_LIST = "localhost:9092";
 
     public static final String CLIENT_ID = "client1";
 

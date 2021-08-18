@@ -23,19 +23,27 @@ public class ConsumerCreator {
         return new KafkaConsumer<>(properties);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         String TOPIC = "test-topic";
         Consumer<String, String> consumer = ConsumerCreator.createConsumer();
-        // 循环消费消息
-        while (true) {
-            //subscribe topic and consume message
-            consumer.subscribe(Collections.singletonList(TOPIC));
-
-            ConsumerRecords<String, String> consumerRecords =
-                    consumer.poll(Duration.ofMillis(1000));
-            for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
-                System.out.println("Consumer consume message:" + consumerRecord.value());
+        try {
+            // 循环消费消息
+            while (true) {
+                //subscribe topic and consume message
+                consumer.subscribe(Collections.singletonList(TOPIC));
+                Thread.sleep(2000);
+                ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(1000));
+                for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
+                    System.out.println("Consumer consume message:" + consumerRecord.value());
+                    //异步提交位移量
+                    consumer.commitAsync();
+                }
             }
+        } catch (Exception e) {
+            // 最后一次提交使用同步阻塞式提交
+            consumer.commitSync();
+        } finally {
+            consumer.close();
         }
     }
 }
