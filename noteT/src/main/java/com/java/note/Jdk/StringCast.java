@@ -81,6 +81,8 @@ public class StringCast {
         }
         System.out.println("========================");
         bVoid(22);
+        System.out.println("========================");
+        booleanNull();
     }
 
     public static void print(String a) {
@@ -106,5 +108,14 @@ public class StringCast {
             e.printStackTrace();
         }
         System.out.println("b3 : " + b);
+    }
+
+
+    public static void booleanNull() {
+        boolean flag = true;
+        boolean simple = false;
+        Boolean nullboolean = null;
+        boolean ss = flag ? nullboolean : simple;
+        System.out.println(ss);
     }
 }
