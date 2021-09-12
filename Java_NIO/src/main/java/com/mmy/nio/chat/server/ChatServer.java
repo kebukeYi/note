@@ -23,7 +23,7 @@ public class ChatServer {
         serverSocketChannel.configureBlocking(false);
         serverSocketChannel.bind(new InetSocketAddress(8888), 1024);
         //优化 这里只有一个 selector 边处理连接事件 还有 读事件
-        //是不是可以使用两个 selector 一个处理连接 一个处理 读写事件
+        //是不是可以使用两个 selector 一个处理连接事件 一个处理 读写事件
         final Selector selector = Selector.open();
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
         while (true) {
