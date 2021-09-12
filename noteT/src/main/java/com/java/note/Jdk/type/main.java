@@ -36,7 +36,9 @@ public class main {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+        new ArrayList<String>().getClass();
+        new ArrayList<Integer>().getClass();
         List<Man> manArrayList = new ArrayList<>();
         List<Woman> womanList = new ArrayList<>();
         List<People> peopleList = new ArrayList<>();
@@ -47,6 +49,8 @@ public class main {
         //getCountPeople2(womanArrayList);
 
         test(peopleList, womanList);
+
+        final String t = new SimpleConvter().createT(String.class);
 
     }
 }

@@ -3,6 +3,7 @@ package com.java.note.Jdk.proxy.java;
 import com.java.note.redis.bean.User;
 
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 
 /**
  * @Author : mmy
@@ -11,11 +12,19 @@ import java.lang.reflect.Proxy;
  */
 public class JdkClient {
 
+
     public static void main(String[] args) {
-        User user = new User("111", "2");
+
+        assert new ArrayList<String>().getClass() == new ArrayList<Integer>().getClass();
+        User user = new User("111", "2222");
         UserProxyServiceImpl us = new UserProxyServiceImpl();
         UserProxyServiceInterceptor usi = new UserProxyServiceInterceptor(us);
-        UserProxyService userProxyService = (UserProxyService) Proxy.newProxyInstance(us.getClass().getClassLoader(), us.getClass().getInterfaces(), usi);
+
+        final ClassLoader classLoader = us.getClass().getClassLoader();
+        System.out.println(classLoader);
+        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        System.out.println(contextClassLoader);
+        UserProxyService userProxyService = (UserProxyService) Proxy.newProxyInstance(contextClassLoader, us.getClass().getInterfaces(), usi);
         userProxyService.add(user);
         System.out.println("-----------------------------------------------");
         System.out.println(us.hashCode());

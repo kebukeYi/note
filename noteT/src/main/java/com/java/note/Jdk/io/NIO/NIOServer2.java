@@ -32,7 +32,9 @@ public class NIOServer2 {
                 socketChannel.register(serverSelector, SelectionKey.OP_ACCEPT);
                 while (true) {
                     // 监测是否有新的连接，这里的1指的是阻塞的时间为 1ms
-                    if (serverSelector.select(20) > 0) {
+                    System.out.println("等待连接中.....");
+                    final int select = serverSelector.select(20);
+                    if (select > 0) {
                         System.out.println("存在  serverSelector select 事件");
                         Set<SelectionKey> selectionKeys = serverSelector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectionKeys.iterator();
@@ -45,7 +47,7 @@ public class NIOServer2 {
                                     //完成了 TCP 三次握手 建立了物理链路
                                     SocketChannel clientChannel = ((ServerSocketChannel) key.channel()).accept();
                                     clientChannel.configureBlocking(false);
-                                    //
+                                    //将channel再次注册到clientSelector选择器上，监听可读状态
                                     clientChannel.register(clientSelector, SelectionKey.OP_READ);
                                 } catch (Exception e) {
                                 } finally {
@@ -63,8 +65,9 @@ public class NIOServer2 {
             try {
                 while (true) {
                     // 监测是否有新的连接，这里的1指的是阻塞的时间为 1ms
-                    if (clientSelector.select(20) > 0) {
-                        System.out.println("存在  clientSelector select 事件");
+                    System.out.println("等待连接中.....");
+                    final int select = clientSelector.select(20);
+                    if (select > 0) {
                         Set<SelectionKey> selectionKeys = clientSelector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectionKeys.iterator();
                         if (keyIterator.hasNext()) {

@@ -5,6 +5,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
  * @Author : mmy
@@ -21,6 +22,7 @@ public class UDPProverbServer {
             Bootstrap b = new Bootstrap();
             b.group(bossGroup)
                     .channel(NioDatagramChannel.class)
+//                    .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UDPProverbServerHandler());
 

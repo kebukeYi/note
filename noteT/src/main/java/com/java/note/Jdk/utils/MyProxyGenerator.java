@@ -92,6 +92,7 @@ public class MyProxyGenerator {
     public static byte[] generateProxyClass(final String var0, Class<?>[] var1, int var2) {
         MyProxyGenerator var3 = new MyProxyGenerator(var0, var1, var2);
         final byte[] var4 = var3.generateClassFile();
+        //配置参数。默认是false，不在本地生产文件。直接返回数据流即可。
         if (saveGeneratedFiles) {
             AccessController.doPrivileged(new PrivilegedAction<Void>() {
                 public Void run() {
@@ -114,7 +115,6 @@ public class MyProxyGenerator {
                 }
             });
         }
-
         return var4;
     }
 

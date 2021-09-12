@@ -418,7 +418,8 @@ public class Proxy implements java.io.Serializable {
         // If the proxy class defined by the given loader implementing
         // the given interfaces exists, this will simply return the cached copy;
         // otherwise, it will create the proxy class via the ProxyClassFactory
-        // 如果实现给定接口的给定加载器定义的代理类存在，则只返回缓存的副本;否则，它将通过ProxyClassFactory创建代理类
+        // 如果实现给定接口的给定加载器定义的代理类存在，则只返回缓存的副本
+        // 否则，它将通过 ProxyClassFactory 创建代理类
         return proxyClassCache.get(loader, interfaces);
     }
 
@@ -573,7 +574,7 @@ public class Proxy implements java.io.Serializable {
         private static final AtomicLong nextUniqueNumber = new AtomicLong();
 
 
-        //Proxy.newProxyInstance(operate.getClass().getClassLoader(), operate.getClass().getInterfaces(), handler);
+        // Proxy.newProxyInstance(operate.getClass().getClassLoader(), operate.getClass().getInterfaces(), handler);
         @Override
         public Class<?> apply(ClassLoader loader, Class<?>[] interfaces) {
             Map<Class<?>, Boolean> interfaceSet = new IdentityHashMap<>(interfaces.length);
@@ -742,7 +743,7 @@ public class Proxy implements java.io.Serializable {
                 checkNewProxyPermission(Reflection.getCallerClass(), proxy);
             }
 
-            //因为动态生成的代理类都继承了 Proxy，所以都有一个参数为 Proxy( InvocationHandler h ) 的构造器
+            // 因为动态生成的代理类都继承了 Proxy，所以都有一个参数为 Proxy( InvocationHandler h ) 的构造器
             // 通过这个构造器生成代理类的实例
             final Constructor<?> cons = proxy.getConstructor(constructorParams);
             final InvocationHandler ih = h;

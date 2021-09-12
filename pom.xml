@@ -9,6 +9,8 @@
         <module>guice</module>
         <module>EffectiveJava</module>
         <module>GeeK_GOF</module>
+        <module>quartz</module>
+        <module>Java_NIO</module>
     </modules>
 
     <parent>

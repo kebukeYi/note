@@ -13,8 +13,8 @@ public class Demo01Logger {
         String msgA = "Hello ";
         String msgB = "World ";
         String msgC = "Java";
-        //无论级别 level 是否满足要求，作为 log 方法的第二个参数，三个字符串一定会首先被拼接并传入方法内，然后才会进行级别判断。
-        // 如果级别不符合要求，那么字符串的拼接操作就白做了，存在性能浪费。
+        //无论级别 level 是否满足要求，作为 log 方法的第二个参数，三个字符串一定会首先被拼接并传入方法内，然后才会进行级别判断
+        // 如果级别不符合要求，那么字符串的拼接操作就白做了，存在性能浪费
         log(1, msgA + msgB + msgC);
     }
 

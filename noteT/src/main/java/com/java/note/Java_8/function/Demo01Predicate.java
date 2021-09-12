@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 /**
  * @author : kebukeyi
  * @date :  2021-04-13 15:11
- * @description :
+ * @description : 传入动作
  **/
 public class Demo01Predicate {
 

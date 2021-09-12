@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 1994, 2017, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
 package java.util;
 
 import java.io.*;
@@ -456,7 +431,7 @@ public class Hashtable<K, V>
      *                              <code>null</code>
      * @see Object#equals(Object)
      * @see #get(Object)
-     *
+     * <p>
      * HashTable的键和值都不能为null，如果将HashTable的一个键值对的key设置为null，
      * 因为 null 值没法调用hashCode()方法获取哈希值，所以会抛出空指针异常。
      * 同样value为null时，在put方法中会进行判断，然后抛出空指针异常。

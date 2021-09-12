@@ -115,8 +115,7 @@ final class WeakCache<K, P, V> {
             }
         }
 
-        // create subKey and retrieve the possible Supplier<V> stored by that
-        // subKey from valuesMap
+        // create subKey and retrieve the possible Supplier<V> stored by that subKey from valuesMap
         Object subKey = Objects.requireNonNull(subKeyFactory.apply(key, parameter));
         Supplier<V> supplier = valuesMap.get(subKey);
         Factory factory = null;

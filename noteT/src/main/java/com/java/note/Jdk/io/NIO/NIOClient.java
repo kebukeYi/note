@@ -56,6 +56,7 @@ public class NIOClient {
         //轮询访问Selector
         while (true) {
             //选择一组可以进行I/O的操作的事件，放在selector中，客户端的该方法不会阻塞
+            System.out.println("等待连接中.....");
             selector.select();
             //获得selector中选中的项的迭代器
             Iterator<SelectionKey> ite = this.selector.selectedKeys().iterator();
@@ -74,7 +75,7 @@ public class NIOClient {
                     channel.configureBlocking(false);
                     //给服务端发送信息；
                     System.out.println("客户端已连接成功！");
-                     channel.write(ByteBuffer.wrap(new String("客户端已连接成功！" + channel.getLocalAddress()).getBytes("UTF-8")));
+                    channel.write(ByteBuffer.wrap(new String("客户端已连接成功！" + channel.getLocalAddress()).getBytes("UTF-8")));
                     //和服务器端连接成功后，为了可以接受到服务端的信息，需要给通道设置读的权限
                     channel.register(this.selector, SelectionKey.OP_READ);
                 } else if (key.isReadable()) {

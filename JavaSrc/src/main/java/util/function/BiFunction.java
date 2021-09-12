@@ -32,11 +32,11 @@ import java.util.Objects;
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
  * whose functional method is {@link #apply(Object, Object)}.
+ * 表示一个方法它接受两个 T, U 参数返回一个 R 结果
  *
  * @param <T> the type of the first argument to the function
  * @param <U> the type of the second argument to the function
  * @param <R> the type of the result of the function
- *
  * @see Function
  * @since 1.8
  */
@@ -58,8 +58,8 @@ public interface BiFunction<T, U, R> {
      * If evaluation of either function throws an exception, it is relayed to
      * the caller of the composed function.
      *
-     * @param <V> the type of output of the {@code after} function, and of the
-     *           composed function
+     * @param <V>   the type of output of the {@code after} function, and of the
+     *              composed function
      * @param after the function to apply after this function is applied
      * @return a composed function that first applies this function and then
      * applies the {@code after} function

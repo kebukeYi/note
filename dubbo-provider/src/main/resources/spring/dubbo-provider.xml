@@ -2,8 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.3.xsd   http://dubbo.apache.org/schema/dubbo        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
-
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
 
     <dubbo:application name="demo-provider" metadata-type="remote">
         <dubbo:parameter key="mapping-type" value="metadata"/>
@@ -24,6 +25,6 @@
     <bean id="demoService" class="com.dubbo.provider.lmpl.IUserServiceImpl"/>
 
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service registry="registry1" interface="com.dubbo.interfaces.DemoService" ref="demoService"/>
+    <dubbo:service registry="registry1" ref="demoService" interface="com.dubbo.interfaces.DemoService" />
 
 </beans>
