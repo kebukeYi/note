@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--sqlMapConfig.xml直接引入-->
+    <!-- 使用方法-->
+    <!-- public void save(Account account) {
+            try {
+                //加载配置文件
+                InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+                //构建会话工厂
+                SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+                //创建连接
+                SqlSession sqlSession = sqlSessionFactory.openSession();
+                //获取映射对象
+                AccountMapper mapper = sqlSession.getMapper(AccountMapper.class);
+                //执行方法
+                mapper.save(account);
+                //提交连接
+                sqlSession.commit();
+                //关闭连接
+                sqlSession.close();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+    -->
+
+    <!--加载properties文件-->
+    <properties resource="jdbc.properties"/>
+
+    <typeAliases>
+        <!--<typeAlias type="com.neu.domain.Account" alias="account"/>-->
+        <package name="com.neu.domain"/>
+    </typeAliases>
+
+    <!--环境-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--加载映射-->
+    <mappers>
+        <mapper resource="AccountMapper.xml"/>
+    </mappers>
+</configuration>

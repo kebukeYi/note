@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <!--<typeAlias type="com.neu.domain.Account" alias="account"/>-->
+        <package name="com.mmy.mvc.bean"/>
+    </typeAliases>
+
+    <!--加载映射-->
+    <mappers>
+        <mapper resource="AccountMapper.xml"/>
+    </mappers>
+
+</configuration>

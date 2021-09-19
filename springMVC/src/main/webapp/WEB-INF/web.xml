@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!--此时的 项目中的 web.xml 是继承 tomcat 中的大 web.xml -->
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
+    <!--springMvc监听器-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--springMvc的前端控制器-->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <!-- 使用自定义的 mvc 配置文件-->
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <!-- 执行拦截范围-->
+        <!-- <url-pattern>*.form</url-pattern>-->
+        <!-- 大有来头-->
+        <!-- /  拦截所有请求 ,不拦截 jsp页面  *.jsp 请求-->
+        <!-- /*  拦截所有请求, 拦截 jsp页面  *.jsp 请求 -->
+        <!--   处理 *.jsp 是tomcat的事情  所有项目的web.xml 都是继承于 tomcat 的 web.xml 的 -->
+        <!-- 1. 在 tomcat 的 web.xml 中存在 DefaultServlet  url-pattern= / -->
+        <!-- 而 DefaultServlet 是 tomcat 中处理静态资源的 servlet ; 比如 index.html  就是 tomcat 在服务器下找到这个资源并返回      -->
+        <!-- 2. 在本项目  的 web.xml 中存在 DispatcherServlet  url-pattern= / -->
+        <!-- 此时的 DispatcherServlet 的 / 禁用了 tomcat 中的 / , 那么静态资源就会来到  DispatcherServlet
+         中 寻找相应的 @RequestMapping() 是 对应的请求参数-->
+        <!-- 并且 tomcat 中存在jsp servlet 本项目中又没有进行相应的jsp 拦截 因此jsp页面就可以访问了-->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--乱码过滤器-->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>

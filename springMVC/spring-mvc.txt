@@ -1,0 +1,7 @@
+
+
+https://www.jb51.net/article/220418.htm
+
+1.新建spring-mvc项目
+2.配置文件是真的多
+3.没有了springboot的省去xml配置,但是springmvc自己单独的配置会不会很简洁
