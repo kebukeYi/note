@@ -694,26 +694,30 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
     }
 
     private boolean batchRemove(Collection<?> c, boolean complement) {
+        //c [1,2,4]
+        //elementData [1,3,4,5,6]
+        //result [2,3,5,6]
         final Object[] elementData = this.elementData;
         int r = 0, w = 0;
         boolean modified = false;
         try {
-            for (; r < size; r++)
-                if (c.contains(elementData[r]) == complement)
+            for (; r < size; r++) {
+                if (c.contains(elementData[r])) {
                     elementData[w++] = elementData[r];
+                }
+            }
         } finally {
-            // Preserve behavioral compatibility with AbstractCollection,
-            // even if c.contains() throws.
+            // Preserve behavioral compatibility with AbstractCollection,even if c.contains() throws.
+            //
             if (r != size) {
-                System.arraycopy(elementData, r,
-                        elementData, w,
-                        size - r);
+                System.arraycopy(elementData, r, elementData, w, size - r);
                 w += size - r;
             }
             if (w != size) {
                 // clear to let GC do its work
-                for (int i = w; i < size; i++)
+                for (int i = w; i < size; i++) {
                     elementData[i] = null;
+                }
                 modCount += size - w;
                 size = w;
                 modified = true;
@@ -822,6 +826,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
 
     /**
      * An optimized version of AbstractList.Itr
+     * 仅仅是下标作用
      */
     private class Itr implements Iterator<E> {
         //当前迭代器指向的索引

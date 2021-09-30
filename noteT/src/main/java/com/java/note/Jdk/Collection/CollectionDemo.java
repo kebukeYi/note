@@ -40,7 +40,9 @@ public class CollectionDemo {
         ConcurrentLinkedQueue concurrentLinkedQueue = new ConcurrentLinkedQueue();
 
 
-        setNoSafe();
+        // setNoSafe();
+
+        removeBatchArrayList();
     }
 
 
@@ -78,6 +80,29 @@ public class CollectionDemo {
                 System.out.println(arrayList);
             }, i + "").start();
         }
+    }
+
+
+    public static void removeBatchArrayList() {
+        final ArrayList<Integer> integers = new ArrayList<>();
+        integers.add(1);
+        integers.add(2);
+        integers.add(4);
+        final ArrayList<Object> objects = new ArrayList<>();
+        objects.add(1);
+        objects.add(3);
+        objects.add(4);
+        objects.add(5);
+        objects.add(2);
+
+        final boolean removeAll = objects.removeAll(integers);
+        System.out.println(objects);
+
+        test(String.class);
+    }
+
+    public static void likedList() {
+        final LinkedList<Object> linkedList = new LinkedList<>();
     }
 
 
@@ -124,5 +149,11 @@ public class CollectionDemo {
             }
             System.out.println("2-当前HashMap是" + HashMap + " 当前entry是" + entry);
         }
+    }
+
+
+    public static <T> T test(T tClass) {
+
+        return tClass;
     }
 }

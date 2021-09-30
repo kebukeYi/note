@@ -1,5 +1,8 @@
 package com.java.note.Jdk.io.NIO;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -20,7 +23,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author
  */
+
 public class NIOClient {
+
 
     //通道管理器
     private Selector selector;
