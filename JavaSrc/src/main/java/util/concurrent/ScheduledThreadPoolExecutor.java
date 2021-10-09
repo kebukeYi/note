@@ -151,11 +151,13 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
 
     /**
      * False if should cancel/suppress periodic tasks on shutdown.
+     * 在关闭时  是否执行 周期性任务
      */
     private volatile boolean continueExistingPeriodicTasksAfterShutdown;
 
     /**
      * False if should cancel non-periodic tasks on shutdown.
+     * 在关闭时  是否执行 非周期性任务
      */
     private volatile boolean executeExistingDelayedTasksAfterShutdown = true;
 
@@ -364,8 +366,11 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
     @Override
     void onShutdown() {
         BlockingQueue<Runnable> q = super.getQueue();
+        //是否执行 非周期性任务
         boolean keepDelayed = getExecuteExistingDelayedTasksAfterShutdownPolicy();
+        //是否继续 周期性任务
         boolean keepPeriodic = getContinueExistingPeriodicTasksAfterShutdownPolicy();
+        //都不允许的
         if (!keepDelayed && !keepPeriodic) {
             for (Object e : q.toArray())
                 if (e instanceof RunnableScheduledFuture<?>)
@@ -375,10 +380,14 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
             // Traverse snapshot to avoid iterator exceptions
             for (Object e : q.toArray()) {
                 if (e instanceof RunnableScheduledFuture) {
-                    RunnableScheduledFuture<?> t =
-                            (RunnableScheduledFuture<?>) e;
+                    RunnableScheduledFuture<?> t = (RunnableScheduledFuture<?>) e;
+                    //如果是 周期性任务 并且是不再执行周期任务  执行删除逻辑
+                    //如果是 周期性任务 并且是继续执行周期任务 就再判断是否是取消状态 是的话 也删除 不是的话 就啥也不干
+                    //如果是 非周期性任务 并且是不再执行非周期任务  执行删除逻辑
+                    //如果是 非周期性任务 并且是继续执行周期任务 就再判断是否是取消状态 是的话 也删除 不是的话 就啥也不干
                     if ((t.isPeriodic() ? !keepPeriodic : !keepDelayed) ||
                             t.isCancelled()) { // also remove if already cancelled
+                        //尝试执行删除
                         if (q.remove(t))
                             t.cancel(false);
                     }

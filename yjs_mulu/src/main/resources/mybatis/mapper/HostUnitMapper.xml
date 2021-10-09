@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yjs.mapper.HostUnitMapper">
+    <!--存在唯一键冲突时，避免策略-->
+    <!--https://www.cnblogs.com/hongdada/p/9970176.html-->
+    <insert id="insertBatchHostUnitBase" parameterType="com.yjs.bean.HostUnit">
+        INSERT INTO master_degree.host_unit
+        (unit_id, unit_code, unit_name, unit_address, graduate_school,self_marking, doctoral_degree, state)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.unit_id},#{item.unit_code},#{item.unit_name},#{item.unit_address},
+            #{item.graduate_school},#{item.self_marking},#{item.doctoral_degree},#{item.state})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        unit_code = values(unit_code)
+    </insert>
+
+</mapper>

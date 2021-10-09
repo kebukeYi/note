@@ -12,6 +12,7 @@
         <module>quartz</module>
         <module>Java_NIO</module>
         <module>springMVC</module>
+        <module>yjs_mulu</module>
     </modules>
 
     <parent>

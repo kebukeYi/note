@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yjs.mapper.BaseMapper">
+
+
+    <insert id="insertBatchSSSBase" parameterType="com.yjs.bean.Base">
+        insert into master_degree.city (mc, dm)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.mc},#{item.dm})
+        </foreach>
+    </insert>
+
+
+    <insert id="insertBatchMISBase" parameterType="com.yjs.bean.Base">
+        insert into master_degree.mis ( mc, dm)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.mc},#{item.dm})
+        </foreach>
+    </insert>
+
+
+    <insert id="insertBatchZYSBase" parameterType="com.yjs.bean.Base">
+        insert into master_degree.zys ( mc, dm)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.mc},#{item.dm})
+        </foreach>
+    </insert>
+
+
+    <insert id="insertBatchZYSSBase" parameterType="com.yjs.bean.Base">
+        insert into master_degree.zyss ( mc, dm)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.mc},#{item.dm})
+        </foreach>
+    </insert>
+
+
+</mapper>

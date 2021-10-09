@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yjs.mapper.UnitCollegeMapper">
+
+    <insert id="insertBatchUnitCollegeBase" parameterType="com.yjs.bean.UnitCollege">
+        INSERT INTO master_degree.unit_college
+        (college_type, unit_id, college_id, college_code, college_name, major_name,
+        major_code, research_direction, learning_style, tutor, proposed_enrollment, test_range_id,
+        comment, state,mllb,xklb)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.college_type},#{item.unit_id},#{item.college_id},#{item.college_code},
+            #{item.college_name},#{item.major_name},#{item.major_code},#{item.research_direction},
+            #{item.learning_style},#{item.tutor},#{item.proposed_enrollment},#{item.test_range_id},
+            #{item.comment},#{item.state},#{item.mllb},#{item.xklb})
+        </foreach>
+    </insert>
+
+</mapper>

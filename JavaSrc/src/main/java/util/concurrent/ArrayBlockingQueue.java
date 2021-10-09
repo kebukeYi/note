@@ -378,8 +378,9 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E> implements BlockingQ
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
         try {
-            while (count == items.length)
+            while (count == items.length) {
                 notFull.await();
+            }
             enqueue(e);
         } finally {
             lock.unlock();

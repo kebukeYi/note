@@ -392,7 +392,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
     private static final int CAPACITY = (1 << COUNT_BITS) - 1;
 
     /**
-     * 线程的状态：
+     * 线程的状态： 5种 ; 线程有6种状态
      * RUNNING：线程池能够接受新任务，以及对新添加的任务进⾏处理。
      * SHUTDOWN：线程池不可以接受新任务，但是可以对已添加的任务进⾏处理。
      * STOP：线程池不接收新任务，不处理已添加的任务，并且会中断正在处理的任务。
@@ -403,15 +403,15 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * 以下状态依次递增
      */
     //111  0000000000000000
-    private static final int RUNNING = -1 << COUNT_BITS;
+    private static final int RUNNING = -1 << COUNT_BITS; //线程池创建之后的初始状态，这种状态下可以执行任务
     //000  0000000000000000
-    private static final int SHUTDOWN = 0 << COUNT_BITS;
+    private static final int SHUTDOWN = 0 << COUNT_BITS;//该状态下线程池不再接受新任务，但是会将工作队列中的任务执行完毕
     //001  0000000000000000
-    private static final int STOP = 1 << COUNT_BITS;
+    private static final int STOP = 1 << COUNT_BITS;//该状态下线程池不再接受新任务，也不会处理工作队列中的剩余任务，并且将会中断所有工作线程
     //010  0000000000000000
-    private static final int TIDYING = 2 << COUNT_BITS;
+    private static final int TIDYING = 2 << COUNT_BITS;//该状态下所有任务都已终止或者处理完成，将会执行 terminated( )钩子方法
     //011  0000000000000000
-    private static final int TERMINATED = 3 << COUNT_BITS;
+    private static final int TERMINATED = 3 << COUNT_BITS;//执行完terminated( )钩子方法之后的状态
 
     // Packing and unpacking ctl
     // 获取线程池的运行状态
@@ -849,7 +849,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                 //强制设置状态 为 TIDYING
                 if (ctl.compareAndSet(c, ctlOf(TIDYING, 0))) {
                     try {
-                        //调用钩子函数
+                        //调用线程终止钩子函数  一般留给子类实现
                         terminated();
                     } finally {
                         //设置线程池状态 为 TERMINATED
@@ -1784,7 +1784,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
             advanceRunState(SHUTDOWN);
             //中断空闲线程
             interruptIdleWorkers();
-            // 空方法，由子类具体去实现，例如ScheduledThreadPoolExecutor
+            // 空方法，由子类具体去实现，例如 ScheduledThreadPoolExecutor
             onShutdown(); // hook for ScheduledThreadPoolExecutor
         } finally {
             mainLock.unlock();
@@ -1863,6 +1863,8 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
         return runStateAtLeast(ctl.get(), TERMINATED);
     }
 
+    //调用了线程池 shutdown与 shutdownNow方法之后，用户程序都不会主动等待线程池关闭完
+    //成，如果需要等到线程池完成关闭，需要调用awaitTermination进行主动等待
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
         long nanos = unit.toNanos(timeout);
         final ReentrantLock mainLock = this.mainLock;

@@ -1,5 +1,7 @@
 package com.java.note.Jdk.thread.demo;
 
+import org.apache.logging.log4j.util.ProcessIdUtil;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -44,7 +46,27 @@ public class DemoTest {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        test01();
+        //test01();
+        testSleepThreadCPU();
+    }
+
+    //测试 sleep 占不占用 cpu
+    public static void testSleepThreadCPU() {
+        //获取进程id  其实  jps  也是可以的
+        final String processId = ProcessIdUtil.getProcessId();
+        System.out.println("进程id:" + processId);
+        try {
+            //main 线程 无限制等待
+            Thread.sleep(Integer.MAX_VALUE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //通过 jstack pid 获取对应的 main 线程状态
+        //"main" #1 prio=5 os_prio=0 tid=0x0000000002ede800 nid=0x55d4 waiting on condition [0x0000000002e0f000]
+        //   java.lang.Thread.State: TIMED_WAITING (sleeping)
+        //        at java.lang.Thread.sleep(Native Method)
+        //        at com.java.note.Jdk.thread.demo.DemoTest.testSleepThreadCPU(DemoTest.java:59)
+        //        at com.java.note.Jdk.thread.demo.DemoTest.main(DemoTest.java:50)
     }
 }
 

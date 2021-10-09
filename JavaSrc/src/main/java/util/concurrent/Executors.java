@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent;
 
 import java.util.*;
@@ -69,6 +34,7 @@ import sun.security.util.SecurityConstants;
  *
  * @author Doug Lea
  * @since 1.5
+ * 静态工厂类
  */
 public class Executors {
 
@@ -172,9 +138,7 @@ public class Executors {
      */
     public static ExecutorService newSingleThreadExecutor() {
         return new FinalizableDelegatedExecutorService
-                (new ThreadPoolExecutor(1, 1,
-                        0L, TimeUnit.MILLISECONDS,
-                        new LinkedBlockingQueue<Runnable>()));
+                (new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()));
     }
 
     /**
@@ -214,10 +178,11 @@ public class Executors {
      *
      * @return the newly created thread pool
      */
+    //创建一个不限制线程数量的线程池，任何提交的任务都将立即执
+    //行，但是空闲线程会得到及时回收
     public static ExecutorService newCachedThreadPool() {
         //CachedThreadPool，线程数大小无界的线程池。核心线程数等于0，最大线程数等于Integer.MAX_VALUE，这个值已经非常大了，因此称之为线程数大小无界的线程池
-        return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>());
+        return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
     }
 
     /**
@@ -233,7 +198,6 @@ public class Executors {
      *                              即它是无界的，这也就意味着如果主线程提交任务的速度高于 maximumPool 中线程处理任务的速度时，
      *                              CachedThreadPool 会不断创建新的线程。极端情况下，这样会导致耗尽 cpu 和内存资源
      *                              令keepAliveTime等于60，单位为秒，这说明空闲线程最多存活60秒
-     *
      */
     public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
         return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
