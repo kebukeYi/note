@@ -1,10 +1,3 @@
-/*
- * Copyright (c) 1997, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- */
-
 package java.lang;
 
 import java.lang.ref.*;
@@ -86,7 +79,8 @@ public class ThreadLocal<T> {
      * The difference between successively generated hash codes - turns
      * implicit sequential thread-local IDs into near-optimally spread
      * multiplicative hash values for power-of-two-sized tables.
-     * 每创建一个threadlocal d对象，这个threadloacal.next 就会增加多少  是斐波那契数 是一个黄金分割数 使得hash分布十分均匀；
+     * 每创建一个 threadlocal 对象，这个 threadloacal.next 就会增加多少
+     * 是斐波那契数 是一个黄金分割数 使得hash分布十分均匀
      */
     private static final int HASH_INCREMENT = 0x61c88647;
 
@@ -159,7 +153,6 @@ public class ThreadLocal<T> {
         if (map != null) {
             ThreadLocalMap.Entry e = map.getEntry(this);
             if (e != null) {
-                @SuppressWarnings("unchecked")
                 T result = (T) e.value;
                 return result;
             }
@@ -199,6 +192,8 @@ public class ThreadLocal<T> {
         ThreadLocalMap map = getMap(t);
         if (map != null) {
             map.set(this, value);
+            //直接报错了都
+            //map.set(t, value);
         } else {
             createMap(t, value);
         }
@@ -310,10 +305,12 @@ public class ThreadLocal<T> {
         static class Entry extends WeakReference<ThreadLocal<?>> {
             /**
              * The value associated with this ThreadLocal.
+             * 值
              */
             Object value;
 
             Entry(ThreadLocal<?> k, Object v) {
+                //使用 WeakReference 对 Key 值进行包装
                 super(k);
                 value = v;
             }
@@ -329,6 +326,8 @@ public class ThreadLocal<T> {
          * The table, resized as necessary.
          * table.length MUST always be a power of two.
          * 散列表引用 数组的长度
+         * ThreadLocalMap 中 Entry[] table 的大小必须是2的N次方呀(len = 2^N)，那 len-1 的二进制表示就是低位连续的N个1，
+         * 那 key.threadLocalHashCode & (len-1) 的值就是 threadLocalHashCode 的低N位
          */
         private Entry[] table;
 
@@ -380,6 +379,8 @@ public class ThreadLocal<T> {
         ThreadLocalMap(ThreadLocal<?> firstKey, Object firstValue) {
             table = new Entry[INITIAL_CAPACITY];
             // 2的幂次方-1  方便各个位参与运算  均匀分布
+            //散列算法：斐波那契（Fibonacci）散列法
+            //寻址方式：Fibonacci 散列法可以让数据更加分散，在发生数据碰撞时进行开放寻址，从碰撞节点向后寻找位置进行存放元素
             int i = firstKey.threadLocalHashCode & (INITIAL_CAPACITY - 1);
             table[i] = new Entry(firstKey, firstValue);
             size = 1;
@@ -401,14 +402,14 @@ public class ThreadLocal<T> {
             for (int j = 0; j < len; j++) {
                 Entry e = parentTable[j];
                 if (e != null) {
-                    @SuppressWarnings("unchecked")
                     ThreadLocal<Object> key = (ThreadLocal<Object>) e.get();
                     if (key != null) {
                         Object value = key.childValue(e.value);
                         Entry c = new Entry(key, value);
                         int h = key.threadLocalHashCode & (len - 1);
-                        while (table[h] != null)
+                        while (table[h] != null) {
                             h = nextIndex(h, len);
+                        }
                         table[h] = c;
                         size++;
                     }
@@ -490,26 +491,33 @@ public class ThreadLocal<T> {
 
             Entry[] tab = table;
             int len = tab.length;
+            //斐波那锲数列
+            //根据 key 的 HashCode，找到 key 在数组上的槽点 i
             int i = key.threadLocalHashCode & (len - 1);
-            //以当前 key 对应的 slot 位置 开始向后查询，找到可以使用的 slot
+            // 从槽点 i 开始向后循环搜索，找空余槽点（空余位置）或者找现有槽点
+            //如果没有现有槽点，则必定有空余槽点，因为没有空间时会扩容
             for (Entry e = tab[i];
                  e != null;
                  e = tab[i = nextIndex(i, len)]) {
                 //获取当前元素 key
                 ThreadLocal<?> k = e.get();
                 //说明是替换操作
+                //找到现有槽点：Key 值为 ThreadLocal 实例
                 if (k == key) {
                     e.value = value;
                     return;
                 }
                 //如果是空 说明 key为 null 是过期数据， 走替换逻辑
+                //找到异常槽点：槽点被 GC 掉，重设 Key 值和 Value 值
                 if (k == null) {
                     replaceStaleEntry(key, value, i);
                     return;
                 }
             }
             // 执行到这里 for 循环遇到了slot 为空的情况，说明是真正的新数据 不用替换
+            //没有找到现有的槽点，增加新的 Entry
             tab[i] = new Entry(key, value);
+            //设置 ThreadLocal 数量
             int sz = ++size;
             //做一次启发式清理 ：
             //条件一：!cleanSomeSlots(i, sz)  成立 说明 启发式清理工作 未清理到任何数据

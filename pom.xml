@@ -13,6 +13,7 @@
         <module>Java_NIO</module>
         <module>springMVC</module>
         <module>yjs_mulu</module>
+        <module>Handwritten_interview</module>
     </modules>
 
     <parent>

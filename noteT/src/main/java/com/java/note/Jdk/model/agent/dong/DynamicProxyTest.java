@@ -25,7 +25,7 @@ public class DynamicProxyTest {
         //2.新建好自己的 加强类（传入原生的实现类 是为了调用原生实现类方法）
         InvocationHandlerImpl handler = new InvocationHandlerImpl(operate);
         //无传入方法
-        InvocationHandlerImpl handler1 = new InvocationHandlerImpl();
+//        InvocationHandlerImpl handler1 = new InvocationHandlerImpl();
         //生成代理对象 　
         // 一个ClassLoader对象，定义了由哪个ClassLoader对象来对生成的代理对象进行加载
         // 一个Interface对象的数组，表示的是我将要给我需要代理的对象提供一组什么接口，如果我提供了一组接口给它，那么这个代理对象就宣称实现了该接口(多态)，这样我就能调用这组接口中的方法了
@@ -43,7 +43,7 @@ public class DynamicProxyTest {
         Path path4 = new File("F:\\" + proxyName + "$myproxy1.class").toPath();
         Files.write(path4, bytes4);
 
-        operate.doSomething("【operate】 deal with ");
+//        operate.doSomething("【operate】 deal with ");
         //增强完成
         //调用操作方法
         String deal_with = operationProxy.doSomething("【operationProxy】 deal with");

@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent.atomic;
 
 import java.util.function.IntUnaryOperator;
@@ -59,7 +24,7 @@ public class AtomicInteger extends Number implements java.io.Serializable {
 
     // setup to use Unsafe.compareAndSwapInt for updates
     // CAS 是一条 CPU 并发原语
-    //Unsafe 类 操作本地内存中的数据 类似于C指针一样操作主内存中的数据；
+    //Unsafe 类 操作本地内存中的数据 类似于C指针一样操作主内存中的数据
     private static final Unsafe unsafe = Unsafe.getUnsafe();
     private static final long valueOffset;
 
@@ -269,8 +234,7 @@ public class AtomicInteger extends Number implements java.io.Serializable {
      * @return the previous value
      * @since 1.8
      */
-    public final int getAndAccumulate(int x,
-                                      IntBinaryOperator accumulatorFunction) {
+    public final int getAndAccumulate(int x, IntBinaryOperator accumulatorFunction) {
         int prev, next;
         do {
             prev = get();
@@ -293,8 +257,7 @@ public class AtomicInteger extends Number implements java.io.Serializable {
      * @return the updated value
      * @since 1.8
      */
-    public final int accumulateAndGet(int x,
-                                      IntBinaryOperator accumulatorFunction) {
+    public final int accumulateAndGet(int x, IntBinaryOperator accumulatorFunction) {
         int prev, next;
         do {
             prev = get();

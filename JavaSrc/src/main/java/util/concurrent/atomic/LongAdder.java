@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent.atomic;
 
 import java.io.Serializable;
@@ -67,8 +32,8 @@ import java.io.Serializable;
  *
  * @author Doug Lea
  * @since 1.8
- * LongAdder 在高并发场景下会比 AtomicInteger 和 AtomicLong 的性能更好，代价就是会消耗更多的内存空间。
- * 将热点数据value被分离成多个单元的cell，每个cell独自维护内部的值，当前对象的实际值由cell[]数组中所有的cell累计合成。
+ * LongAdder 在高并发场景下会比 AtomicInteger 和 AtomicLong 的性能更好，代价就是会消耗更多的内存空间
+ * 将热点数据value被分离成多个单元的cell，每个cell独自维护内部的值，当前对象的实际值由cell[]数组中所有的cell累计合成
  * 这样，热点就进行了有效的分离，提高了并行度，所以LongAdder虽然降低了并发竞争，但是却对实时更新的数据不友好
  */
 public class LongAdder extends Striped64 implements Serializable {
@@ -96,11 +61,11 @@ public class LongAdder extends Striped64 implements Serializable {
         //a 表示当前线程命中的单元格
         Cell a;
         //条件一： as = cells 表示 当前线程一已经将数据写入到对应的 cells 中 ；否则表示 cells 未被初始化 ，当前所有线程应该将数据写到 base 中；
-        //条件二：true 表示当前线程替换数据成功；false 否则竞争发生失败 需要扩容 或者 重试；
+        //条件二：true 表示当前线程替换数据成功；false 否则竞争发生失败 需要扩容 或者 重试
         if ((as = cells) != null || !casBase(b = base, b + x)) {
             //什么时候会进来？
-            //1. 表示 当前线程一已经将数据写入到对应的 cells 中 ；
-            //2. false 否则竞争发生失败 需要扩容 或者 重试；
+            //1. 表示 当前线程一已经将数据写入到对应的 cells 中
+            //2. false 否则竞争发生失败 需要扩容 或者 重试
 
             //true 未发生竞争    false 发生了竞争
             boolean uncontended = true;
@@ -137,11 +102,11 @@ public class LongAdder extends Striped64 implements Serializable {
     }
 
     /**
-     * Returns the current sum.  The returned value is <em>NOT</em> an
-     * atomic snapshot; invocation in the absence of concurrent
+     * Returns the current sum.  The returned value is <em>NOT</em> an atomic snapshot;
+     * invocation in the absence of concurrent
      * updates returns an accurate result, but concurrent updates that
      * occur while the sum is being calculated might not be
-     * incorporated.
+     * incorporated.  不是准确的
      *
      * @return the sum
      */
@@ -151,8 +116,9 @@ public class LongAdder extends Striped64 implements Serializable {
         long sum = base;
         if (as != null) {
             for (int i = 0; i < as.length; ++i) {
-                if ((a = as[i]) != null)
+                if ((a = as[i]) != null) {
                     sum += a.value;
+                }
             }
         }
         return sum;
@@ -296,8 +262,7 @@ public class LongAdder extends Striped64 implements Serializable {
      * @param s the stream
      * @throws java.io.InvalidObjectException always
      */
-    private void readObject(java.io.ObjectInputStream s)
-            throws java.io.InvalidObjectException {
+    private void readObject(java.io.ObjectInputStream s) throws java.io.InvalidObjectException {
         throw new java.io.InvalidObjectException("Proxy required");
     }
 
