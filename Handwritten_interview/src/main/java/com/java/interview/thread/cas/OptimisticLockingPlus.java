@@ -1,7 +1,5 @@
 package com.java.interview.thread.cas;
 
-import sun.misc.Unsafe;
-
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -17,7 +15,7 @@ public class OptimisticLockingPlus {
     //成员属性：包装的值
     volatile private int value;
     //静态常量：JDK 不安全类的实例
-//    private static final Unsafe unsafe = JvmUtil.getUnsafe();
+    // private static final Unsafe unsafe = JvmUtil.getUnsafe();
     //静态常量：value 成员的相对偏移（相对于对象头）
     //private static final long valueOffset;
     //静态常量：CAS 的失败次数

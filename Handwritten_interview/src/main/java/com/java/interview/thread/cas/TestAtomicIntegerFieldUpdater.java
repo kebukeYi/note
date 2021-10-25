@@ -1,7 +1,5 @@
 package com.java.interview.thread.cas;
 
-import com.java.interview.thread.consumer_provider.Print;
-
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 /**

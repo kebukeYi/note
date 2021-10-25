@@ -76,8 +76,8 @@ public class LongAdder extends Striped64 implements Serializable {
             //                                                                       不成立：说明cell已经被初始化了，当前线程应该是 找自己的cell的值； 进入下一个判断条件
             //条件二：getProbe()  获取当前线程的hash值      成立：(cells已经开好了) 当前线程对应的下标元素为 null，需要创建； 直接接入if代码块
             //                                                                      不成立：当前线程对应的下标元素不为 null，说明下一步需要将 x  追加到 此cell 中； 进入下一个判断条件
-            //条件三：a.cas(v = a.value, v + x)  ：                 成立：说明赋值完成；取反 false 直接 退出代码块，完事儿了；
-            //                                                                      不成立： 说明当前线程对应得 cell 存在竞争，进入if代码块
+            //条件三：a.cas(v = a.value, v + x)  ：                 成立：说明cas赋值完成；取反 false 直接 退出代码块，完事儿了；
+            //                                                                      不成立： 说明当前线程对应得 cell 存在竞争，一般uncontended都是false；进入if代码块
             if (as == null || (m = as.length - 1) < 0 ||
                     (a = as[getProbe() & m]) == null ||
                     !(uncontended = a.cas(v = a.value, v + x))) {

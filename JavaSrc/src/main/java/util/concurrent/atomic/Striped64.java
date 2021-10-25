@@ -217,7 +217,7 @@ abstract class Striped64 extends Number {
      * 重置当前线程的hash值
      */
     static final int advanceProbe(int probe) {
-        probe ^= probe << 13;   // xorshift
+        probe ^= probe << 13;
         probe ^= probe >>> 17;
         probe ^= probe << 5;
         UNSAFE.putInt(Thread.currentThread(), PROBE, probe);
@@ -232,30 +232,30 @@ abstract class Striped64 extends Number {
      * reads.
      *
      * @param x              the value
-     * @param fn             the update function, or null for add (this convention
-     *                       avoids the need for an extra field or function in LongAdder).
+     * @param fn             the update function, or null for add (this convention avoids the need for an extra field or function in LongAdder).
      * @param wasUncontended false if CAS failed before call
-     *                       最核心的方法
-     *                       //1. true 说明 cell 未被初始化 也就是多线程写 base 出现竞争了 需要重试初始化 cells；
-     *                       //2. true 的话，当前线程对应的下标元素为 null，需要创建；
-     *                       //3. false 的话 说明当前线程对应得 cell 存在竞争，需要重试；
-     *                       wasUncontended ：只有cell初始化后  并且 当前线程 是 竞争修改失败 才会false
      */
+    //进来这里的情况？
+    //1. 条件一  成立 说明 cell 未被初始化 也就是多线程写 base 出现竞争了 需要重试初始化 cells
+    //2. 条件二  成立 说明 cell 已被初始化 当前线程对应的 cell 为 null，需要创建
+    //3. 条件三  成立 说明 cell 已被初始化 当前线程对应的 cell 存在竞争，需要重试|扩容
     final void longAccumulate(long x, LongBinaryOperator fn, boolean wasUncontended) {
         //表示hash值
         int h;
-        //条件成立：说明还未分配 hash 值 需要重新分配hash值; 这个if相当于给线程生成一个非0的hash值
+        //条件成立：说明还未分配 hash 值 需要重新分配hash值
+        // 这个if相当于给线程生成一个非0的hash值
         if ((h = getProbe()) == 0) {
             //给当前线程分配 hash 值
             ThreadLocalRandom.current(); // force initialization
             h = getProbe();
             //为什么？
-            //默认 hash为 0 的线程肯定是写入到了 0 这个 槽位，不把它当作是真正的竞争；
+            //默认 hash为 0 的线程肯定是写入到了 0 这个 槽位，不把它当作是真正的竞争
+            //true 未发生竞争    false 发生了竞争
             wasUncontended = true;
         }
 
         //表示扩容 意向：false 一定不扩容  true 可能会扩容
-        boolean collide = false;                // True if last slot nonempty
+        boolean collide = false;
         // 自旋
         for (; ; ) {
             //表示 cells 引用
@@ -266,17 +266,22 @@ abstract class Striped64 extends Number {
             int n;
             //期望值
             long v;
-            //除非是还未被初始化 转 CASE2
-            //条件一：表示 cells 已经被初始化了 当前线程需要把数据写入到对应的 cell 中
-            if ((as = cells) != null && (n = as.length) > 0) {
 
-                // 成立的话：表示当前线程对应的 cells下标 cells 为空 需要创建 new cell 实例
+            //CASE1 除非是 还未被初始化 转 CASE2
+            //条件一：成立 : Cells 已经被初始化了 当前线程需要把数据写入到对应的 cell 中 ; 进入当前if分支
+            //             不成立 : 转363行代码 进行第二个判断 目的是为了初始化 cells
+            if ((as = cells) != null && (n = as.length) > 0) {
+                //进来的前提条件：
+                //2. 条件二  成立 说明 cell 已被初始化 当前线程对应的 cell 为 null，需要创建
+                //3. 条件三  成立 说明 cell 已被初始化 当前线程对应的 cell 存在竞争，需要重试|扩容
+
+                // 成立的话：表示当前线程对应的 cells 下标 cells 为空 需要创建 new Cell 实例
                 if ((a = as[(n - 1) & h]) == null) {
                     // 成立的话 表示当前是无锁状态 锁未占用
-                    if (cellsBusy == 0) {       // Try to attach new Cell
+                    if (cellsBusy == 0) {
                         //新的cell 元素
-                        Cell r = new Cell(x);   // Optimistically create
-                        //是无锁状态 或者 能获取到锁  或者 尝试加锁
+                        Cell r = new Cell(x);
+                        //是无锁状态 且 能获取到锁  且 尝试加锁（防止线程并发操作）
                         if (cellsBusy == 0 && casCellsBusy()) {
                             //是否创建 成功 标记
                             boolean created = false;
@@ -303,96 +308,119 @@ abstract class Striped64 extends Number {
                             if (created) {
                                 break;
                             }
-                            continue;           // Slot is now non-empty 不是自己进行第一次累积操作，重头再来
+                            //不是自己进行第一次累积操作，重头再来
+                            continue;           // Slot is now non-empty
                         }
                     }
                     //强制设置为不扩容
                     //执行这一句是因为cells被加锁了，不能往下继续执行第一次的赋值操作（第一次累积），所以还不能考虑扩容
                     collide = false;
                 }
-                // wasUncontended ：只有cell初始化后  并且 当前线程 是 竞争修改失败 才会false
-                else if (!wasUncontended) {      // CAS already known to fail 前面一次CAS更新a.value（进行一次累积）的尝试已经失败了，说明已经发生了线程竞争
-                    //情况失败标识，后面去重新算一遍线程的hash值
+
+                // 此时 线程对应的 cell 元素不为空 只是上一个add()函数调用cas 赋值时 失败 就进来了这个分支
+                // wasUncontended ：只有cells 初始化后  并且 当前线程 是 竞争修改失败 才会 false,也就是只会执行一次
+                else if (!wasUncontended) {      // CAS already known to fail add()函数执行CAS更新a.value（进行一次累积）的尝试已经失败了，说明已经发生了线程竞争
+                    //情况失败标识，然后跳出此 if 去执行最后代码块的 重新算一遍线程的hash值 然后重新 循环
                     wasUncontended = true;
                 }     // Continue after rehash
-                //这一步才是最常用到的操作，一般都是fn == null 直接更新v+x
-                //当前线程 rehash 过 新命中的cell不为空
+
+                //线程对应位置不为空 && 上一个if分支也执行过了 线程也重新执行rehash了  就来到了这里 再次尝试执行cas追加操作
+                //这一步才是最常用到的操作，一般都是 fn == null 直接更新 v+x
+                //当前线程 rehash 过 新命中的 cell 不为空
                 //如果写入成功 就退出自旋  ；
                 // 否则 表示 rehash  之后 命中的新cell 也存在竞争 重试1次
-                else if (a.cas(v = a.value, ((fn == null) ? v + x : fn.applyAsLong(v, x)))) {//尝试CAS更新a.value（进行一次累积） ------ 标记为分支A
+                else if (a.cas(v = a.value, ((fn == null) ? v + x : fn.applyAsLong(v, x)))) {
+                    //执行成功 完事了 要是没有成功就再继续rehash线程 继续循环
                     break;
                 }
-                //条件一：如果数组长度大于cpu数量 成立就表示扩容意向为 false
-                //条件二：如果 cells != as 当前有其他线程已经 扩容过了，当前线程 rehash 过重试即可
+
+                //线程对应位置不为空 && 上一个if分支也执行过了 线程也重新执行rehash了 && 相应的新位置 cell 执行cas追加操作失败
+                //条件一：如果数组长度大于cpu数量 成立就表示扩容意向为 false；如果没有大于 就走下一个判断条件
+                //条件二：如果 cells != as 表示当前有其他线程已经 扩容过了，当前线程 rehash 过重试即可
                 else if (n >= NCPU || cells != as) {
                     //表示不扩容了
                     collide = false; //长度n是递增的，执行到了这个分支，说明n >= NCPU会永远为true，下面两个else if就永远不会被执行了，也就永远不会再进行扩容
                 }    // At max size or stale
+
                 //collide 取反成立后 设置扩容意向  并不一定 真的 发生扩容
                 else if (!collide) {
                     //把扩容意向设置为true，只有这里才会给collide赋值为true，也只有执行了这一句，才可能执行后面一个else if进行扩容
                     collide = true;
                 }
 
+                //线程对应位置不为空 && 上一个if分支也执行过了 线程也重新执行rehash了 && 相应的新位置 cell 执行cas追加操作失败 && 执行扩容
+
                 //真正扩容的代码
                 //条件一：cellsBusy == 0 表示无锁状态，当前线程可以去竞争这把锁
+                //                    成立：走下一个判断条件
+                //                 不成立： 直接 走到代码最后 再次给当前线程重新 rehash 机会
                 //条件二：casCellsBusy()   并且 通过原子方式 获取锁
+                //                    成立：走进代码内部
+                //                 不成立：不会走到这一步
                 else if (cellsBusy == 0 && casCellsBusy()) {
                     try {
                         //检查下是否被别的线程扩容了（CAS更新锁标识，处理不了ABA问题，这里再检查一遍）
-                        if (cells == as) {      // Expand table unless stale
+                        if (cells == as) {
                             //执行2倍扩容
                             Cell[] rs = new Cell[n << 1];
                             for (int i = 0; i < n; ++i) {
                                 rs[i] = as[i];
                             }
+                            //扩容完毕 内存可见性也设置了
                             cells = rs;
                         }
                     } finally {
                         //释放锁
                         cellsBusy = 0;
                     }
-                    //扩容意向
+                    //回归扩容意向
                     collide = false;
                     continue;                   // Retry with expanded table 扩容后重头再来
                 }
+
                 //重新给线程生成一个hash值，降低hash冲突，减少映射到同一个Cell导致CAS竞争的情况
                 h = advanceProbe(h);
             }
 
-            // cells没有被初始化，并且也没有被加锁（被别的线程正在初始化）那么就尝试对它进行加锁，加锁成功进入这个else if
-            // CASE2 前置条件：cells 还未被初始化；需要被初始化
+            // Cells 没有被初始化，并且也没有被加锁（被别的线程正在初始化）那么就尝试对它进行加锁，加锁成功进入这个else if
+            // CASE2 前置条件：cells 还未被初始化，需要被初始化
             // 条件一：cellsBusy == 0  成立：说明 当前未加锁；
             // 条件二： cells == as 再次对比 因为 害怕之前 多线程之前已经执行初始化了；
             // 条件二： casCellsBusy()  表示获取锁成功  ；失败 表示其他锁持有这个锁；
             else if (cellsBusy == 0 && cells == as && casCellsBusy()) {
+                //线程在拿锁状态下
                 boolean init = false;
-                try {                           // Initialize table
+                // Initialize table
+                try {
                     // 又来对比 防止其他线程已经初始化了 当前线程又来进行初始化 造成数据丢失
                     if (cells == as) {//CAS避免不了ABA问题，这里再检测一次，如果还是null，或者空数组，那么就执行初始化
                         Cell[] rs = new Cell[2];//初始化时只创建两个单元
-                        // h为线程的hash值， 对其中一个单元进行累积操作，另一个不管，继续为null
+                        // h为线程的hash值， 对其中一个单元进行累积操作，另一个不管，继续为 null
                         rs[h & 1] = new Cell(x);
                         cells = rs;
                         //初始化结束
                         init = true;
                     }
                 } finally {
-                    cellsBusy = 0;// 清空自旋标识，释放锁
+                    // 清空自旋标识，释放锁
+                    cellsBusy = 0;
                 }
                 // 如果某个原本为null的Cell单元是由自己进行第一次累积操作，那么任务已经完成了，所以可以退出循环
                 if (init) {
+                    //初始化完毕了 + 线程对应的 cell 值也 赋值好了 那就完事了  直接退出代码块
                     break;
                 }
             }
-            //CASE3
-            // 1. 当前 CellsBusy 加锁状态，表示其他线程正在初始化 cells  所以当前线程需要把数据累计到 base 中
-            // 2. cells 被其他线程初始化后   所以当前线程需要把数据累计到 base 中
+
+            //CASE3 ：前提 上面 CASE1 把cells初始化过的处理了; CASE2 把cells初始化处理了; CASE3就是处理 初始化cells失败的兜底方案;
+            // 1. casCellsBusy() false -> 当前 CellsBusy 加锁状态 or casCellsBusy() 方法执行失败：表示其他线程正在初始化 cells  所以当前线程需要把数据累计到 base 中
+            // 2. cells == as false ->Cells 被其他线程初始化后   所以当前线程需要把数据累计到 base 中
             else if (casBase(v = base, ((fn == null) ? v + x : fn.applyAsLong(v, x)))) {
+                //成功加到base后 就完事了 ; 没有加到的话 继续for循环
                 break;
             }  // Fall back on using base
-        }
-    }
+        }//for(;;) over
+    }//longAccumulate() over
 
     /**
      * Same as longAccumulate, but injecting long/double conversions
