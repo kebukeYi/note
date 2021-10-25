@@ -60,28 +60,31 @@ public class LongAdder extends Striped64 implements Serializable {
         int m;
         //a 表示当前线程命中的单元格
         Cell a;
-        //条件一： as = cells 表示 当前线程一已经将数据写入到对应的 cells 中 ；否则表示 cells 未被初始化 ，当前所有线程应该将数据写到 base 中；
-        //条件二：true 表示当前线程替换数据成功；false 否则竞争发生失败 需要扩容 或者 重试
+        //条件一： 成立   表示cells已经初始化好了 当前线程应该将数据写入到对应的 cells 中 ； 直接进入if代码块
+        //              false  表示 cells 未被初始化 ，当前所有线程应该将数据写到 base 中；       进入下一个判断条件
+        //条件二：false  表示当前线程替换数据成功； 好的达到目的 直接退出代码块；
+        //              true 竞争发生 casBase 失败 需要扩容 或者 重试  ； 进入if代码块
         if ((as = cells) != null || !casBase(b = base, b + x)) {
             //什么时候会进来？
-            //1. 表示 当前线程一已经将数据写入到对应的 cells 中
-            //2. false 否则竞争发生失败 需要扩容 或者 重试
+            //1. 条件一  成立 cells 已经初始化好了   当前线程应该将数据写入到对应的 cells 中
+            //2. 条件二  成立 cells 未被初始化   竞争发生失败 需要扩容 或者 重试
 
             //true 未发生竞争    false 发生了竞争
             boolean uncontended = true;
 
-            //条件一：(as == null || (m = as.length - 1) < 0  成立：说明cell未被初始化 也就是多线程写base出现竞争了；
-            //                                                                                    不成立：说明cell已经被初始化了，当前线程应该是 找自己的cell的值；
-            //条件二：getProbe 获取当前线程的hash值，如果是true的话，当前线程对应的下标元素为 null，需要创建；
-            //                                                                   如果是false 的话，当前线程对应的下标元素不为 null，说明下一步需要将 x 放入到 cell 中 ；
-            //条件三：a.cas(v = a.value, v + x)  ：如果是 true 的话，说明赋值完成；false 的话 说明当前线程对应得 cell 存在竞争，代码继续向下执行；
+            //条件一：(as == null || (m = as.length - 1) < 0  成立：说明cell未被初始化  也就是多线程写base出现竞争了；直接接入if代码块
+            //                                                                       不成立：说明cell已经被初始化了，当前线程应该是 找自己的cell的值； 进入下一个判断条件
+            //条件二：getProbe()  获取当前线程的hash值      成立：(cells已经开好了) 当前线程对应的下标元素为 null，需要创建； 直接接入if代码块
+            //                                                                      不成立：当前线程对应的下标元素不为 null，说明下一步需要将 x  追加到 此cell 中； 进入下一个判断条件
+            //条件三：a.cas(v = a.value, v + x)  ：                 成立：说明赋值完成；取反 false 直接 退出代码块，完事儿了；
+            //                                                                      不成立： 说明当前线程对应得 cell 存在竞争，进入if代码块
             if (as == null || (m = as.length - 1) < 0 ||
                     (a = as[getProbe() & m]) == null ||
                     !(uncontended = a.cas(v = a.value, v + x))) {
                 //进来这里的情况？
-                //1. true 说明 cell 未被初始化 也就是多线程写 base 出现竞争了 需要重试初始化 cells；
-                //2. true 的话，当前线程对应的下标元素为 null，需要创建；
-                //3. false 的话 说明当前线程对应得 cell 存在竞争，需要重试；
+                //1. 条件一  成立 说明 cell 未被初始化 也就是多线程写 base 出现竞争了 需要重试初始化 cells
+                //2. 条件二  成立 说明当前线程对应的下标元素为 null，需要创建；
+                //3. 条件三  成立 说明当前线程对应的 cell 存在竞争，需要重试；
                 longAccumulate(x, null, uncontended);
             }
         }

@@ -13,14 +13,15 @@ public class LongAdderTest {
 
 
     private static int readThreadNum = 0;
-    private static int writeThreadNum = 1;
+    private static int writeThreadNum = 2;
 
-    private static int maxValue = 1000;
+    private static int maxValue = 100;
 
     public static void main(String[] args) {
         Counter lockTest = new LongAdderTest().new Counter();
         long startTime = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(readThreadNum + writeThreadNum);
+
         for (int i = 0; i < writeThreadNum; i++) {
             new Thread(() -> {
                 for (int cur = 0; cur < maxValue; cur++) {
@@ -60,7 +61,7 @@ public class LongAdderTest {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            return  count.sum();
+            return count.sum();
         }
 
         public void count() {
