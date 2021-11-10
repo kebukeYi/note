@@ -17,7 +17,6 @@ import sun.reflect.CallerSensitive;
 import sun.reflect.Reflection;
 import sun.security.util.SecurityConstants;
 
-
 /**
  * A <i>thread</i> is a thread of execution in a program. The Java
  * Virtual Machine allows an application to have multiple threads of
@@ -238,6 +237,7 @@ public class Thread implements Runnable {
      * Returns a reference to the currently executing thread object.
      *
      * @return the currently executing thread.
+     * 是 Thread 类 提供的方法 currentThread
      */
     public static native Thread currentThread();
 
@@ -1167,8 +1167,8 @@ public class Thread implements Runnable {
      *                                  <i>interrupted status</i> of the current thread is
      *                                  cleared when this exception is thrown.
      *                                  <p>
-     *                                      join()方法的作用是：在当前线程A中调用另外一个线程B的join()方法后，会让当前线程A阻塞，直到线程B的逻辑执行完成，A线程才会解阻塞，
-     *                                      然后继续执行自己的业务逻辑。
+     *                                  join()方法的作用是：在当前线程A中调用另外一个线程B的join()方法后，会让当前线程A阻塞，直到线程B的逻辑执行完成，A线程才会解阻塞，
+     *                                  然后继续执行自己的业务逻辑。
      *                                  成员方法加了synchronized说明是synchronized(this)，
      *                                  this是谁？this就是threadA子线程对象本身。也就是说，主线程持有了threadA这个子线程对象的锁
      */

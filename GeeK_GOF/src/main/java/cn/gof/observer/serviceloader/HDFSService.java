@@ -8,6 +8,7 @@ package cn.gof.observer.serviceloader;
  * @link:
  **/
 public class HDFSService implements IService {
+
     @Override
     public String sayHello() {
         return "Hello HDFSService";

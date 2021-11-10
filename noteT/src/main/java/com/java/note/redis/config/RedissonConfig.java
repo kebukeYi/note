@@ -14,13 +14,13 @@ import org.springframework.context.annotation.Configuration;
 public class RedissonConfig {
 
 
-//    @Bean
-//    public Redisson redisson() {
-//        //单机模式
-//        Config config = new Config();
-//        config.useSingleServer().setAddress("redis://localhost:6379").setDatabase(1);
-//        return (Redisson) Redisson.create(config);
-//    }
+    @Bean
+    public Redisson redisson() {
+        //单机模式
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://localhost:6379").setDatabase(1);
+        return (Redisson) Redisson.create(config);
+    }
 
 
 }

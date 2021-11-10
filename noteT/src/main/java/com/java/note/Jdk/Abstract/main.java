@@ -20,10 +20,15 @@ public class main {
         System.out.println(subOne.server.serverId);
         System.out.println(subOne.abstractNum);
         System.out.println(AbstractFat.staticAbstractNum);
+        System.out.println(AbstractFat.map);
+        subOne.excute(AbstractFat.map);
+        System.out.println(AbstractFat.map);
         System.out.println("=====================");
         final SubTwo subTwo = new SubTwo();
         System.out.println(subTwo.abstractNum);
         System.out.println(subTwo.server.serverId);
+        System.out.println(AbstractFat.staticAbstractNum);
+        System.out.println(AbstractFat.map);
     }
 }
  
