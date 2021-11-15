@@ -7,7 +7,7 @@ package cn.gof.observer.serviceloader;
  * @question :
  * @usinglink :
  **/
-public interface IService {
+public  interface IService {
     String sayHello();
 
     String getScheme();

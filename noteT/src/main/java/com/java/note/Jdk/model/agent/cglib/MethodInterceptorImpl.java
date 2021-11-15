@@ -25,6 +25,9 @@ public class MethodInterceptorImpl implements MethodInterceptor {
         System.out.println("obj:" + obj.getClass());
         System.out.println(method.getName());
         System.out.println("method:" + method);
+        if ("toString".equals(method.getName())) {
+            return null;
+        }
         System.out.println(args[0]);
         System.out.println("MethodProxy:" + proxy);
         System.out.println("MethodProxy.getClass() :" + proxy.getClass());

@@ -14,7 +14,6 @@ public class ProxyTest {
         //手动创建目标对象
         Operator operator = new Operator();
         System.out.println("operator:" + operator);
-
         //手动创建方法拦截器
         MethodInterceptorImpl methodInterceptorImpl = new MethodInterceptorImpl();
         //初始化加强器对象
