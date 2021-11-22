@@ -10,8 +10,6 @@ import java.util.concurrent.TimeUnit;
  * @Description
  */
 public class MyThreadLocal {
-
-
     /**
      * 链接：https://zhuanlan.zhihu.com/p/163852829
      * Spring采用ThreadLocal的方式，来保证单个线程中的数据库操作使用的是同一个数据库连接，同时，采用这种方式可以使业务层使用事务时不需要感知并管理connection对象，
@@ -24,7 +22,7 @@ public class MyThreadLocal {
 
 
     // 第一次get()方法调用时会进行初始化(如果set方法没有调用)，每个线程会调用一次
-    private static final ThreadLocal<Long> TIME_THREADLOCAL = new ThreadLocal<Long>() {
+    private final ThreadLocal<Long> TIME_THREADLOCAL = new ThreadLocal<Long>() {
         @Override
         protected Long initialValue() {
             return System.currentTimeMillis();
@@ -42,7 +40,6 @@ public class MyThreadLocal {
      * 父子线程共享数据
      */
     private void test() {
-
         final ThreadLocal threadLocal = new InheritableThreadLocal();
         threadLocal.set("帅得一匹");
 
@@ -57,21 +54,21 @@ public class MyThreadLocal {
     }
 
 
-    public static final void begin() {
+    public final void begin() {
         TIME_THREADLOCAL.set(System.currentTimeMillis());
         TIME_THREADLOCAL_2.set("第二个");
     }
 
-    public static final long end() {
+    public final long end() {
         System.out.println(TIME_THREADLOCAL_2.get());
         return System.currentTimeMillis() - TIME_THREADLOCAL.get();
     }
 
     public static void main(String[] args) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-
-        MyThreadLocal.begin();
+        final MyThreadLocal myThreadLocal = new MyThreadLocal();
+        myThreadLocal.begin();
         TimeUnit.SECONDS.sleep(1);
-        System.out.println("Cost: " + MyThreadLocal.end() + " mills");
+        System.out.println("Cost: " + myThreadLocal.end() + " mills");
     }
 }

@@ -332,14 +332,17 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
      * @param task the task
      */
     private void delayedExecute(RunnableScheduledFuture<?> task) {
-        if (isShutdown())
+        if (isShutdown()) {
             reject(task);
-        else {
+        } else {
+            //加入到 阻塞队列中去
             super.getQueue().add(task);
-            if (isShutdown() && !canRunInCurrentRunState(task.isPeriodic()) && remove(task))
+            if (isShutdown() && !canRunInCurrentRunState(task.isPeriodic()) && remove(task)) {
                 task.cancel(false);
-            else
+            } else {
+                //确保线程启动
                 ensurePrestart();
+            }
         }
     }
 
@@ -438,6 +441,7 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
      * @throws IllegalArgumentException if {@code corePoolSize < 0}
      */
     public ScheduledThreadPoolExecutor(int corePoolSize) {
+        //核心线程数  最大线程池值
         super(corePoolSize, Integer.MAX_VALUE, 0, NANOSECONDS,
                 new DelayedWorkQueue());
     }
@@ -568,17 +572,21 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
                                                   long initialDelay,
                                                   long period,
                                                   TimeUnit unit) {
-        if (command == null || unit == null)
+        if (command == null || unit == null) {
             throw new NullPointerException();
-        if (period <= 0)
+        }
+        if (period <= 0) {
             throw new IllegalArgumentException();
+        }
         ScheduledFutureTask<Void> sft =
                 new ScheduledFutureTask<Void>(command,
                         null,
                         triggerTime(initialDelay, unit),
                         unit.toNanos(period));
+        //包装一个任务
         RunnableScheduledFuture<Void> t = decorateTask(command, sft);
         sft.outerTask = t;
+        //执行任务
         delayedExecute(t);
         return t;
     }
@@ -928,8 +936,10 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
         private void grow() {
             int oldCapacity = queue.length;
             int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
-            if (newCapacity < 0) // overflow
+            if (newCapacity < 0) { // overflow
                 newCapacity = Integer.MAX_VALUE;
+            }
+            //性能堪忧
             queue = Arrays.copyOf(queue, newCapacity);
         }
 
@@ -1023,8 +1033,9 @@ public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements S
             lock.lock();
             try {
                 int i = size;
-                if (i >= queue.length)
+                if (i >= queue.length) {
                     grow();
+                }
                 size = i + 1;
                 if (i == 0) {
                     queue[0] = e;

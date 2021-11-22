@@ -224,7 +224,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
             //返回 任务的当前状态；线程可能睡了一会了
             s = awaitDone(false, 0L);
         }
-        //
+        //执行返回
         return report(s);
     }
 

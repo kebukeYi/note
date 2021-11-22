@@ -2006,15 +2006,22 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
     }
 
     /**
-     * Same as prestartCoreThread except arranges that at least one
-     * thread is started even if corePoolSize is 0.
+     * Same as prestartCoreThread except arranges that at least one thread is started even if corePoolSize is 0.
+     * 尽管 corePoolSize 可能为0 但是还是尽量启动一个线程
      */
     void ensurePrestart() {
+        //当前工作线程
         int wc = workerCountOf(ctl.get());
-        if (wc < corePoolSize)
+        //如果当前线程小于 核心数 新建线程
+        if (wc < corePoolSize) {
             addWorker(null, true);
-        else if (wc == 0)
+        }
+        //如果当前线程等于0 新建线程
+        else if (wc == 0) {
             addWorker(null, false);
+        }
+        //如果当前线程 等于 核心线程数 什么也不干
+
     }
 
     /**
