@@ -34,7 +34,7 @@ public class RedisLockController {
      * 服务器A
      * 第一种解法
      */
-//    @GetMapping("/stock")
+    // @GetMapping("/stock")
     public String redisLock() {
         Jedis jedis = JedisUtil6800.getJedis();
         String clinenId = UUID.randomUUID().toString();
@@ -68,7 +68,6 @@ public class RedisLockController {
              //            return 0
              //        end
              */
-
             String luaScript = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return 0 end";
             eval = jedis.eval(luaScript, Collections.singletonList(LOCK_KEY), Collections.singletonList(clinenId));
 
@@ -81,7 +80,7 @@ public class RedisLockController {
      * 服务器A
      * 第二种解法
      */
-//    @GetMapping("/redisson")
+    // @GetMapping("/redisson")
     public static String redisson2() {
         Redisson redisson = redisson();
         RLock rLock = redisson.getLock(LOCK_KEY);
