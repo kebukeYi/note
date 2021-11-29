@@ -5,13 +5,13 @@ import java.util.List;
 /**
  * @author : kebukeyi
  * @date :  2021-07-19 17:55
- * @description:
+ * @description: 组合模式
  * @question:
  * @link: https://time.geekbang.org/column/article/207456
  **/
 public class OADemo {
 
-    //将一组对象（员工和部门）组织成树形结构，以表示一种‘部分 - 整体’的层次结构（部门与子部门的嵌套结构）。
+    //  将一组对象（员工和部门）组织成树形结构，以表示一种‘部分 - 整体’的层次结构（部门与子部门的嵌套结构）
     // 组合模式让客户端可以统一单个对象（员工）和组合对象（部门）的处理逻辑（递归遍历）
 
     private static final long ORGANIZATION_ROOT_ID = 1001;
@@ -21,7 +21,7 @@ public class OADemo {
     public double buildOrganization() {
         Department rootDepartment = new Department(ORGANIZATION_ROOT_ID);
         buildOrganization(rootDepartment);
-        final double salary = rootDepartment.calculateSalary();
+        double salary = rootDepartment.calculateSalary();
         return salary;
     }
 

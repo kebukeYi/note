@@ -8,6 +8,7 @@ package cn.gof.composite.oa;
  * @link:
  **/
 public abstract class HumanResource {
+
     protected long id;
     protected double salary;
 
