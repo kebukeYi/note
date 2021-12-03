@@ -1,5 +1,7 @@
 package com.java.note.Jdk.thread.blockqueue;
 
+import lombok.val;
+
 import java.util.concurrent.SynchronousQueue;
 
 /**
@@ -10,14 +12,16 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class SynchronousQueueDemo {
 
-    public static void main(String[] args) {
-        SynchronousQueue synchronousQueue = new SynchronousQueue();
+    public static void main(String[] args) throws InterruptedException {
+        SynchronousQueue synchronousQueue = new SynchronousQueue(true);
 
-        new Thread(() -> {
+        final Thread thread1 = new Thread(() -> {
             try {
                 System.out.println(Thread.currentThread().getName() + "put1");
-                //当没有消费者线程时 将会阻塞在这里
+                //当没有消费者线程时  当前将会阻塞在这里
                 synchronousQueue.put("1");
+                //不会打印 因为当前线程已经被阻塞了
+                System.out.println("1111111111111111");
                 final boolean offer = synchronousQueue.offer("1");
                 System.out.println(offer);
                 System.out.println(Thread.currentThread().getName() + "put2");
@@ -28,17 +32,28 @@ public class SynchronousQueueDemo {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
+        thread1.start();
 
-        new Thread(() -> {
+        final val thread2 = new Thread(() -> {
             try {
-                Thread.sleep(3000);
-                System.out.println(synchronousQueue.take());
-                System.out.println(synchronousQueue.take());
-                System.out.println(synchronousQueue.take());
+                //当没有消费者线程时  当前将会阻塞在这里
+                synchronousQueue.put("2.2");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
+        thread2.start();
+        final Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+                System.out.println(synchronousQueue.take());
+                //System.out.println(synchronousQueue.take());
+                //System.out.println(synchronousQueue.take());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        // thread.start();
     }
 }
