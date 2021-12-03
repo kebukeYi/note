@@ -234,9 +234,8 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
 
     /**
      * Creates a {@code LinkedBlockingQueue} with a capacity of
-     * {@link Integer#MAX_VALUE}.
+     * {@link Integer#MAX_VALUE}. 默认大小太大了
      */
-    //默认大小太大了
     public LinkedBlockingQueue() {
         this(Integer.MAX_VALUE);
     }
@@ -250,7 +249,9 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
      */
     //当然如果在初始化的时候，就指定链表大小，那么它就是有界队列了
     public LinkedBlockingQueue(int capacity) {
-        if (capacity <= 0) throw new IllegalArgumentException();
+        if (capacity <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.capacity = capacity;
         last = head = new Node<E>(null);
     }
@@ -293,6 +294,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E> implements Blocking
      *
      * @return the number of elements in this queue
      */
+    @Override
     public int size() {
         return count.get();
     }

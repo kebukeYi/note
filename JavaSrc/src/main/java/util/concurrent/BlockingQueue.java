@@ -143,13 +143,14 @@ import java.util.Queue;
  * @since 1.5
  */
 public interface BlockingQueue<E> extends Queue<E> {
+
     /**
-     * Inserts the specified element into this queue if it is possible to do
-     * so immediately without violating capacity restrictions, returning
-     * {@code true} upon success and throwing an
-     * {@code IllegalStateException} if no space is currently available.
-     * When using a capacity-restricted queue, it is generally preferable to
-     * use {@link #offer(Object) offer}.
+     * Inserts the specified element into this queue if it is possible to do so immediately without violating capacity restrictions,
+     * returning  true upon success and throwing an  IllegalStateException if no space is currently available.
+     * When using a capacity-restricted queue, it is generally preferable to use  offer(Object)
+     * 如果没有违背容量就立即添加进去并且返回 success，
+     * 如果没有容量的话，就直接抛出异常 不返回任何信息，
+     * 当使用容量受限的队列时，一般最好使用 offer(Object)。
      *
      * @param e the element to add
      * @return {@code true} (as specified by {@link Collection#add})
@@ -160,17 +161,17 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws NullPointerException     if the specified element is null
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this queue
-     *                                  如果满的话 函数就直接返回抛出异常
      */
+    @Override
     boolean add(E e);
 
     /**
-     * Inserts the specified element into this queue if it is possible to do
-     * so immediately without violating capacity restrictions, returning
-     * {@code true} upon success and {@code false} if no space is currently
-     * available.  When using a capacity-restricted queue, this method is
-     * generally preferable to {@link #add}, which can fail to insert an
-     * element only by throwing an exception.
+     * Inserts the specified element into this queue if it is possible to do so immediately without violating capacity restrictions,
+     * returning true upon success and false if no space is currently available.
+     * When using a capacity-restricted queue, this method is generally preferable to add, which can fail to insert an element only by throwing an exception.
+     * 如果没有违背容量就立即添加进去并且返回 success，
+     * 如果没有容量的话，返回 false ，
+     * 当使用容量受限的队列时，此 offer(Object)方法优于 add 方法
      *
      * @param e the element to add
      * @return {@code true} if the element was added to this queue, else
@@ -180,12 +181,14 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws NullPointerException     if the specified element is null
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this queue
-     *                                  如果满的话 函数就直接 false 不会 返回异常 比较好
      */
+    @Override
     boolean offer(E e);
 
     /**
+     * 新增方法
      * Inserts the specified element into this queue, waiting if necessary for space to become available.
+     * 如果满的话  插入会阻塞(把当前要执行插入的线程扔队列里去) 更好 的做法
      *
      * @param e the element to add
      * @throws InterruptedException     if interrupted while waiting
@@ -194,12 +197,12 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws NullPointerException     if the specified element is null
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this queue
-     *                                  如果满的话 插入会阻塞(把当前要执行插入的线程扔队列里去) 更好 的做法
      */
     void put(E e) throws InterruptedException;
 
     /**
      * Inserts the specified element into this queue, waiting up to the specified wait time if necessary for space to become available.
+     * 将指定的元素插入此队列，并在必要时等待指定的等待时间以获取可用空间
      *
      * @param e       the element to add
      * @param timeout how long to wait before giving up, in units of
@@ -214,24 +217,23 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws NullPointerException     if the specified element is null
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this queue
-     *
      */
     boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException;
 
     /**
      * Retrieves and removes the head of this queue, waiting if necessary
      * until an element becomes available.
-     *
+     * 有则取出，无则会一直阻塞等待
      * @return the head of this queue
      * @throws InterruptedException if interrupted while waiting
-     *                              取出会阻塞
+     *
      */
     E take() throws InterruptedException;
 
     /**
      * Retrieves and removes the head of this queue, waiting up to the
      * specified wait time if necessary for an element to become available.
-     *
+     * 有则取出，无则会阻塞等待一段时间
      * @param timeout how long to wait before giving up, in units of
      *                {@code unit}
      * @param unit    a {@code TimeUnit} determining how to interpret the

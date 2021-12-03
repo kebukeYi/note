@@ -128,7 +128,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
      */
 
     /**
-     * Shared internal API for dual stacks and queues.
+     * Shared internal API for dual stacks and queues
      */
     abstract static class Transferer<E> {
         /**
@@ -140,7 +140,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
          * @param timed if this operation should timeout
          * @param nanos the timeout, in nanoseconds
          * @param e     可以为null，null时表示这个请求是一个 REQUEST 类型的请求   (消费) ; 如果不是null，说明这个请求是一个 DATA 类型的请求。（入队）
-         * @param timed 如果为true 表示指定了超时时间 ,如果为false 表示不支持超时，表示当前请求一直等待到匹配为止，或者被中断。
+         * @param timed 如果为true 表示指定了超时时间 ,如果为false 表示不支持超时，表示当前请求一直等待到匹配为止，或者被中断
          * @param nanos 超时时间限制 单位 纳秒
          * @return E 如果当前请求是一个 REQUEST类型的请求，返回值如果不为 null 表示 匹配成功；
          * 如果返回null，表示REQUEST类型的请求超时 或 被中断。
@@ -156,8 +156,8 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
     //自旋的好处，自旋期间线程会一直检查自己的状态是否被匹配到，如果自旋期间被匹配到，那么直接就返回了
     //如果自旋期间未被匹配到，自旋次数达到某个指标后，还是会将当前线程挂起的...
     //NCPUS：当一个平台只有一个CPU时，你觉得还需要自旋么？
-    //答：肯定不需要自旋了，因为一个cpu同一时刻只能执行一个线程，自旋没有意义了...而且你还站着cpu 其它线程没办法执行..这个
-    //栈的状态更不会改变了.. 当只有一个cpu时 会直接选择 LockSupport.park() 挂起等待者线程
+    //答：肯定不需要自旋了，因为一个cpu同一时刻只能执行一个线程，自旋没有意义了...而且你还占着cpu 其它线程没办法执行..
+    // 这个栈的状态更不会改变了.. 当只有一个cpu时 会直接选择 LockSupport.park() 挂起等待者线程
 
     /**
      * The number of CPUs, for spin control
@@ -261,7 +261,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
             boolean casNext(SNode cmp, SNode val) {
                 //优化：cmp == next  为什么要判断？
                 //因为cas指令 在平台执行时，同一时刻只能有一个cas指令被执行。（重点）
-                //有了java层面的这一次判断，可以提升一部分性能。 cmp == next 不相等，就没必要走 cas指令。
+                //有了java层面的这一次判断，可以提升一部分性能。 cmp == next 不相等，就没必要走 cas指令
                 return cmp == next && UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
             }
 
@@ -271,7 +271,7 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
              * Waiters block until they have been matched.
              *
              * @param s the node to match
-             * @return ture 匹配成功。 否则匹配失败..
+             * @return ture 匹配成功。 否则匹配失败...
              */
             boolean tryMatch(SNode s) {
                 //条件一：match == null 成立，说明当前Node尚未与任何节点发生过匹配...
@@ -673,9 +673,13 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
          * Node class for TransferQueue.
          */
         static final class QNode {
+            //下一个节点
             volatile QNode next;          // next node in queue
+            // 数据吗？
             volatile Object item;         // CAS'ed to or from null
+            //等待线程
             volatile Thread waiter;       // to control park/unpark
+            //是否是 data ？莫非是 put（1） 携带data ； take（）没有携带data 的含义？
             final boolean isData;
 
             QNode(Object item, boolean isData) {
@@ -734,16 +738,16 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
 
         /**
          * Head of queue
+         * 头节点
          */
         transient volatile QNode head;
         /**
          * Tail of queue
+         * 尾节点
          */
         transient volatile QNode tail;
         /**
-         * Reference to a cancelled node that might not yet have been
-         * unlinked from queue because it was the last inserted node
-         * when it was cancelled.
+         * Reference to a cancelled node that might not yet have been unlinked from queue because it was the last inserted node when it was cancelled.
          */
         transient volatile QNode cleanMe;
 
@@ -826,12 +830,15 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
                         advanceTail(t, tn);
                         continue;
                     }
-                    if (timed && nanos <= 0)        // can't wait
+                    if (timed && nanos <= 0) {      // can't wait
                         return null;
-                    if (s == null)
+                    }
+                    if (s == null) {
                         s = new QNode(e, isData);
-                    if (!t.casNext(null, s))        // failed to link in
+                    }
+                    if (!t.casNext(null, s)) {    // failed to link in
                         continue;
+                    }
 
                     advanceTail(t, s);              // swing tail and wait
                     Object x = awaitFulfill(s, e, timed, nanos);
@@ -842,8 +849,9 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
 
                     if (!s.isOffList()) {           // not already unlinked
                         advanceHead(t, s);          // unlink if head
-                        if (x != null)              // and forget fields
+                        if (x != null) {           // and forget fields
                             s.item = s;
+                        }
                         s.waiter = null;
                     }
                     return (x != null) ? (E) x : e;
@@ -1001,10 +1009,12 @@ public class SynchronousQueue<E> extends AbstractQueue<E> implements BlockingQue
     /**
      * Creates a {@code SynchronousQueue} with the specified fairness policy.
      *
-     * @param fair if true, waiting threads contend in FIFO order for
-     *             access; otherwise the order is unspecified.
+     * @param fair if true, waiting threads contend in FIFO order for access; otherwise the order is unspecified.
+     *             如果为真，等待线程以 FIFO 顺序竞争访问；否则顺序是未指定的。
      */
     public SynchronousQueue(boolean fair) {
+        //fair 是 true 时 创建 TransferQueue
+        //fair 是 false 时 创建 TransferStack
         transferer = fair ? new TransferQueue<E>() : new TransferStack<E>();
     }
 

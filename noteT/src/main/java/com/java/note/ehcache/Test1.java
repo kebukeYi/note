@@ -4,7 +4,8 @@ import com.java.note.Java_8.bean.Person;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-import org.junit.Test;
+
+
 
 /**
  * @Author : mmy
@@ -14,7 +15,6 @@ import org.junit.Test;
 public class Test1 {
 
 
-    @Test
     public void test1() {
         // 1. 创建缓存管理器
         CacheManager cacheManager = CacheManager.create("src/main/resources/ehcache.xml");
