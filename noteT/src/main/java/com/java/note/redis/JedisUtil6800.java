@@ -24,7 +24,7 @@ public class JedisUtil6800 {
     private static String ADDR_ARRAY = "127.0.0.1";
 
     //Redis的端口号
-    private static int PORT = 6491;
+    private static int PORT = 6379;
 
     //访问密码
     //private static String AUTH = "";
