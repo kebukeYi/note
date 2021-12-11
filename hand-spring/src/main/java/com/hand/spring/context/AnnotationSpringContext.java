@@ -5,13 +5,9 @@ import com.hand.spring.annoation.Component;
 import com.hand.spring.annoation.ComponentScan;
 import com.hand.spring.annoation.Scope;
 import com.hand.spring.core.BeanDefinition;
-import com.sun.deploy.util.StringUtils;
-import sun.misc.ClassLoaderUtil;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 /**
  * @author : kebukeYi
@@ -22,7 +18,7 @@ import java.nio.charset.Charset;
  **/
 public class AnnotationSpringContext extends AbstractContext {
 
-    private Class aClass;
+    private Class<?> aClass;
 
     /**
      * 包名
@@ -47,12 +43,13 @@ public class AnnotationSpringContext extends AbstractContext {
      */
     private boolean initialize;
 
-    public static final String separator = "" + "\\";
+    public static final String SEPARATOR = "" + "\\";
 
     /**
      * 字符串常量：空字符串 {@code ""}
      */
     public static final String EMPTY = "";
+
     /**
      * 字符串常量：点 {@code "."}
      */
@@ -60,17 +57,19 @@ public class AnnotationSpringContext extends AbstractContext {
 
     public static final int INDEX_NOT_FOUND = -1;
 
-    public AnnotationSpringContext(Class aClass) {
+    public AnnotationSpringContext(Class<?> aClass) {
         this.aClass = aClass;
         componentScan();
     }
 
     public void componentScan() {
         ComponentScan declaredAnnotation = (ComponentScan) aClass.getDeclaredAnnotation(ComponentScan.class);
-        String path = declaredAnnotation.value();//com.hand.spring
+        //com.hand.spring
+        String path = declaredAnnotation.value();
         this.packageName = path;
         this.packageNameWithDot = addSuffixIfNot(this.packageName, DOT);
-        String replace = path.replace(".", separator);//com/hand/spring
+        //com/hand/spring
+        String replace = path.replace(".", SEPARATOR);
         this.packageDirName = replace;
         ClassLoader classLoader = AnnotationSpringContext.class.getClassLoader();
         this.classLoader = classLoader;
@@ -79,13 +78,9 @@ public class AnnotationSpringContext extends AbstractContext {
         //E:\Projects\Git-Repostiys\note\hand-spring\target\classes\com%5chand%5cspring
         // File file = new File(resource.getFile());
         //E:\Projects\Git-Repostiys\note\hand-spring\target\classes\com\hand\spring
+        assert resource != null;
         final File file = new File(URLUtil.decode(resource.getFile(), this.charset));
-        // if (file.isDirectory()) {
-        //     final File[] files = file.listFiles();
-        //     for (File f : files) {
         scanBeanDefinition(file, null);
-        // }
-        // }
     }
 
     public void addIfAccept(String className) {
@@ -107,7 +102,7 @@ public class AnnotationSpringContext extends AbstractContext {
         }
     }
 
-    public void addIfAccept(Class aClass) {
+    public void addIfAccept(Class<?> aClass) {
         if (aClass == null) {
             return;
         }
@@ -135,7 +130,7 @@ public class AnnotationSpringContext extends AbstractContext {
         if (file.isFile()) {
             final String fileAbsolutePath = file.getAbsolutePath();
             if (fileAbsolutePath.endsWith(".class")) {
-                final String className = fileAbsolutePath.substring(rootDir.length(), fileAbsolutePath.length() - 6).replace(separator, ".");
+                final String className = fileAbsolutePath.substring(rootDir.length(), fileAbsolutePath.length() - 6).replace(SEPARATOR, ".");
                 addIfAccept(className);
             } else {
                 if (fileAbsolutePath.endsWith(".jar")) {
@@ -190,7 +185,7 @@ public class AnnotationSpringContext extends AbstractContext {
         if (this.packageDirName != null) {
             filePath = subBefore(filePath, this.packageDirName, true);
         }
-        return addSuffixIfNot(filePath, separator);
+        return addSuffixIfNot(filePath, SEPARATOR);
     }
 
     /**
@@ -239,7 +234,7 @@ public class AnnotationSpringContext extends AbstractContext {
 
         final String str2 = str.toString();
         final String suffix2 = suffix.toString();
-        if (false == str2.endsWith(suffix2)) {
+        if (!str2.endsWith(suffix2)) {
             return str2.concat(suffix2);
         }
         return str2;
