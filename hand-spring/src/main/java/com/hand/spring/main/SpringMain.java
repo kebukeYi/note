@@ -2,6 +2,7 @@ package com.hand.spring.main;
 
 import com.hand.spring.config.AppConfig;
 import com.hand.spring.context.AnnotationSpringContext;
+import com.hand.spring.service.IUserService;
 import com.hand.spring.service.OrderService;
 import com.hand.spring.service.UserService;
 
@@ -21,15 +22,15 @@ public class SpringMain {
         //原型 Bean
         final OrderService orderService = (OrderService) annotationSpringContext.getBean("orderService");
         final OrderService orderServices = (OrderService) annotationSpringContext.getBean("orderService");
-        System.out.println(orderService);
-        System.out.println(orderServices);
-        orderServices.getUserService();
+        // System.out.println(orderService);
+        // System.out.println(orderServices);
+        // orderServices.getUserService();
         //单例 Bean
-        final UserService userService = (UserService) annotationSpringContext.getBean("userService");
-        final UserService userServices = (UserService) annotationSpringContext.getBean("userService");
-        System.out.println(userService);
-        System.out.println(userServices);
-        userService.getOrderService();
+        final IUserService userService = (IUserService) annotationSpringContext.getBean("userService");
+        final IUserService userServices = (IUserService) annotationSpringContext.getBean("userService");
+        // System.out.println(userService);
+        // System.out.println(userServices);
+        userService.proxyBean();
     }
 }
  

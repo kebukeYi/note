@@ -15,8 +15,9 @@ import com.hand.spring.aware.BeanNameAware;
 // @Scope("prototype")
 public class OrderService implements BeanNameAware {
 
+    //Can not set com.hand.spring.service.UserService field com.hand.spring.service.OrderService.userService to com.sun.proxy.$Proxy5
     @Autowried
-    private UserService userService;
+    private IUserService userService;
 
     private String beanName;
 

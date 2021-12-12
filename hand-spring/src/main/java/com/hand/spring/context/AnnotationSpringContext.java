@@ -6,7 +6,9 @@ import com.hand.spring.annoation.Component;
 import com.hand.spring.annoation.ComponentScan;
 import com.hand.spring.annoation.Scope;
 import com.hand.spring.aware.BeanNameAware;
+import com.hand.spring.bean.BeanPostProcessor;
 import com.hand.spring.core.BeanDefinition;
+import com.hand.spring.init.InitializingBean;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -107,9 +109,10 @@ public class AnnotationSpringContext extends AbstractContext {
             //无参构造方法执行 属性值都是 null
             declaredConstructor = beanClass.getDeclaredConstructor();
             //Todo 1 实例化 bean
-            final Object newInstance = declaredConstructor.newInstance();
+            Object newInstance = declaredConstructor.newInstance();
             noInitializingObjects.put(beanName, newInstance);
-            //Todo 2 处理属性注入
+
+            //Todo 2 填充属性
             for (Field declaredField : beanClass.getDeclaredFields()) {
                 if (declaredField.isAnnotationPresent(Autowried.class)) {
                     //ByName 去查找属性
@@ -129,10 +132,30 @@ public class AnnotationSpringContext extends AbstractContext {
                     declaredField.set(newInstance, bean);
                 }
             }
-            //Todo 3 是否实现了相关接口
+
+            //Todo 3 Aware 回调
             if (newInstance instanceof BeanNameAware) {
                 ((BeanNameAware) newInstance).setBeanName(beanName);
             }
+
+            //Todo 3.5 普通 Bean 初始化之前操作
+            //假如其他 Bean 过来 不能执行这个
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+                //交给程序员去加工 但是 这里的入参 跟返回参数不一定是同一个 bean 对象
+                newInstance = beanPostProcessor.postProcessBeforeInitialization(newInstance, beanName);
+            }
+
+            //Todo 4 是否实现了相关初始化接口
+            if (newInstance instanceof InitializingBean) {
+                ((InitializingBean) newInstance).afterPropertiesSet();
+            }
+
+            //Todo 4.5 初始化之后操作 生命周期的最后一步
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+                //交给程序员去加工 但是 这里的入参 跟返回参数不一定是同一个 bean 对象
+                newInstance = beanPostProcessor.postProcessAfterInitialization(newInstance, beanName);
+            }
+
             singletonObjects.put(beanName, newInstance);
             return newInstance;
         } catch (NoSuchMethodException e) {
@@ -142,6 +165,8 @@ public class AnnotationSpringContext extends AbstractContext {
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -192,12 +217,17 @@ public class AnnotationSpringContext extends AbstractContext {
             return;
         }
         if (aClass.isAnnotationPresent(Component.class)) {
-            //判断是单例 还是 原型 bean
-            //解析 bean -> BeanDefinition
-            final Component annotation = aClass.getAnnotation(Component.class);
-            final String beanName = annotation.value();
             final BeanDefinition beanDefinition = new BeanDefinition();
             beanDefinition.setBeanClass(aClass);
+            //判断是单例 还是 原型 bean
+            //解析 bean -> BeanDefinition
+            String beanName = null;
+            final Component annotation = aClass.getDeclaredAnnotation(Component.class);
+            beanName = annotation.value();
+            if ("".equals(beanName)) {
+                beanName = generateBeanName(aClass);
+            }
+
             if (aClass.isAnnotationPresent(Scope.class)) {
                 final Scope scope = aClass.getAnnotation(Scope.class);
                 final String scopeValue = scope.value();
@@ -206,10 +236,39 @@ public class AnnotationSpringContext extends AbstractContext {
                 //没有这个注解说明是 单例 bean
                 beanDefinition.setScope(singleton);
             }
+
+            //当前类是否实现了这接口
+            //todo 不太优雅
+            if (BeanPostProcessor.class.isAssignableFrom(aClass)) {
+                try {
+                    BeanPostProcessor beanPostProcessor = (BeanPostProcessor) aClass.getDeclaredConstructor().newInstance();
+                    beanPostProcessors.add(beanPostProcessor);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            }
             beanDefinitionsMap.put(beanName, beanDefinition);
         }
     }
 
+    private String generateBeanName(Class<?> aClass) {
+        //DefaultListableBeanFactory -> defaultListableBeanFactory
+        final String name = aClass.getName();
+        final String[] split = name.split("\\.");
+        final String className = split[split.length - 1];
+        final char c = className.charAt(0);
+        final String substring = className.substring(1);
+        //大写转小写
+        final String s = ((char) (c + 32)) + substring;
+        System.out.println("beanName生成 : " + s);
+        return s;
+    }
 
     public void scanBeanDefinition(File file, String rootDir) {
         if (file.isFile()) {
