@@ -16,6 +16,8 @@ public abstract class AbstractContext implements BeanFactory {
 
     public ConcurrentHashMap<String, Object> singletonObjects = new ConcurrentHashMap<>();
 
+    public ConcurrentHashMap<String, Object> noInitializingObjects = new ConcurrentHashMap<>();
+
     public ConcurrentHashMap<String, BeanDefinition> beanDefinitionsMap = new ConcurrentHashMap<>();
 
 

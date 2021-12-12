@@ -9,16 +9,15 @@ package com.hand.spring.core;
  **/
 public class BeanDefinition {
 
-    private Class aClass;
+    private Class beanClass;
     private String scope;
 
-
-    public Class getaClass() {
-        return aClass;
+    public Class getBeanClass() {
+        return beanClass;
     }
 
-    public void setaClass(Class aClass) {
-        this.aClass = aClass;
+    public void setBeanClass(Class beanClass) {
+        this.beanClass = beanClass;
     }
 
     public String getScope() {

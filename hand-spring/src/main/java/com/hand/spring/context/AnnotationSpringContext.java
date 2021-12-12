@@ -1,13 +1,19 @@
 package com.hand.spring.context;
 
 import cn.hutool.core.util.URLUtil;
+import com.hand.spring.annoation.Autowried;
 import com.hand.spring.annoation.Component;
 import com.hand.spring.annoation.ComponentScan;
 import com.hand.spring.annoation.Scope;
+import com.hand.spring.aware.BeanNameAware;
 import com.hand.spring.core.BeanDefinition;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * @author : kebukeYi
@@ -38,6 +44,10 @@ public class AnnotationSpringContext extends AbstractContext {
      */
     private final String charset = "UTF-8";
 
+    private final String singleton = "singleton";
+    private final String _class = ".class";
+    private final String _jar = ".jar";
+
     /**
      * 是否初始化类
      */
@@ -59,10 +69,85 @@ public class AnnotationSpringContext extends AbstractContext {
 
     public AnnotationSpringContext(Class<?> aClass) {
         this.aClass = aClass;
-        componentScan();
+        //解析 @Component() 注解上的值 并且注册 BD
+        scan();
+        //逐一创建 单例类型的 Bean
+        for (Map.Entry<String, BeanDefinition> entry : beanDefinitionsMap.entrySet()) {
+            final BeanDefinition beanDefinition = entry.getValue();
+            //如果是单例那么就创建
+            if (beanDefinition.getScope().equals(singleton)) {
+                final String beanName = entry.getKey();
+                if (singletonObjects.containsKey(beanName)) continue;
+                final Object bean = creatBean(beanName, beanDefinition);
+                // singletonObjects.put(beanName, bean);
+            }
+        }
     }
 
-    public void componentScan() {
+    @Override
+    public Object getBean(String beanName) {
+        if (beanDefinitionsMap.containsKey(beanName)) {
+            final BeanDefinition beanDefinition = beanDefinitionsMap.get(beanName);
+            if (singleton.equals(beanDefinition.getScope())) {
+                Object o = singletonObjects.get(beanName);
+                return o;
+            } else {
+                //说明是 原型bean 需要每次都要创建 Bean
+                return creatBean(beanName, beanDefinition);
+            }
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public Object creatBean(String beanName, BeanDefinition beanDefinition) {
+        final Class<?> beanClass = beanDefinition.getBeanClass();
+        final Constructor<?> declaredConstructor;
+        try {
+            //无参构造方法执行 属性值都是 null
+            declaredConstructor = beanClass.getDeclaredConstructor();
+            //Todo 1 实例化 bean
+            final Object newInstance = declaredConstructor.newInstance();
+            noInitializingObjects.put(beanName, newInstance);
+            //Todo 2 处理属性注入
+            for (Field declaredField : beanClass.getDeclaredFields()) {
+                if (declaredField.isAnnotationPresent(Autowried.class)) {
+                    //ByName 去查找属性
+                    String fieldName = declaredField.getName();
+                    //不好
+                    Object bean = getBean(fieldName);
+                    //单例池中没有找到
+                    if (bean == null) {
+                        //是否实例化过 否则就先用实例化后的
+                        bean = noInitializingObjects.get(fieldName);
+                        //没有实例化 才去实例化
+                        if (bean == null) {
+                            bean = creatBean(fieldName, beanDefinitionsMap.get(fieldName));
+                        }
+                    }
+                    declaredField.setAccessible(true);
+                    declaredField.set(newInstance, bean);
+                }
+            }
+            //Todo 3 是否实现了相关接口
+            if (newInstance instanceof BeanNameAware) {
+                ((BeanNameAware) newInstance).setBeanName(beanName);
+            }
+            singletonObjects.put(beanName, newInstance);
+            return newInstance;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void scan() {
         ComponentScan declaredAnnotation = (ComponentScan) aClass.getDeclaredAnnotation(ComponentScan.class);
         //com.hand.spring
         String path = declaredAnnotation.value();
@@ -109,17 +194,17 @@ public class AnnotationSpringContext extends AbstractContext {
         if (aClass.isAnnotationPresent(Component.class)) {
             //判断是单例 还是 原型 bean
             //解析 bean -> BeanDefinition
-            final Component annotation = (Component) aClass.getAnnotation(Component.class);
+            final Component annotation = aClass.getAnnotation(Component.class);
             final String beanName = annotation.value();
             final BeanDefinition beanDefinition = new BeanDefinition();
-            beanDefinition.setaClass(aClass);
+            beanDefinition.setBeanClass(aClass);
             if (aClass.isAnnotationPresent(Scope.class)) {
-                final Scope scope = (Scope) aClass.getAnnotation(Scope.class);
+                final Scope scope = aClass.getAnnotation(Scope.class);
                 final String scopeValue = scope.value();
                 beanDefinition.setScope(scopeValue);
             } else {
                 //没有这个注解说明是 单例 bean
-                beanDefinition.setScope("singleton");
+                beanDefinition.setScope(singleton);
             }
             beanDefinitionsMap.put(beanName, beanDefinition);
         }
@@ -129,11 +214,11 @@ public class AnnotationSpringContext extends AbstractContext {
     public void scanBeanDefinition(File file, String rootDir) {
         if (file.isFile()) {
             final String fileAbsolutePath = file.getAbsolutePath();
-            if (fileAbsolutePath.endsWith(".class")) {
-                final String className = fileAbsolutePath.substring(rootDir.length(), fileAbsolutePath.length() - 6).replace(SEPARATOR, ".");
+            if (fileAbsolutePath.endsWith(_class)) {
+                final String className = fileAbsolutePath.substring(rootDir.length(), fileAbsolutePath.length() - 6).replace(SEPARATOR, DOT);
                 addIfAccept(className);
             } else {
-                if (fileAbsolutePath.endsWith(".jar")) {
+                if (fileAbsolutePath.endsWith(_jar)) {
                     System.out.println("Jar包扫描 再说啦！");
                 }
             }
@@ -244,14 +329,6 @@ public class AnnotationSpringContext extends AbstractContext {
         return null == cs ? null : cs.toString();
     }
 
-    @Override
-    public Object getBean(String beanName) {
-        if (singletonObjects.containsKey(beanName)) {
-            return singletonObjects.get(beanName);
-        } else {
-            throw new NullPointerException();
-        }
-    }
 
 }
  
