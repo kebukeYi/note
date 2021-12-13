@@ -150,7 +150,7 @@ public class AnnotationSpringContext extends AbstractContext {
                 ((InitializingBean) newInstance).afterPropertiesSet();
             }
 
-            //Todo 4.5 初始化之后操作 生命周期的最后一步
+            //Todo 4.5 初始化之后操作 生命周期的最后一步 AOP 代理对象生成
             for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
                 //交给程序员去加工 但是 这里的入参 跟返回参数不一定是同一个 bean 对象
                 newInstance = beanPostProcessor.postProcessAfterInitialization(newInstance, beanName);
