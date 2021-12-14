@@ -115,7 +115,7 @@ public class RedisLockController {
         Redisson redisson = redisson();
         RLock rLock = redisson.getLock(LOCK_KEY);
         try {
-            //加锁 -> 默认设置一个key 超时30秒
+            //加锁 -> 默认设置一个 key 超时30秒
             rLock.lock();
             int stock = Integer.parseInt(JedisUtil6800.getString1(STOCK));
             if (stock > 0) {
