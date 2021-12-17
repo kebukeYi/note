@@ -10,7 +10,7 @@ package com.java.note.ids;
 public class SnowflakeIdWorker {
 
     /**
-     * Twitter_Snowflake
+     * Twitter_Snowflake 64位
      * SnowFlake的结构如下(每部分用-分开):
      * 0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000
      * 1位标识，由于long基本类型在Java中是带符号的，最高位是符号位，正数是0，负数是1，所以id一般是正数，最高位是0
@@ -123,10 +123,12 @@ public class SnowflakeIdWorker {
      * @return SnowflakeId
      */
     public synchronized long nextId() {
+        //当前时间
         long timestamp = timeGen();
 
         //如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
         if (timestamp < lastTimestamp) {
+            //这里是否可以有些优化？
             throw new RuntimeException(
                     String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
         }
@@ -172,6 +174,7 @@ public class SnowflakeIdWorker {
     /**
      * 返回以毫秒为单位的当前时间
      * 13 位
+     *
      * @return 当前时间(毫秒)
      */
     protected long timeGen() {
@@ -182,6 +185,7 @@ public class SnowflakeIdWorker {
 
     /**
      * 测试
+     * 假如我就是要 并发生出 4096个 ID呢？
      */
     public static void main(String[] args) {
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);

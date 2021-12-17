@@ -1,6 +1,9 @@
 package com.java.note.redis.miaosha;
 
 import com.java.note.redis.JedisUtil6800;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
+import org.redisson.config.Config;
 import redis.clients.jedis.Jedis;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,13 +19,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RedisMiao {
 
     private AtomicBoolean isRedis = new AtomicBoolean(true);
-
     final Jedis jedis = JedisUtil6800.getJedis();
-    ReentrantLock reentrantLock = new ReentrantLock();
 
     public Integer subtractionStockByRedis(String shopId) {
-        //reentrantLock.lock();
+        Redisson redisson = redisson();
+        RLock redissonLock = redisson.getLock(shopId);
+        redissonLock.lock();
         try {
+            //默认是有库存
             if (isRedis.get()) {
                 //扣减总库存 -1
                 final Long aLong = jedis.decrBy(shopId, 1);
@@ -38,11 +42,17 @@ public class RedisMiao {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            //reentrantLock.unlock();
+            redissonLock.unlock();
         }
         return -1;
     }
 
+    public static Redisson redisson() {
+        //单机模式
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://localhost:6379").setDatabase(1);
+        return (Redisson) Redisson.create(config);
+    }
 
 }
  
