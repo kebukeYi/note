@@ -44,6 +44,18 @@
             <version>0.10</version>
         </dependency>
 
+        <!-- JMH(Java Microbenchmark Harness)-->
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>1.23</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>1.23</version>
+        </dependency>
+
         <!-- 开启 cache 缓存 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
