@@ -21,16 +21,22 @@ public class FileDemo {
          *  /xzg/docs/d.txt
          */
         Directory fileSystemTree = new Directory("/");
+
         Directory node_wz = new Directory("/wz/");
         Directory node_xzg = new Directory("/xzg/");
+
         fileSystemTree.addSubNode(node_wz);
         fileSystemTree.addSubNode(node_xzg);
+
         FileNode node_wz_a = new FileNode("/wz/a.txt");
         FileNode node_wz_b = new FileNode("/wz/b.txt");
+
         Directory node_wz_movies = new Directory("/wz/movies/");
+
         node_wz.addSubNode(node_wz_a);
         node_wz.addSubNode(node_wz_b);
         node_wz.addSubNode(node_wz_movies);
+
         FileNode node_wz_movies_c = new FileNode("/wz/movies/c.avi");
         node_wz_movies.addSubNode(node_wz_movies_c);
 

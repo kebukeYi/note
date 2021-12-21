@@ -1,9 +1,11 @@
 package cn.gof.composite.file;
 
+import java.io.File;
+
 /**
  * @author : kebukeyi
  * @date :  2021-07-19 17:24
- * @description:
+ * @description: 具体文件节点 | 最终的叶子节点
  * @question:
  * @link:
  **/
@@ -20,7 +22,7 @@ public class FileNode extends FileSystemNode {
 
     @Override
     public long countSizeOfFiles() {
-        java.io.File file = new java.io.File(path);
+        File file = new java.io.File(path);
         if (!file.exists()) return 0;
         return file.length();
     }

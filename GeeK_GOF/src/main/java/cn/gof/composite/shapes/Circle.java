@@ -10,6 +10,7 @@ import java.awt.*;
  * @link:
  **/
 public class Circle extends BaseShape {
+
     public int radius;
 
     public Circle(int x, int y, int radius, Color color) {

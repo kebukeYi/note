@@ -10,6 +10,7 @@ import java.awt.*;
  * @link:
  **/
 public abstract class BaseShape implements Shape {
+
     public int x;
     public int y;
     public Color color;

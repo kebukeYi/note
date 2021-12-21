@@ -6,7 +6,8 @@ import java.util.List;
 /**
  * @author : kebukeyi
  * @date :  2021-07-19 17:25
- * @description: 目录是目录
+ * @description: 目录是目录 |
+ * 树枝节点 类型  其中树枝节点包括 后面的树枝节点  或者 叶子节点
  * @question:
  * @link:
  **/
