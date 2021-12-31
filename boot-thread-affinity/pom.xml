@@ -5,28 +5,31 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+        <version>2.6.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
-    <groupId>com.meituan.leaf</groupId>
-    <artifactId>mmy-leaf</artifactId>
-    <version>0.0.1</version>
-    <name>mmy-leaf</name>
-
-    <description>Demo project for Spring Boot</description>
-
+    <groupId>com.thread.affinity</groupId>
+    <artifactId>java-thread-affinity</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>java-thread-affinity</name>
+    <description>Java-Thread-Affinity project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
 
-<!--        <dependency>-->
-<!--            <artifactId>leaf-boot-starter</artifactId>-->
-<!--            <groupId>com.sankuai.inf.leaf</groupId>-->
-<!--            <version>1.0.1-RELEASE</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>affinity</artifactId>
+            <version>3.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.70.Final</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -38,7 +41,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
