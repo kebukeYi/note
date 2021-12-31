@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadFactory;
  * @date :  2021-12-31 15:57
  * @description:
  * @question:
- * @link:
+ * @link: https://mp.weixin.qq.com/s/494wqyxyFzDuGwG_51tFbQ
  **/
 public class NettyThreadAffinity {
 
