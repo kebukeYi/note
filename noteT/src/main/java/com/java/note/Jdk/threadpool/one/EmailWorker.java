@@ -13,6 +13,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  **/
 public class EmailWorker implements Runnable {
 
+    private volatile int theadId;
+
+    public EmailWorker(final int theadId) {
+        this.theadId = theadId;
+    }
+
     //每个线程下 单独出一个存储任务的队列
     public static LinkedBlockingQueue<EmailEntity> emailQueue = new LinkedBlockingQueue();
     //是否处于运行状态下
@@ -47,7 +53,7 @@ public class EmailWorker implements Runnable {
 
     public void dealWorker(EmailEntity emailEntity) {
         try {
-            System.out.println("处理任务");
+            System.out.println("线程ID：" + this.theadId + " 处理任务 " + emailEntity.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,7 +68,7 @@ public class EmailWorker implements Runnable {
     }
 
     private void exit() {
-        System.out.println("执行退出");
+        System.out.println("线程ID：" + this.theadId + " 执行退出");
     }
 
 

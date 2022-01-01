@@ -1689,9 +1689,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * the task is handled by the current {@code RejectedExecutionHandler}.
      *
      * @param command the task to execute
-     * @throws RejectedExecutionException at discretion of
-     *                                    {@code RejectedExecutionHandler}, if the task
-     *                                    cannot be accepted for execution
+     * @throws RejectedExecutionException at discretion of {@code RejectedExecutionHandler}, if the task cannot be accepted for execution
      * @throws NullPointerException       if {@code command} is null
      *                                    入参  可以是 FutureTask
      */
@@ -1701,8 +1699,8 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
         }
         //获取 高3位是线程池状态 低29位是线程池数量
         int c = ctl.get();
-        //如果线程池中运⾏的 线程数量<corePoolSize，则创建新线程来处理请求，即使其他辅助线程是空闲的
-        //1.首先判断当前线程池中之行的 任务数量 是否小于 corePoolSize
+        //如果线程池中运⾏的 线程数量<corePoolSize，则创建新线程来处理请求，即使其他辅助线程是空闲的 或者 即使存在空闲的核心线程也不会复用 而是直接新建新线程
+        //1.首先判断当前线程池中之行的 线程数量 是否小于 corePoolSize
         // 如果小于的话，通过 addWorker(command, true) 新建一个线程，并将任务(command)添加到该线程中；
         // 然后，启动该线程从而执行任务
         if (workerCountOf(c) < corePoolSize) {
@@ -1712,7 +1710,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                 return;
             }
 
-            //执行到这时说明 add worker 线程 失败了
+            //执行到这时说明 addWorker() 线程 失败了
             //1. 存在并发现象：当多个线程调用时 execute 方法时 ，当 workerCountOf(c) < corePoolSize 成立后，其他线程也成立了 并且向线程池中添加任务
             //这时 addWorker 时 可能线程池核心线程数量已经达到，因此就失败了
             //2. 当前线程池状态发生变化了，变为非 RUNNING 的话也会失败
@@ -1720,13 +1718,13 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
             c = ctl.get();
         }
 
-        // 1.如果当前之行的任务数量大于等于 corePoolSize 的时候就会走到这里
-        //2. add 失败
+        // 1.如果当前执行的线程数量大于等于 corePoolSize 的时候就会走到这里
+        // 2.addWorker() 失败 也会走到这里
 
         // 当工作线程数大于等于核心线程数时，线程池是运行状态，且任务添加到队列成功
-        // 通过 isRunning 方法判断线程池状态，线程池处于 RUNNING 状态才会被并且队列可以加入任务
-        //拓展: 如何修改原生线程池，使得可以先拉满线程数再入任务队列排队？
-        //增加: && workerCountOf(c)=maximumPoolSize
+        // 通过 isRunning 方法判断线程池状态，线程池处于 RUNNING 状态才会被队列加入任务
+        //拓展: 如何修改原生线程池，使得可以先拉满线程数再入任务队列排队？ 当前条件中增加: && workerCountOf(c)=maximumPoolSize ：
+        //只要不满足最大线程数量，那么就会一直新建线程，并且 addWorker() 方法也会进行判断 当前线程数量是否超过最大线程数量
         if (isRunning(c) && workQueue.offer(command)) {
             //执行到这里 说明 提交任务加入成功了
             //再次获取 ctl
@@ -1734,7 +1732,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
             // 1.如果线程池不是RUNNING状态，原因：当前线程池状态发生了变化 被外部线程修改了
             // 2. 需要删除任务了
             // 删除任务：可能成功、失败
-            //失败：提交之后  在被 shutdown() 之前被线程池中的线程 拿去消费了 不用管了
+            // 失败：提交之后  在被 shutdown() 之前被线程池中的线程 拿去消费了 不用管了
             // 成功：提交之后 还未消费 ；从阻塞队列中删除任务，则该任务由当前 RejectedExecutionHandler 处理
             if (!isRunning(recheck) && remove(command)) {
                 //非 running 且 移除任务失败  就会执行拒绝策略
