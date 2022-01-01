@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  **/
 public class ThreadPoolUtils {
 
+    //存放任务结果的
     public ArrayList<Future> queryFuture = new ArrayList<Future>();
     public ArrayList<Future> emailFuture = new ArrayList<Future>();
 
@@ -32,6 +33,7 @@ public class ThreadPoolUtils {
 
     public void submitQuery() {
         for (int i = 0; i < 3; i++) {
+            //3个任务 : 每个任务线程从启动就都是不断的获取队列中的任务执行
             final QueryWorker worker = new QueryWorker();
             final Future<?> submit = executor.submit(worker);
             if (!submit.isDone()) {
@@ -43,6 +45,7 @@ public class ThreadPoolUtils {
     public void submitEmail() {
         for (int i = 0; i < 3; i++) {
             final EmailWorker worker = new EmailWorker();
+            worker.addTask(new EmailEntity());
             final Future<?> submit = executor.submit(worker);
             if (!submit.isDone()) {
                 emailFuture.add(submit);
@@ -50,10 +53,13 @@ public class ThreadPoolUtils {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         final ThreadPoolUtils poolUtils = new ThreadPoolUtils();
         poolUtils.submitEmail();
-        poolUtils.submitQuery();
+        Thread.sleep(3000);
+        //停止运行任务
+        EmailWorker.STOP.set(true);
+        // poolUtils.submitQuery();
     }
 
 
