@@ -715,6 +715,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
          * Delegates main run loop to outer runWorker
          * 当 worker 启动时 会调用 run 方法
          */
+        @Override
         public void run() {
             runWorker(this);
         }
@@ -1238,9 +1239,9 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * @param w                 the worker
      * @param completedAbruptly if the worker died due to user exception
      */
-    private void processWorkerExit(Worker w, boolean completedAbruptly) {
+    private void processWorkerExit(Worker w1, boolean completedAbruptly) {
         //条件成立：代表当前这个 w 是发生异常退出的，执行 task 任务过程中向上抛出异常了
-        //异常退出 ctl 数量减一
+        //异常退出  -> ctl 数量减一
         if (completedAbruptly) {
             decrementWorkerCount();
         }
@@ -1268,11 +1269,11 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
         //其他就直接返回 null
         if (runStateLessThan(c, STOP)) {
 
-            //条件成立：当前线程是正常正常退出
+            //条件成立：当前线程是正常退出
             if (!completedAbruptly) {
                 //min 表示线程池 最低持有线程池数量
                 //allowCoreThreadTimeOut==true  表示核心线程数 也会被收回收
-                //allowCoreThreadTimeOut==false  表示 min==corePoolSize (corePoolSize会不会等于 0 呢?)
+                //allowCoreThreadTimeOut==false  表示 min==corePoolSize (corePoolSize会不会等于 0 呢？会的)
                 int min = allowCoreThreadTimeOut ? 0 : corePoolSize;
                 //假设min ==0 成立 需要判断条件二：
                 //如果队列不为空，表示需要留一个线程
@@ -1471,6 +1472,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                 //假设(runStateAtLeast(ctl.get(), STOP)不成立： 就会走(Thread.interrupted() && runStateAtLeast(ctl.get(), STOP))这个判断：
                 //Thread.interrupted() 获取当前中断状态且设置为false ，runStateAtLeast(ctl.get(), STOP) 大概率 还是 false
                 if ((runStateAtLeast(ctl.get(), STOP) || (Thread.interrupted() && runStateAtLeast(ctl.get(), STOP))) && !wt.isInterrupted()) {
+                    //设置中断线程
                     wt.interrupt();
                 }
 
@@ -1498,10 +1500,12 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                         // 该方法的目的是为了让任务执行后做一些其他操作
                         afterExecute(task, thrown);
                     }
+
                 } finally {
                     //将局部变量 值为null
                     task = null;
                     //当前线程完成数量 ++
+                    // 不论执行任务中是否发生了异常
                     w.completedTasks++;
                     //释放独占锁
                     //1. 正常状态下：会再次回到 getTask() 方法那里获得任务 while()
