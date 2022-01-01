@@ -16,9 +16,8 @@ public class ThreadPoolDemo {
         });
         //执行用户任务 && 获取任务队列中的任务
         work.thread.start();
-        //设置线程 one 中断一下 -> 会被捕获异常 ->执行退出函数
+        //设置线程 one 中断一下 -> 会被捕获异常 -> 执行退出函数
         //work.thread.interrupt();
-
 
         System.out.println("====================================");
 
@@ -28,7 +27,7 @@ public class ThreadPoolDemo {
         });
         //新建线程  && 并且执行用户任务 && 获取任务队列中的任务
         worker.run();
-        //设置线程 two 中断一下 -> 会被捕获异常 ->执行退出函数
+        //设置线程 two 中断一下 -> 会被捕获异常 -> 执行退出函数
         //worker.thread.interrupt();
 
         //避免主线程退出
@@ -66,6 +65,7 @@ class Work implements Runnable {
                 try {
                     try {
                         try {
+                            //用户传入的第一个任务
                             if (task != null) {
                                 task.run();
                             }
@@ -74,6 +74,7 @@ class Work implements Runnable {
                             throw e;
                         }
                         Thread.sleep(2 * 1000);
+                        //模拟线程从任务队列中循环获取任务
                         System.out.println(name + "线程从任务队列中获取任务");
                     } catch (Exception e) {
                         thrown = e;
@@ -131,6 +132,7 @@ class Worker {
                     try {
                         try {
                             try {
+                                //用户传入的第一个任务
                                 if (task != null) {
                                     task.run();
                                 }
@@ -139,6 +141,7 @@ class Worker {
                                 throw e;
                             }
                             Thread.sleep(2 * 1000);
+                            //模拟线程从任务队列中循环获取任务
                             System.out.println(name + "线程从任务队列中获取任务");
                         } catch (Exception e) {
                             thrown = e;
