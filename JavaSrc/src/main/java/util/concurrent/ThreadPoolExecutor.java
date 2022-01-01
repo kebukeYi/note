@@ -670,7 +670,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * 采用了AQS 的独占模式：两个重要属性：state 状态属性、exclusiveOwnerThread 所拥有线程
      * state =0 时未被占用 ；>0 时被占用 ；<0 时 初始状态 不能被强锁；
      * exclusiveOwnerThread 表示独占锁的线程
-     * 美团：Worker是通过继承AQS，使用AQS来实现独占锁这个功能。
+     * 美团：Worker是通过继承AQS，使用AQS来实现独占锁这个功能
      * 没有使用可重入锁 ReentrantLock，而是使用AQS，为的就是实现不可重入的特性去反应线程现在的执行状态
      */
     private final class Worker extends AbstractQueuedSynchronizer implements Runnable {
@@ -687,7 +687,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
         final Thread thread;
         /**
          * Initial task to run.  Possibly null.
-         * 假设 firstTask 不为 null ，当 work 内部的线程启动后 优先执行 firstTask ，执行完毕后 会从队列中获取；
+         * 假设 firstTask 不为 null ，当 work 内部的线程启动后 优先执行 firstTask ，执行完毕后 会从队列中获取
          */
         Runnable firstTask;
         /**
@@ -1101,7 +1101,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 
                 // 线程数+1，如果设置成功，就跳出外层循环
                 //成功：尝试添加线程池数量 申请了一个令牌
-                // 失败：其他线程修改过 ctl 这个值了
+                //失败：其他线程修改过 ctl 这个值了
                 if (compareAndIncrementWorkerCount(c)) {
                     //一定是 cas 成功了 申请到令牌了
                     //直接跳出了外部自旋
@@ -1181,7 +1181,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                 // 启动线程
                 if (workerAdded) {
                     //当调用线程的start()方法之后，如果线程获取到CPU的执行权，那么就会执行线程的run()方法，在线程的run()方法中，
-                    // 会执行线程中target属性的run()方法。这里线程的target属性就是我们创建的worker对象，因此最终会执行到Worker的run()方法
+                    //会执行线程中target属性的run()方法。这里线程的target属性就是我们创建的worker对象，因此最终会执行到Worker的run()方法
                     //那么线程是怎么消亡的呢???
                     t.start();
                     workerStarted = true;
@@ -1446,7 +1446,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      */
     final void runWorker(Worker w) {
         //获取当前线程
-        Thread wt = Thread.currentThread();
+        Thread wt1 = Thread.currentThread();
         //赋值 firstTask
         Runnable task = w.firstTask;
         //清空引用
@@ -1750,8 +1750,8 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 
             //1. workQueue.offer(command) 提交失败
             //2. 当前线程池状态不是 RUNNING 状态
-            // workQueue.offer() 失败：说明 队列满了，这个时候如果 线程数量尚未达到最大的线程数量 的话，就尝试创建新的 worker 线程 直接执行 任务
-            // 非RUNNING ：因为 command ！=null 那么 add 就一定失败 最后执行拒绝策略；表示不能再创建新的线程了;
+            // workQueue.offer() 失败：说明 队列满了，这个时候如果 线程数量尚未达到最大的线程数量 的话，就尝试创建新的 addWorker() 线程 直接执行 任务
+            // 非RUNNING ：因为 command ！=null 那么 addWorker() 就一定失败 最后执行拒绝策略；表示不能再创建新的线程了;
         } else if (!addWorker(command, false)) {
             // 如果创建新的 worker 线程失败，就执行拒绝策略
             reject(command);
