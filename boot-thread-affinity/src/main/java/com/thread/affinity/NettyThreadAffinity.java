@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * @author : kebukeYi
  * @date :  2021-12-31 15:57
- * @description:
+ * @description: 绑核操作
  * @question:
  * @link: https://mp.weixin.qq.com/s/494wqyxyFzDuGwG_51tFbQ
  **/
