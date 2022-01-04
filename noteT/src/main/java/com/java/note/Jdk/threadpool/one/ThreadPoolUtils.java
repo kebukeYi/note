@@ -28,8 +28,7 @@ public class ThreadPoolUtils {
                 4,
                 5,
                 100, TimeUnit.MILLISECONDS,
-                new SynchronousQueue<>(),
-                new MyRejectedExecutionHandler());
+                new SynchronousQueue<>());
     }
 
     public void submitQuery() {
@@ -49,6 +48,7 @@ public class ThreadPoolUtils {
             EmailWorker.emailQueue.put(new EmailEntity(i));
         }
         //创建线程池性任务
+        //RejectedExecutionException
         for (int i = 1; i <= 6; i++) {
             EmailWorker worker = new EmailWorker(atomicInteger.getAndIncrement());
             Future<?> submit = executor.submit(worker);
