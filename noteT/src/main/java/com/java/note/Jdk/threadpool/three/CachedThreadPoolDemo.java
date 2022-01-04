@@ -95,6 +95,7 @@ public class CachedThreadPoolDemo {
                     //捕捉到默认拒绝策略异常 就将任务先保存到 拒绝队列中
                     try {
                         //当前消费不到 就放到另外一个对列中
+                        //boolean offer = taskQueue.offer(task, 10, TimeUnit.MILLISECONDS);
                         rejectTaskQueue.put(task);
                         System.out.println("当前线程池到达极限 需要等待：" + task.getTaskId());
                         //当前 consumerTask 线程 等待 线程池中的线程进行消费消息
@@ -136,6 +137,7 @@ public class CachedThreadPoolDemo {
                     try {
                         //当前消费不了 就放到另外一个对列中
                         taskQueue.put(task);
+                        //boolean offer = rejectTaskQueue.offer(task, 10, TimeUnit.MILLISECONDS);
                         System.out.println("线程池到达极限需要等待：" + task.getTaskId());
                         //当前 consumerRejectTask 线程等待 线程池中的线程进行消费消息
                         Thread.sleep(30);
