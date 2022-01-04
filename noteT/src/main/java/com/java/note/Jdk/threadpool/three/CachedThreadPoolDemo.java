@@ -46,7 +46,7 @@ public class CachedThreadPoolDemo {
     //生产者队列(没有容量限制 容易oom)
     private final static BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>(1000);
 
-    //正常任务队列被消费下 被拒绝的任务队列
+    //正常任务队列被消费时 被拒绝的任务队列
     private final static BlockingQueue<Task> rejectTaskQueue = new LinkedBlockingQueue<>(1000);
 
     public ThreadPoolExecutor getCachedThreadPool(int coreSize, int maxSize) {
