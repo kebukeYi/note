@@ -9,8 +9,8 @@ import java.util.concurrent.*;
 /**
  * @author : kebukeYi
  * @date :  2022-01-04 19:35
- * @description:
- * @question:
+ * @description: 可缓存线程池之实践(尽可能的通过创建多线程来快速消费任务)
+ * @question: “可缓存线程池”的弊端：线程池没有最大线程数量限制，如果大量的异步任务执行目标实例同时提交，可能导致创线程过多会而导致资源耗尽
  * @link:
  **/
 public class CachedThreadPoolDemo {
