@@ -55,7 +55,6 @@ public class FileLockDemo {
         System.out.println("读取出内容：");
         while (tr != null) {
             System.out.println(" " + tr);
-
             tr = bufferedReader.readLine();
         }
         fileReader.close();

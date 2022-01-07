@@ -25,8 +25,7 @@ public class AsyncFileChannelDemo {
     public void writeAsyncFileCompleted() throws IOException {
         //1 创建AsynchronousFileChannel
         Path path = Paths.get("d:\\atguigu\\002.txt");
-        AsynchronousFileChannel fileChannel =
-                AsynchronousFileChannel.open(path, StandardOpenOption.WRITE);
+        AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.WRITE);
 
         //2 创建Buffer
         ByteBuffer buffer = ByteBuffer.allocate(1024);
@@ -75,8 +74,7 @@ public class AsyncFileChannelDemo {
     public void readAsyncFileChannelCompleted() throws Exception {
         //1 创建AsynchronousFileChannel
         Path path = Paths.get("d:\\atguigu\\002.txt");
-        AsynchronousFileChannel fileChannel =
-                AsynchronousFileChannel.open(path, StandardOpenOption.READ);
+        AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);
 
         //2 创建Buffer
         ByteBuffer buffer = ByteBuffer.allocate(1024);
@@ -104,8 +102,7 @@ public class AsyncFileChannelDemo {
     public void readAsyncFileChannelFuture() throws Exception {
         //1 创建AsynchronousFileChannel
         Path path = Paths.get("d:\\atguigu\\002.txt");
-        AsynchronousFileChannel fileChannel =
-                AsynchronousFileChannel.open(path, StandardOpenOption.READ);
+        AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);
 
         //2 创建Buffer
         ByteBuffer buffer = ByteBuffer.allocate(1024);

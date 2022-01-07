@@ -15,8 +15,13 @@ public class FileChannel {
 
 
     public static void main(String[] args) throws IOException {
+
         final RandomAccessFile randomAccessFile = new RandomAccessFile("F:\\01.txt", "rw");
         final java.nio.channels.FileChannel fileChannel = randomAccessFile.getChannel();
+
+        final RandomAccessFile randomAccessFile1 = new RandomAccessFile("F:\\02.txt", "rw");
+        final java.nio.channels.FileChannel fileChannel1 = randomAccessFile1.getChannel();
+        fileChannel1.position(fileChannel1.size());
         //在 FileChannel 的某个特定位置进行数据的读/写操作
         long pos = fileChannel.position();
         fileChannel.position(pos + 0);
@@ -58,10 +63,11 @@ public class FileChannel {
         //buffer 中是否还存在数据
         while (buffer.hasRemaining()) {
             //处于性能的原因,操作系统会将数据缓存在内存中，所以无法保证写入到 FileChannel 里的数据一定会即时写到磁盘上
-            fileChannel.write(buffer);
+            fileChannel1.write(buffer);
         }
         randomAccessFile.close();
         fileChannel.close();
+        fileChannel1.close();
         System.out.println("over");
     }
 }

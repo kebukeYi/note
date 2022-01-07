@@ -7,6 +7,7 @@ import com.my.drools.entity.Order
 rule "score_1"
 
 when
+# 变量名字叫做 $s  类型是 Order 规则是 变量值小于 等于 100
 $s : Order(amout <= 100)
 then
 $s.setScore(0);

@@ -38,8 +38,7 @@ public class FilesDemo {
         Path destinationPath = Paths.get("d:\\atguigu\\01test.txt");
 
         try {
-            Files.move(sourcePath, destinationPath,
-                    StandardCopyOption.REPLACE_EXISTING);
+            Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             //移动文件失败
             e.printStackTrace();
