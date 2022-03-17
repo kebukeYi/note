@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * @author : kebukeYi
  * @date :  2021-10-04 21:59
- * @description:
+ * @description: 研究生科目爬虫项目
  * @question:
  * @link:
  **/

@@ -19,7 +19,7 @@ public class DemoReflection {
         // 1.2 加载配置文件，转换为一个集合
         // 1.2.1 获取类的类加载器
         ClassLoader classLoader = DemoReflection.class.getClassLoader();
-         InputStream inputStream = classLoader.getResourceAsStream("pro.properties");
+        InputStream inputStream = classLoader.getResourceAsStream("pro.properties");
 //        InputStream inputStream = new FileInputStream("pro.properties");
         properties.load(inputStream);
         // 2. 获取配置文件中定义的数据

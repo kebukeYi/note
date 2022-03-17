@@ -17,7 +17,7 @@ public class MethodInterceptorImpl implements MethodInterceptor {
     // 在子类中加入需要增强的方法，让这个子类代替原有的类，完成增强的操作
     //1.生成指定类的Class对象字节数组
     //2.将Class对象字节数组转换为Class对象
-    //3.通过 Class.forName 方法将Class对象装载到JVM
+    //3.通过 Class.forName() 方法将Class对象装载到JVM
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         System.out.println("CGlib 开始");
