@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea and Martin Buchholz with assistance from members of
- * JCP JSR-166 Expert Group and released to the public domain, as explained
- * at http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent;
 
 import java.util.AbstractQueue;
@@ -102,8 +67,7 @@ import java.util.function.Consumer;
  * @author Doug Lea
  * @since 1.5
  */
-public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
-        implements Queue<E>, java.io.Serializable {
+public class ConcurrentLinkedQueue<E> extends AbstractQueue<E> implements Queue<E>, java.io.Serializable {
     private static final long serialVersionUID = 196745693267521676L;
 
     /*

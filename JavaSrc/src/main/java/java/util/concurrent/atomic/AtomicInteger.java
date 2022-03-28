@@ -310,7 +310,7 @@ public class AtomicInteger extends Number implements java.io.Serializable {
      * @jls 5.1.2 Widening Primitive Conversions
      */
     public double doubleValue() {
-        return  get();
+        return get();
     }
 
 }
