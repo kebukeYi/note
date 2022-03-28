@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent.atomic;
 import java.util.function.UnaryOperator;
 import java.util.function.BinaryOperator;
@@ -47,6 +12,7 @@ import sun.misc.Unsafe;
  * @param <V> The type of object referred to by this reference
  */
 public class AtomicReference<V> implements java.io.Serializable {
+
     private static final long serialVersionUID = -1848883965231344442L;
 
     private static final Unsafe unsafe = Unsafe.getUnsafe();
@@ -195,8 +161,7 @@ public class AtomicReference<V> implements java.io.Serializable {
      * @return the previous value
      * @since 1.8
      */
-    public final V getAndAccumulate(V x,
-                                    BinaryOperator<V> accumulatorFunction) {
+    public final V getAndAccumulate(V x, BinaryOperator<V> accumulatorFunction) {
         V prev, next;
         do {
             prev = get();
@@ -219,8 +184,7 @@ public class AtomicReference<V> implements java.io.Serializable {
      * @return the updated value
      * @since 1.8
      */
-    public final V accumulateAndGet(V x,
-                                    BinaryOperator<V> accumulatorFunction) {
+    public final V accumulateAndGet(V x, BinaryOperator<V> accumulatorFunction) {
         V prev, next;
         do {
             prev = get();

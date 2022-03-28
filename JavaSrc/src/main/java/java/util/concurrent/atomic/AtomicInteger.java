@@ -103,8 +103,9 @@ public class AtomicInteger extends Number implements java.io.Serializable {
      * @return {@code true} if successful. False return indicates that
      * the actual value was not equal to the expected value.
      * valueOffset : 第二个是对象中用于运算的属性的偏移量
-     * 在Unsafe类中，compareAndSwapInt和getAndAddInt的区别在于，getAndAddInt会一直重试直到成功
-     * ，compareAndSwapInt如果更新失败，只会返回false
+     * 在Unsafe类中，compareAndSwapInt和getAndAddInt的区别在于，
+     * getAndAddInt会一直重试直到成功
+     * compareAndSwapInt如果更新失败，只会返回 false
      */
     public final boolean compareAndSet(int expect, int update) {
         return unsafe.compareAndSwapInt(this, valueOffset, expect, update);
@@ -289,7 +290,7 @@ public class AtomicInteger extends Number implements java.io.Serializable {
      * @jls 5.1.2 Widening Primitive Conversions
      */
     public long longValue() {
-        return (long) get();
+        return get();
     }
 
     /**
@@ -309,7 +310,7 @@ public class AtomicInteger extends Number implements java.io.Serializable {
      * @jls 5.1.2 Widening Primitive Conversions
      */
     public double doubleValue() {
-        return (double) get();
+        return  get();
     }
 
 }
