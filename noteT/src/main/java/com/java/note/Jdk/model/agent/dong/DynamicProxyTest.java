@@ -42,8 +42,7 @@ public class DynamicProxyTest {
         byte[] bytes4 = MyProxyGenerator.generateProxyClass(proxyName, new Class<?>[]{Operate.class});
         Path path4 = new File("F:\\" + proxyName + "$myproxy1.class").toPath();
         Files.write(path4, bytes4);
-
-//        operate.doSomething("【operate】 deal with ");
+        // operate.doSomething("【operate】 deal with ");
         //增强完成
         //调用操作方法
         String deal_with = operationProxy.doSomething("【operationProxy】 deal with");

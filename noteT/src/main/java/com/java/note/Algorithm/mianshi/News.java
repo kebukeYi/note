@@ -28,13 +28,46 @@ import java.util.List;
 
 public class News {
 
-    @Data
-    @NoArgsConstructor
     static class Message {
         Message next;
         LocalTime startTime;
         LocalTime endTime;
         int flag;
+
+        public Message getNext() {
+            return next;
+        }
+
+        public void setNext(Message next) {
+            this.next = next;
+        }
+
+        public LocalTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalTime endTime) {
+            this.endTime = endTime;
+        }
+
+        public int getFlag() {
+            return flag;
+        }
+
+        public void setFlag(int flag) {
+            this.flag = flag;
+        }
+
+        public Message() {
+        }
 
         public Message(LocalTime startTime, LocalTime endTime, int flag) {
             this.startTime = startTime;
@@ -284,6 +317,4 @@ public class News {
         }
         return newsList;
     }
-
-
 }

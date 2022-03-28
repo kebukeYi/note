@@ -2,7 +2,7 @@ package com.java.note.Jdk.thread.LeeCode;
 
 /**
  * @Author : mmy
- * @Creat Time : 2020/4/19  17:12
+ * @CreatTime : 2020/4/19  17:12
  * @Description
  */
 public class Foo {

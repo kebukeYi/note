@@ -38,10 +38,9 @@ public class InvocationHandlerImpl implements InvocationHandler {
         System.out.println("result : " + result);
         System.out.println("after calling method: " + method.getName());
         System.out.println("动态代理 结束");
-
-//        return proxy;
+        // return proxy;
         return result;
-//        return null;
+        // return null;
     }
 
 

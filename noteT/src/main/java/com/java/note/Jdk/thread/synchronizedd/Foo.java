@@ -1,7 +1,5 @@
 package com.java.note.Jdk.thread.synchronizedd;
 
-import lombok.Data;
-
 /**
  * @author : kebukeyi
  * @date :  2021-07-13 11:49
@@ -9,11 +7,11 @@ import lombok.Data;
  * @question :
  * @usinglink :
  **/
-@Data
 public class Foo extends Thread {
+
     private String value;
 
-    private Object object = null;
+    private final Object object = new Object();
 
 
     public Foo(String value) {

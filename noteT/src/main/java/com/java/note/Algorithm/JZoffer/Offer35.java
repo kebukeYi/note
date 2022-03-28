@@ -11,15 +11,37 @@ import lombok.Data;
  */
 public class Offer35 {
 
-    @Data
-    static
-    class RandomListNode {
+    static class RandomListNode {
         int label;
         RandomListNode next = null;
         RandomListNode random = null;
 
         RandomListNode(int label) {
             this.label = label;
+        }
+
+        public int getLabel() {
+            return label;
+        }
+
+        public void setLabel(int label) {
+            this.label = label;
+        }
+
+        public RandomListNode getNext() {
+            return next;
+        }
+
+        public void setNext(RandomListNode next) {
+            this.next = next;
+        }
+
+        public RandomListNode getRandom() {
+            return random;
+        }
+
+        public void setRandom(RandomListNode random) {
+            this.random = random;
         }
     }
 

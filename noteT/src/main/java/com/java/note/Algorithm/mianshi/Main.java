@@ -226,17 +226,41 @@ public class Main {
         System.out.println(2 + 2 + "5" + 2 + 2);
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
     static class ScoreVo {
         String studentName;
         String courseName;
         double score;
-    }
 
-    @Data
-    @AllArgsConstructor
+        public ScoreVo(String studentName, String courseName, double score) {
+            this.studentName = studentName;
+            this.courseName = courseName;
+            this.score = score;
+        }
+
+        public String getStudentName() {
+            return studentName;
+        }
+
+        public void setStudentName(String studentName) {
+            this.studentName = studentName;
+        }
+
+        public String getCourseName() {
+            return courseName;
+        }
+
+        public void setCourseName(String courseName) {
+            this.courseName = courseName;
+        }
+
+        public double getScore() {
+            return score;
+        }
+
+        public void setScore(double score) {
+            this.score = score;
+        }
+    }
     @NoArgsConstructor
     static class StudentVo {
         private String name;
@@ -245,6 +269,63 @@ public class Main {
         private double englishScore;
         private double physicalScore;
         private double totalScore;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getChineseScore() {
+            return chineseScore;
+        }
+
+        public void setChineseScore(double chineseScore) {
+            this.chineseScore = chineseScore;
+        }
+
+        public double getMathScore() {
+            return mathScore;
+        }
+
+        public void setMathScore(double mathScore) {
+            this.mathScore = mathScore;
+        }
+
+        public double getEnglishScore() {
+            return englishScore;
+        }
+
+        public void setEnglishScore(double englishScore) {
+            this.englishScore = englishScore;
+        }
+
+        public double getPhysicalScore() {
+            return physicalScore;
+        }
+
+        public void setPhysicalScore(double physicalScore) {
+            this.physicalScore = physicalScore;
+        }
+
+        public double getTotalScore() {
+            return totalScore;
+        }
+
+        public void setTotalScore(double totalScore) {
+            this.totalScore = totalScore;
+        }
+
+        public StudentVo(String name, double chineseScore, double mathScore, double englishScore, double physicalScore, double totalScore) {
+            this.name = name;
+            this.chineseScore = chineseScore;
+            this.mathScore = mathScore;
+            this.englishScore = englishScore;
+            this.physicalScore = physicalScore;
+            this.totalScore = totalScore;
+        }
     }
 
     public static List<ScoreVo> getScoreList() {

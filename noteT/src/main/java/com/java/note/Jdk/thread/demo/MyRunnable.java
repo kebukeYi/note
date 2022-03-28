@@ -3,8 +3,8 @@ package com.java.note.Jdk.thread.demo;
 import java.util.Date;
 
 /**
- * @Author : mmy
- * @Creat Time : 2020/4/25  16:25
+ * @Author mmy
+ * @CreatTime 2020/4/25  16:25
  * @Description
  */
 public class MyRunnable implements Runnable {
@@ -49,6 +49,7 @@ public class MyRunnable implements Runnable {
         return this.command;
     }
 
+    //main 方法还真只能写在 class 内部
     public static void main(String[] args) {
         MyRunnable myRunnable = new MyRunnable();
         Thread thread = new Thread(myRunnable);
@@ -60,6 +61,6 @@ public class MyRunnable implements Runnable {
         }
         thread.interrupt();
     }
-}
 
+}
 
