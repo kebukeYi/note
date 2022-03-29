@@ -22,6 +22,7 @@ public class ReadWriteLock {
     private int waitingWriters = 0;
 
     //是否写入优先
+    //意义：读操作过后 写操作优先执行 ； 写操作过后 读操作优先执行；
     private boolean preferWriters = true;
 
     //只能一个线程通过 其余线程则加入等待队列中
