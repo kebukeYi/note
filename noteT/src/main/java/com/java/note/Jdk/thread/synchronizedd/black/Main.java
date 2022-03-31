@@ -1,10 +1,13 @@
 package com.java.note.Jdk.thread.synchronizedd.black;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadFactory;
+
 /**
  * @ClassName Main
  * @Author kebukeyi
  * @Date 2022/3/29 23:44
- * @Description
+ * @Description 目的： 假如子线程没有获得锁的话 主线程不返回 继续阻塞
  * @Version 1.0.0
  */
 public class Main {
@@ -15,4 +18,5 @@ public class Main {
         BlackHole.enter(o);
         System.out.println("END");
     }
+
 }

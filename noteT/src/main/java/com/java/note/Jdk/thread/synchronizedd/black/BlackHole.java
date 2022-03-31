@@ -4,7 +4,7 @@ package com.java.note.Jdk.thread.synchronizedd.black;
  * @ClassName blackhole
  * @Author kebukeyi
  * @Date 2022/3/29 23:43
- * @Description
+ * @Description 目的： 假如子线程没有获得锁的话 主线程不返回 继续阻塞
  * @Version 1.0.0
  */
 public class BlackHole {
