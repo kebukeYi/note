@@ -16,7 +16,7 @@ public class Main {
         new ClientThread("haha", channel).start();
         new ClientThread("papa", channel).start();
         Thread.sleep(2000);
-        //手动停止线程：设置抛出异常 然后线程捕获异常 自动退出线程
+        //手动停止线程：设置抛出异常tH 然后线程捕获异常 自动退出线程
         channel.stopAllWorkers();
     }
 }
