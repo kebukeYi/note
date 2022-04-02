@@ -25,10 +25,10 @@ public class HanoiThread extends Thread {
     public void run() {
         try {
             for (int n = 0; !isShutDownRequest(); n++) {
-                Thread.sleep(500);
                 System.out.println(" ===  level  " + n + "  ===  ");
                 //将塔座X上编号为1至n的n个圆盘按规则搬到塔座Z上， Y可用作辅助塔座
                 doWork(n, "A", "B", "C");
+                Thread.sleep(500);
                 System.out.println("");
             }
         } catch (InterruptedException e) {
@@ -45,7 +45,7 @@ public class HanoiThread extends Thread {
             //将X上编号为1至n-1的圆盘移到Y,Z作辅助塔
             doWork(level - 1, a, c, b);
             //将编号为n的圆盘从X移到Z
-            System.out.println(a + " -> " + c + "  ");
+            System.out.print(a + " -> " + c + "  ");
             //将Y上编号为1至n-1的圆盘移动到Z， X作辅助塔
             doWork(level - 1, b, a, c);
         }
