@@ -11,8 +11,6 @@ import org.jetbrains.annotations.Contract;
  */
 public class Log {
 
-    private static final ThreadLocal threadLocal = new ThreadLocal();
-
     //默认redis锁的有效时长 秒/单位
     private static final Integer MAX_REDIS_LOCK = 2;
     //默认最大 延期次数   加上 首次 一共 3次
