@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Application {
 
+
     public static void redisson() throws InterruptedException {
         Config config = new Config();
         config.useClusterServers()
