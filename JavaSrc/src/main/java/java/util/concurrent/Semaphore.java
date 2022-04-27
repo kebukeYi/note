@@ -126,7 +126,7 @@ import java.util.concurrent.locks.AbstractQueuedSynchronizer;
  * 这些"许可证"的个数其实就是⼀个count变量罢了~
  */
 public class Semaphore implements java.io.Serializable {
-    private static final long serialVersionUID = -3222578661600680210L;
+
     /**
      * All mechanics via AbstractQueuedSynchronizer subclass
      */
@@ -138,7 +138,6 @@ public class Semaphore implements java.io.Serializable {
      * versions.
      */
     abstract static class Sync extends AbstractQueuedSynchronizer {
-        private static final long serialVersionUID = 1192457210091910933L;
 
         Sync(int permits) {
             setState(permits);
@@ -147,7 +146,6 @@ public class Semaphore implements java.io.Serializable {
         final int getPermits() {
             return getState();
         }
-
 
         final int nonfairTryAcquireShared(int acquires) {
             for (; ; ) {
@@ -196,7 +194,6 @@ public class Semaphore implements java.io.Serializable {
      * NonFair version
      */
     static final class NonfairSync extends Sync {
-        private static final long serialVersionUID = -2694183684443567898L;
 
         NonfairSync(int permits) {
             super(permits);
@@ -211,7 +208,6 @@ public class Semaphore implements java.io.Serializable {
      * Fair version
      */
     static final class FairSync extends Sync {
-        private static final long serialVersionUID = 2014338818796000944L;
 
         FairSync(int permits) {
             super(permits);

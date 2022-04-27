@@ -355,11 +355,13 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * on the design of this class.
      */
     static final class Node {
+
         /**
          * Marker to indicate a node is waiting in shared mode
          * 标记一个结点（对应的线程）在共享模式下等待
          */
         static final Node SHARED = new Node();
+
         /**
          * Marker to indicate a node is waiting in exclusive mode
          * 标记一个结点（对应的线程）在独占模式下等待
@@ -383,6 +385,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
          * waitStatus的值，表示该结点（对应的线程）在等待某一条件
          */
         static final int CONDITION = -2;
+
         /**
          * waitStatus value to indicate the next acquireShared should
          * unconditionally propagate
@@ -464,7 +467,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         /**
          * The thread that enqueued this node.  Initialized on
          * construction and nulled out after use.
-         * 结点对应的线程
+         * <p>
+         * 节点对应的线程
          */
         volatile Thread thread;
 
@@ -485,7 +489,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
          * Returns true if node is waiting in shared mode.
          * 判断共享模式的方法
          */
-        final boolean isShared() {
+        boolean isShared() {
             return nextWaiter == SHARED;
         }
 
@@ -496,11 +500,10 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
          *
          * @return the predecessor of this node
          */
-        final Node predecessor() throws NullPointerException {
+        Node predecessor() throws NullPointerException {
             Node p = prev;
             if (p == null) throw new NullPointerException();
-            else
-                return p;
+            else return p;
         }
 
         Node() {    // Used to establish initial head or SHARED marker
@@ -696,7 +699,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
 
         //当是 -1 状态时 需要唤醒后续节点
         if (ws < 0) {
-            //设置成 0 状态 原因：当前当前节点已经完成喊后继节点的任务了
+            //设置成 0 状态 原因：当前当前节点已经完成，喊后继节点的任务了
             compareAndSetWaitStatus(node, ws, 0);
         }
 
@@ -716,7 +719,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
             //为何从尾部找？
             //从尾部向前获取到一个 里 node 最近的 并且 不为 null 并且 状态不是取消的节点
             /**
-             * 同步队列中的节点所代表的线程，可能被取消了，此时这个节点的waitStatus=1
+             * 同步队列中的节点所代表的线程，可能被取消了，此时这个节点的 waitStatus=1
              * 因此这个时候利用for循环从同步队列尾部开始向前遍历，判断节点是不是被取消了
              * 正常情况下，当头结点释放锁以后，应该唤醒同步队列中的第二个节点，但是如果第二个节点的线程被取消了，此时就不能唤醒它了,
              * 就应该判断第三个节点，如果第三个节点也被取消了，再依次往后判断，直到第一次出现没有被取消的节点。如果都被取消了，此时s==null，所以不会唤醒任何线程
@@ -820,8 +823,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         //将当前节点设置为 新的 head节点。
         setHead(node);
         //调用 setHeadAndPropagete 时  propagate  == 1 一定成立
-        if (propagate > 0 || h == null || h.waitStatus < 0 ||
-                (h = head) == null || h.waitStatus < 0) {
+        if (propagate > 0 || h == null || h.waitStatus < 0 || (h = head) == null || h.waitStatus < 0) {
             //获取当前节点的后继节点..
             Node s = node.next;
             //条件一：s == null  什么时候成立呢？  当前node节点已经是 tail了，条件一会成立。 doReleaseShared() 里面会处理这种情况..
@@ -891,8 +893,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 // 调用 shouldParkAfterFailedAcquire 会让 node.next  节点越过取消状态的节点
                 // 完成真正 出队
                 Node next = node.next;
-                if (next != null && next.waitStatus <= 0)
-                    compareAndSetNext(pred, predNext, next);
+                if (next != null && next.waitStatus <= 0) compareAndSetNext(pred, predNext, next);
             } else {
                 //3. 当前 node 是 head.next 节点
                 //类似情况2  后继节点被唤醒后，调用 shouldParkAfterFailedAcquire 会让 node.next 节点越过取消状态的节点
@@ -941,24 +942,32 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         if (ws > 0) {
             /*
              * Predecessor was cancelled. Skip over predecessors and indicate retry.
-             * 前身已取消，跳过前任并指示重试
+             * 前身已取消，跳过前任节点并继续重试
              */
             //找爸爸的过程，条件是什么呢？ 前置节点的 waitStatus <= 0 的情况
             do {
                 //由于前置节点不可用 所以需要跳过前置节点 指向前前节点
                 node.prev = pred = pred.prev;
             } while (pred.waitStatus > 0);
+
             //找到好爸爸后，退出循环
             //隐含着一种操作，CANCELED 状态的节点会被出队
             pred.next = node;
         }
-        // 如果ws既不等于-1，也不大于0，就会进入到当前else语句中
-        // 此时会调用CAS方法将pred节点的waitStatus字段的值改为-1
+
+        // 如果ws既不等于 -1，也不大于0，那就是会等于 0 CONDITION(-2)  PROPAGATE(-3)，
+        // 就会进入到当前else语句中，此时会调用CAS方法将pred节点的waitStatus字段的值改为-1
         else {
+            /*
+             * waitStatus must be 0 or PROPAGATE.  Indicate that we
+             * need a signal, but don't park yet.  Caller will need to
+             * retry to make sure it cannot acquire before parking.
+             */
             //当前 node 前置节点的状态就是 0 的这一种情况
             //将当前线程 node 的前置 preNode，状态强制设置为 SIGNAl，表示前置节点释放锁之后需要 喊醒我...
             compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
         }
+        //
         return false;
     }
 
@@ -973,15 +982,15 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * Convenience method to park and then check if interrupted
      *
      * @return {@code true} if interrupted
-     * 如果某线程 A 调用park，那么除非另外一个线程调用 unpark(A) 给A一个许可，否则线程 A 将阻塞在 park 操作上
+     * 如果某线程 A 调用park，那么除非另外一个线程调用 unPark(A) 给A一个许可，否则线程 A 将阻塞在 park 操作上
      */
     private final boolean parkAndCheckInterrupt() {
         // 通过 LockSupport 类的 park 方法来阻塞当前线程
         // 阻塞中,等待被唤醒；
         LockSupport.park(this);
-        // 被唤醒后，返回中断标志
+        // 被唤醒后，返回中断标志： true or false
         //隐蔽点：由于此线程执行挂起 park 操作，当外部有线程想要中断这个线程时 并不会抛出中断异常，
-        //只会改变当前线程内部的中断状态值；就会返回true；
+        //只会改变当前线程内部的中断状态值；738行，随后就会返回true，并清理中断状态
         return Thread.interrupted();
     }
 
@@ -1056,7 +1065,6 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                     //设置中断标志位  而另外的 则是抛出中断异常
                     interrupted = true;
                 }
-
             }//for结束
         } finally {
             // 如果在try中出现异常，那么此时failed就会为true，就会取消获取锁
@@ -1095,13 +1103,11 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 // 如果自己可以休息了，就进入 waiting 状态，直到被 unpark()
 
                 // 判断是否可以阻塞线程并做相应操作
-                if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt())
-                    throw new InterruptedException();
+                if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt()) throw new InterruptedException();
             }
         } finally {
             // 一旦检测到中断请求，立即返回不再参与锁的竞争并且取消锁获取操作（即finally中的cancelAcquire操作）
-            if (failed)
-                cancelAcquire(node);
+            if (failed) cancelAcquire(node);
         }
     }
 
@@ -1165,19 +1171,15 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                     if (r >= 0) {
                         setHeadAndPropagate(node, r);
                         p.next = null; // help GC
-                        if (interrupted)
-                            selfInterrupt();
+                        if (interrupted) selfInterrupt();
                         failed = false;
                         return;
                     }
                 }
-                if (shouldParkAfterFailedAcquire(p, node) &&
-                        parkAndCheckInterrupt())
-                    interrupted = true;
+                if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt()) interrupted = true;
             }
         } finally {
-            if (failed)
-                cancelAcquire(node);
+            if (failed) cancelAcquire(node);
         }
     }
 
@@ -1214,8 +1216,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 }
             }
         } finally {
-            if (failed)
-                cancelAcquire(node);
+            if (failed) cancelAcquire(node);
         }
     }
 
@@ -1226,10 +1227,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * @param nanosTimeout max wait time
      * @return {@code true} if acquired
      */
-    private boolean doAcquireSharedNanos(int arg, long nanosTimeout)
-            throws InterruptedException {
-        if (nanosTimeout <= 0L)
-            return false;
+    private boolean doAcquireSharedNanos(int arg, long nanosTimeout) throws InterruptedException {
+        if (nanosTimeout <= 0L) return false;
         final long deadline = System.nanoTime() + nanosTimeout;
         final Node node = addWaiter(Node.SHARED);
         boolean failed = true;
@@ -1246,17 +1245,13 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                     }
                 }
                 nanosTimeout = deadline - System.nanoTime();
-                if (nanosTimeout <= 0L)
-                    return false;
-                if (shouldParkAfterFailedAcquire(p, node) &&
-                        nanosTimeout > spinForTimeoutThreshold)
+                if (nanosTimeout <= 0L) return false;
+                if (shouldParkAfterFailedAcquire(p, node) && nanosTimeout > spinForTimeoutThreshold)
                     LockSupport.parkNanos(this, nanosTimeout);
-                if (Thread.interrupted())
-                    throw new InterruptedException();
+                if (Thread.interrupted()) throw new InterruptedException();
             }
         } finally {
-            if (failed)
-                cancelAcquire(node);
+            if (failed) cancelAcquire(node);
         }
     }
 
@@ -1456,8 +1451,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         //第一个是判断线程的中断标识，如果为true，则抛出中断异常。
         if (Thread.interrupted()) throw new InterruptedException();
         //如果获取不到锁
-        if (!tryAcquire(arg))
-            doAcquireInterruptibly(arg);
+        if (!tryAcquire(arg)) doAcquireInterruptibly(arg);
     }
 
     /**
@@ -1525,8 +1519,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      *            and can represent anything you like.
      */
     public final void acquireShared(int arg) {
-        if (tryAcquireShared(arg) < 0)
-            doAcquireShared(arg);
+        if (tryAcquireShared(arg) < 0) doAcquireShared(arg);
     }
 
     /**
@@ -1576,10 +1569,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * @throws InterruptedException if the current thread is interrupted
      */
     public final boolean tryAcquireSharedNanos(int arg, long nanosTimeout) throws InterruptedException {
-        if (Thread.interrupted())
-            throw new InterruptedException();
-        return tryAcquireShared(arg) >= 0 ||
-                doAcquireSharedNanos(arg, nanosTimeout);
+        if (Thread.interrupted()) throw new InterruptedException();
+        return tryAcquireShared(arg) >= 0 || doAcquireSharedNanos(arg, nanosTimeout);
     }
 
     /**
@@ -1660,10 +1651,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
          */
         Node h, s;
         Thread st;
-        if (((h = head) != null && (s = h.next) != null &&
-                s.prev == head && (st = s.thread) != null) ||
-                ((h = head) != null && (s = h.next) != null &&
-                        s.prev == head && (st = s.thread) != null))
+        if (((h = head) != null && (s = h.next) != null && s.prev == head && (st = s.thread) != null) || ((h = head) != null && (s = h.next) != null && s.prev == head && (st = s.thread) != null))
             return st;
 
         /*
@@ -1678,8 +1666,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         Thread firstThread = null;
         while (t != null && t != head) {
             Thread tt = t.thread;
-            if (tt != null)
-                firstThread = tt;
+            if (tt != null) firstThread = tt;
             t = t.prev;
         }
         return firstThread;
@@ -1696,11 +1683,9 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * @throws NullPointerException if the thread is null
      */
     public final boolean isQueued(Thread thread) {
-        if (thread == null)
-            throw new NullPointerException();
+        if (thread == null) throw new NullPointerException();
         for (Node p = tail; p != null; p = p.prev)
-            if (p.thread == thread)
-                return true;
+            if (p.thread == thread) return true;
         return false;
     }
 
@@ -1715,10 +1700,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      */
     final boolean apparentlyFirstQueuedIsExclusive() {
         Node h, s;
-        return (h = head) != null &&
-                (s = h.next) != null &&
-                !s.isShared() &&
-                s.thread != null;
+        return (h = head) != null && (s = h.next) != null && !s.isShared() && s.thread != null;
     }
 
     /**
@@ -1771,8 +1753,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         Node t = tail; // Read fields in reverse initialization order
         Node h = head;
         Node s;
-        return h != t &&
-                ((s = h.next) == null || s.thread != Thread.currentThread());
+        return h != t && ((s = h.next) == null || s.thread != Thread.currentThread());
         //主要判断当前线程是否位于CLH 同步队列中的一个
     }
 
@@ -1792,8 +1773,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     public final int getQueueLength() {
         int n = 0;
         for (Node p = tail; p != null; p = p.prev) {
-            if (p.thread != null)
-                ++n;
+            if (p.thread != null) ++n;
         }
         return n;
     }
@@ -1813,8 +1793,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         ArrayList<Thread> list = new ArrayList<Thread>();
         for (Node p = tail; p != null; p = p.prev) {
             Thread t = p.thread;
-            if (t != null)
-                list.add(t);
+            if (t != null) list.add(t);
         }
         return list;
     }
@@ -1832,8 +1811,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         for (Node p = tail; p != null; p = p.prev) {
             if (!p.isShared()) {
                 Thread t = p.thread;
-                if (t != null)
-                    list.add(t);
+                if (t != null) list.add(t);
             }
         }
         return list;
@@ -1852,8 +1830,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         for (Node p = tail; p != null; p = p.prev) {
             if (p.isShared()) {
                 Thread t = p.thread;
-                if (t != null)
-                    list.add(t);
+                if (t != null) list.add(t);
             }
         }
         return list;
@@ -1871,8 +1848,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     public String toString() {
         int s = getState();
         String q = hasQueuedThreads() ? "non" : "";
-        return super.toString() +
-                "[State = " + s + ", " + q + "empty queue]";
+        return super.toString() + "[State = " + s + ", " + q + "empty queue]";
     }
 
 
@@ -1897,8 +1873,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         // 2.node.waitStatus == 1 （当前线程是未持有锁调用 await 方法..最终会将 node 的状态修改为 取消状态..）
         // node.waitStatus == 0     为什么还要判断 node.prev == null ?
         // 因为 signal 方法 是先修改状态，再迁移
-        if (node.waitStatus == Node.CONDITION || node.prev == null)
-            return false;
+        if (node.waitStatus == Node.CONDITION || node.prev == null) return false;
 
         // 执行到这里，会是哪种情况 ？
         // node.waitStatus != CONDITION 且 node.prev != null  ===> 可以排除掉 node.waitStatus == 1 取消状态..
@@ -1929,10 +1904,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     private boolean findNodeFromTail(Node node) {
         Node t = tail;
         for (; ; ) {
-            if (t == node)
-                return true;
-            if (t == null)
-                return false;
+            if (t == node) return true;
+            if (t == null) return false;
             t = t.prev;
         }
     }
@@ -2048,8 +2021,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 throw new IllegalMonitorStateException();
             }
         } finally {
-            if (failed)
-                node.waitStatus = Node.CANCELLED;
+            if (failed) node.waitStatus = Node.CANCELLED;
         }
     }
 
@@ -2084,8 +2056,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * @throws NullPointerException         if the condition is null
      */
     public final boolean hasWaiters(ConditionObject condition) {
-        if (!owns(condition))
-            throw new IllegalArgumentException("Not owner");
+        if (!owns(condition)) throw new IllegalArgumentException("Not owner");
         return condition.hasWaiters();
     }
 
@@ -2106,8 +2077,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * @throws NullPointerException         if the condition is null
      */
     public final int getWaitQueueLength(ConditionObject condition) {
-        if (!owns(condition))
-            throw new IllegalArgumentException("Not owner");
+        if (!owns(condition)) throw new IllegalArgumentException("Not owner");
         return condition.getWaitQueueLength();
     }
 
@@ -2128,8 +2098,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * @throws NullPointerException         if the condition is null
      */
     public final Collection<Thread> getWaitingThreads(ConditionObject condition) {
-        if (!owns(condition))
-            throw new IllegalArgumentException("Not owner");
+        if (!owns(condition)) throw new IllegalArgumentException("Not owner");
         return condition.getWaitingThreads();
     }
 
@@ -2367,11 +2336,9 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
             boolean interrupted = false;
             while (!isOnSyncQueue(node)) {
                 LockSupport.park(this);
-                if (Thread.interrupted())
-                    interrupted = true;
+                if (Thread.interrupted()) interrupted = true;
             }
-            if (acquireQueued(node, savedState) || interrupted)
-                selfInterrupt();
+            if (acquireQueued(node, savedState) || interrupted) selfInterrupt();
         }
 
         /*
@@ -2473,8 +2440,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 //       返回0表示没有被中断过
                 //       返回-1表示需要抛出异常
                 //       返回1表示需要重置中断标识
-                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
-                    break;
+                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0) break;
             }
 
             // 执行到这里，就说明 当前 node 已经迁移到 “条件阻塞队列”了
@@ -2528,17 +2494,13 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                 if (nanosTimeout >= spinForTimeoutThreshold)
                     //挂起
                     LockSupport.parkNanos(this, nanosTimeout);
-                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
-                    break;
+                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0) break;
                 nanosTimeout = deadline - System.nanoTime();
             }
 
-            if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
-                interruptMode = REINTERRUPT;
-            if (node.nextWaiter != null)
-                unlinkCancelledWaiters();
-            if (interruptMode != 0)
-                reportInterruptAfterWait(interruptMode);
+            if (acquireQueued(node, savedState) && interruptMode != THROW_IE) interruptMode = REINTERRUPT;
+            if (node.nextWaiter != null) unlinkCancelledWaiters();
+            if (interruptMode != 0) reportInterruptAfterWait(interruptMode);
             return deadline - System.nanoTime();
         }
 
@@ -2569,15 +2531,11 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                     break;
                 }
                 LockSupport.parkUntil(this, abstime);
-                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
-                    break;
+                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0) break;
             }
-            if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
-                interruptMode = REINTERRUPT;
-            if (node.nextWaiter != null)
-                unlinkCancelledWaiters();
-            if (interruptMode != 0)
-                reportInterruptAfterWait(interruptMode);
+            if (acquireQueued(node, savedState) && interruptMode != THROW_IE) interruptMode = REINTERRUPT;
+            if (node.nextWaiter != null) unlinkCancelledWaiters();
+            if (interruptMode != 0) reportInterruptAfterWait(interruptMode);
             return !timedout;
         }
 
@@ -2597,8 +2555,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
          */
         public final boolean await(long time, TimeUnit unit) throws InterruptedException {
             long nanosTimeout = unit.toNanos(time);
-            if (Thread.interrupted())
-                throw new InterruptedException();
+            if (Thread.interrupted()) throw new InterruptedException();
             Node node = addConditionWaiter();
             int savedState = fullyRelease(node);
             final long deadline = System.nanoTime() + nanosTimeout;
@@ -2609,18 +2566,13 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                     timedout = transferAfterCancelledWait(node);
                     break;
                 }
-                if (nanosTimeout >= spinForTimeoutThreshold)
-                    LockSupport.parkNanos(this, nanosTimeout);
-                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
-                    break;
+                if (nanosTimeout >= spinForTimeoutThreshold) LockSupport.parkNanos(this, nanosTimeout);
+                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0) break;
                 nanosTimeout = deadline - System.nanoTime();
             }
-            if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
-                interruptMode = REINTERRUPT;
-            if (node.nextWaiter != null)
-                unlinkCancelledWaiters();
-            if (interruptMode != 0)
-                reportInterruptAfterWait(interruptMode);
+            if (acquireQueued(node, savedState) && interruptMode != THROW_IE) interruptMode = REINTERRUPT;
+            if (node.nextWaiter != null) unlinkCancelledWaiters();
+            if (interruptMode != 0) reportInterruptAfterWait(interruptMode);
             return !timedout;
         }
 
@@ -2647,8 +2599,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         protected final boolean hasWaiters() {
             if (!isHeldExclusively()) throw new IllegalMonitorStateException();
             for (Node w = firstWaiter; w != null; w = w.nextWaiter) {
-                if (w.waitStatus == Node.CONDITION)
-                    return true;
+                if (w.waitStatus == Node.CONDITION) return true;
             }
             return false;
         }
@@ -2666,8 +2617,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
             if (!isHeldExclusively()) throw new IllegalMonitorStateException();
             int n = 0;
             for (Node w = firstWaiter; w != null; w = w.nextWaiter) {
-                if (w.waitStatus == Node.CONDITION)
-                    ++n;
+                if (w.waitStatus == Node.CONDITION) ++n;
             }
             return n;
         }
@@ -2687,8 +2637,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
             for (Node w = firstWaiter; w != null; w = w.nextWaiter) {
                 if (w.waitStatus == Node.CONDITION) {
                     Thread t = w.thread;
-                    if (t != null)
-                        list.add(t);
+                    if (t != null) list.add(t);
                 }
             }
             return list;
@@ -2741,8 +2690,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * CAS waitStatus field of a node.
      */
     private static final boolean compareAndSetWaitStatus(Node node, int expect, int update) {
-        return unsafe.compareAndSwapInt(node, waitStatusOffset,
-                expect, update);
+        return unsafe.compareAndSwapInt(node, waitStatusOffset, expect, update);
     }
 
     /**

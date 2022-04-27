@@ -14,7 +14,7 @@ public class Test {
 
     private void add10K() {
         int idx = 0;
-        while (idx++ < 10000) {
+        while (idx++ < 100) {
             count += 1;
         }
     }
@@ -41,7 +41,10 @@ public class Test {
         try {
             long calc = calc();
             System.out.println(calc);
-        } catch (InterruptedException e) {
+            //main 中调用 main() 怎么样
+            //main(null);
+            //System.out.println("dff");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

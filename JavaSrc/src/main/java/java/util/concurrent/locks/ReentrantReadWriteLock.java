@@ -178,8 +178,7 @@ import java.util.concurrent.locks.ReadWriteLock;
  *     finally { w.unlock(); }
  *   }
  * }}</pre>
- * TreeMap使用读写锁提高井
- * 发性的Demo
+ * TreeMap使用读写锁提高井发性的Demo
  * <h3>Implementation Notes</h3>
  *
  * <p>This lock supports a maximum of 65535 recursive write locks
@@ -191,16 +190,14 @@ import java.util.concurrent.locks.ReadWriteLock;
  * 1.什么是读写锁？
  * 答: 之前接触的都是一把锁,锁住之后读写操作什么都不能干了;读写锁出现是增加了一个锁,分为读锁和写锁,改进是多个读线程可以同时进行读取,而不用进行同步阻塞;
  * 写线程执行写操作时,其余的任何读写线程 都进行阻塞等待; 读线程进行读取时 多个读可同时读,写线程只能阻塞;
- * 优点: 提高了并发度,增加了吞吐量,提高了cpu效率
+ * 优点: 提高了并发度,增加了吞吐量,提高了cpu 效率
  * 缺点: 增加了代码实现复杂度,当有大量读线程时,可能写线程延迟很久才执行;
  * 2.ReadWriteLock存在的意义是什么？
  * 答:提高并发度
- * <p>
  * 3.读写锁适用于什么场景？
  * 答: 以前是 直接上锁,现在是 读可以共享锁,适合 读多写少
  * 4.什么是锁降级和锁升级？
- * 答:
- * <p>
+ * 答: 写锁状态下能够调用读锁并且降级成读锁; 在读锁状态下 调用 写锁 将不能完成锁升级
  * 解释: ReentrantReadWriteLock是⼀个读写锁：
  * 在读取数据的时候，可以多个线程同时进⼊到到临界区(被锁定的区域)
  * 在写数据的时候，⽆论是读线程还是写线程都是互斥的
@@ -373,7 +370,7 @@ public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializab
          */
         abstract boolean writerShouldBlock();
 
-        /*
+        /**
          * Note that tryRelease and tryAcquire can be called by
          * Conditions. So it is possible that their arguments contain
          * both read and write holds that are all released during a

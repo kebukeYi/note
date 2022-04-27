@@ -510,9 +510,8 @@ public class FutureTask<V> implements RunnableFuture<V> {
                 return s;
                 //说明：任务 接近完后状态； 这里让当前任务 再释放 cpu , 进行下一次抢占 cpu , 为何?
             } else if (s == COMPLETING) {
-                //
+                //主动让出 CPU
                 Thread.yield();
-
                 //条件成立：第一次自旋  当前线程还未创建节点对象   此时开始创建节点对象
             } else if (q == null) {
                 q = new WaitNode();
@@ -530,6 +529,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
                     removeWaiter(q);
                     return state;
                 }
+                //线程进入等待状态 会自动被唤醒
                 LockSupport.parkNanos(this, nanos);
             } else {
                 //当前 get 的线程会被park 阻塞掉，线程状态会变化曾waiting 状态 线程休眠了

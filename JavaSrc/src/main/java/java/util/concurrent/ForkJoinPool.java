@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent;
 
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -691,12 +656,13 @@ public class ForkJoinPool extends AbstractExecutorService {
      */
 
     // Static utilities
-    /*
-   ForkJoinPool是Fork/Join框架的两⼤核⼼类之⼀。与其它类型的
-ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work-stealing)：所有池中线程
-会尝试找到并执⾏已被提交到池中的或由其他线程创建的任务。这样很少有线程会处于空闲状
-态，⾮常⾼效。这使得能够有效地处理以下情景：⼤多数由任务产⽣⼤量⼦任务的情况；从外部
-客户端⼤量提交⼩任务到池中的情况。
+
+    /**
+     *   ForkJoinPool是Fork/Join框架的两⼤核⼼类之⼀。与其它类型的
+     *   ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work-stealing)：所有池中线程
+     *   会尝试找到并执行已被提交到池中的或由其他线程创建的任务。这样很少有线程会处于空闲状
+     *   态，⾮常⾼效。
+     *   这使得能够有效地处理以下情景：⼤多数由任务产⽣⼤量⼦任务的情况；从外部客户端⼤量提交⼩任务到池中的情况。
      */
 
     /**
@@ -705,8 +671,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      */
     private static void checkPermission() {
         SecurityManager security = System.getSecurityManager();
-        if (security != null)
-            security.checkPermission(modifyThreadPermission);
+        if (security != null) security.checkPermission(modifyThreadPermission);
     }
 
     // Nested classes
@@ -732,8 +697,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      * Default ForkJoinWorkerThreadFactory implementation; creates a
      * new ForkJoinWorkerThread.
      */
-    static final class DefaultForkJoinWorkerThreadFactory
-            implements ForkJoinWorkerThreadFactory {
+    static final class DefaultForkJoinWorkerThreadFactory implements ForkJoinWorkerThreadFactory {
         public final ForkJoinWorkerThread newThread(ForkJoinPool pool) {
             return new ForkJoinWorkerThread(pool);
         }
@@ -861,11 +825,8 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         final boolean isEmpty() {
             ForkJoinTask<?>[] a;
             int n, m, s;
-            return ((n = base - (s = top)) >= 0 ||
-                    (n == -1 &&           // possibly one task
-                            ((a = array) == null || (m = a.length - 1) < 0 ||
-                                    U.getObject
-                                            (a, (long) ((m & (s - 1)) << ASHIFT) + ABASE) == null)));
+            return ((n = base - (s = top)) >= 0 || (n == -1 &&           // possibly one task
+                    ((a = array) == null || (m = a.length - 1) < 0 || U.getObject(a, (long) ((m & (s - 1)) << ASHIFT) + ABASE) == null)));
         }
 
         /**
@@ -884,10 +845,8 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 U.putOrderedObject(a, ((m & s) << ASHIFT) + ABASE, task);
                 U.putOrderedInt(this, QTOP, s + 1);
                 if ((n = s - b) <= 1) {
-                    if ((p = pool) != null)
-                        p.signalWork(p.workQueues, this);
-                } else if (n >= m)
-                    growArray();
+                    if ((p = pool) != null) p.signalWork(p.workQueues, this);
+                } else if (n >= m) growArray();
             }
         }
 
@@ -899,21 +858,17 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         final ForkJoinTask<?>[] growArray() {
             ForkJoinTask<?>[] oldA = array;
             int size = oldA != null ? oldA.length << 1 : INITIAL_QUEUE_CAPACITY;
-            if (size > MAXIMUM_QUEUE_CAPACITY)
-                throw new RejectedExecutionException("Queue capacity exceeded");
+            if (size > MAXIMUM_QUEUE_CAPACITY) throw new RejectedExecutionException("Queue capacity exceeded");
             int oldMask, t, b;
             ForkJoinTask<?>[] a = array = new ForkJoinTask<?>[size];
-            if (oldA != null && (oldMask = oldA.length - 1) >= 0 &&
-                    (t = top) - (b = base) > 0) {
+            if (oldA != null && (oldMask = oldA.length - 1) >= 0 && (t = top) - (b = base) > 0) {
                 int mask = size - 1;
                 do { // emulate poll from old array, push to new array
                     ForkJoinTask<?> x;
                     int oldj = ((b & oldMask) << ASHIFT) + ABASE;
                     int j = ((b & mask) << ASHIFT) + ABASE;
                     x = (ForkJoinTask<?>) U.getObjectVolatile(oldA, oldj);
-                    if (x != null &&
-                            U.compareAndSwapObject(oldA, oldj, x, null))
-                        U.putObjectVolatile(a, j, x);
+                    if (x != null && U.compareAndSwapObject(oldA, oldj, x, null)) U.putObjectVolatile(a, j, x);
                 } while (++b != t);
             }
             return a;
@@ -930,8 +885,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             if ((a = array) != null && (m = a.length - 1) >= 0) {
                 for (int s; (s = top - 1) - base >= 0; ) {
                     long j = ((m & s) << ASHIFT) + ABASE;
-                    if ((t = (ForkJoinTask<?>) U.getObject(a, j)) == null)
-                        break;
+                    if ((t = (ForkJoinTask<?>) U.getObject(a, j)) == null) break;
                     if (U.compareAndSwapObject(a, j, t, null)) {
                         U.putOrderedInt(this, QTOP, s);
                         return t;
@@ -951,8 +905,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             ForkJoinTask<?>[] a;
             if ((a = array) != null) {
                 int j = (((a.length - 1) & b) << ASHIFT) + ABASE;
-                if ((t = (ForkJoinTask<?>) U.getObjectVolatile(a, j)) != null &&
-                        base == b && U.compareAndSwapObject(a, j, t, null)) {
+                if ((t = (ForkJoinTask<?>) U.getObjectVolatile(a, j)) != null && base == b && U.compareAndSwapObject(a, j, t, null)) {
                     base = b + 1;
                     return t;
                 }
@@ -996,8 +949,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         final ForkJoinTask<?> peek() {
             ForkJoinTask<?>[] a = array;
             int m;
-            if (a == null || (m = a.length - 1) < 0)
-                return null;
+            if (a == null || (m = a.length - 1) < 0) return null;
             int i = (config & FIFO_QUEUE) == 0 ? top - 1 : base;
             int j = ((i & m) << ASHIFT) + ABASE;
             return (ForkJoinTask<?>) U.getObjectVolatile(a, j);
@@ -1010,9 +962,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         final boolean tryUnpush(ForkJoinTask<?> t) {
             ForkJoinTask<?>[] a;
             int s;
-            if ((a = array) != null && (s = top) != base &&
-                    U.compareAndSwapObject
-                            (a, (((a.length - 1) & --s) << ASHIFT) + ABASE, t, null)) {
+            if ((a = array) != null && (s = top) != base && U.compareAndSwapObject(a, (((a.length - 1) & --s) << ASHIFT) + ABASE, t, null)) {
                 U.putOrderedInt(this, QTOP, s);
                 return true;
             }
@@ -1032,8 +982,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 currentSteal = null;
                 ForkJoinTask.cancelIgnoringExceptions(t);
             }
-            while ((t = poll()) != null)
-                ForkJoinTask.cancelIgnoringExceptions(t);
+            while ((t = poll()) != null) ForkJoinTask.cancelIgnoringExceptions(t);
         }
 
         // Specialized execution methods
@@ -1054,20 +1003,16 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         final void execLocalTasks() {
             int b = base, m, s;
             ForkJoinTask<?>[] a = array;
-            if (b - (s = top - 1) <= 0 && a != null &&
-                    (m = a.length - 1) >= 0) {
+            if (b - (s = top - 1) <= 0 && a != null && (m = a.length - 1) >= 0) {
                 if ((config & FIFO_QUEUE) == 0) {
                     for (ForkJoinTask<?> t; ; ) {
-                        if ((t = (ForkJoinTask<?>) U.getAndSetObject
-                                (a, ((m & s) << ASHIFT) + ABASE, null)) == null)
+                        if ((t = (ForkJoinTask<?>) U.getAndSetObject(a, ((m & s) << ASHIFT) + ABASE, null)) == null)
                             break;
                         U.putOrderedInt(this, QTOP, s);
                         t.doExec();
-                        if (base - (s = top - 1) > 0)
-                            break;
+                        if (base - (s = top - 1) > 0) break;
                     }
-                } else
-                    pollAndExecAll();
+                } else pollAndExecAll();
             }
         }
 
@@ -1084,8 +1029,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 if (++nsteals < 0)      // collect on overflow
                     transferStealCount(pool);
                 scanState |= SCANNING;
-                if (thread != null)
-                    thread.afterTopLevelExec();
+                if (thread != null) thread.afterTopLevelExec();
             }
         }
 
@@ -1110,8 +1054,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         final boolean tryRemoveAndExec(ForkJoinTask<?> task) {
             ForkJoinTask<?>[] a;
             int m, s, b, n;
-            if ((a = array) != null && (m = a.length - 1) >= 0 &&
-                    task != null) {
+            if ((a = array) != null && (m = a.length - 1) >= 0 && task != null) {
                 while ((n = (s = top) - (b = base)) > 0) {
                     for (ForkJoinTask<?> t; ; ) {      // traverse from s to b
                         long j = ((--s & m) << ASHIFT) + ABASE;
@@ -1125,21 +1068,16 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                                     removed = true;
                                 }
                             } else if (base == b)      // replace with proxy
-                                removed = U.compareAndSwapObject(
-                                        a, j, task, new EmptyTask());
-                            if (removed)
-                                task.doExec();
+                                removed = U.compareAndSwapObject(a, j, task, new EmptyTask());
+                            if (removed) task.doExec();
                             break;
                         } else if (t.status < 0 && s + 1 == top) {
-                            if (U.compareAndSwapObject(a, j, t, null))
-                                U.putOrderedInt(this, QTOP, s);
+                            if (U.compareAndSwapObject(a, j, t, null)) U.putOrderedInt(this, QTOP, s);
                             break;                  // was cancelled
                         }
-                        if (--n == 0)
-                            return false;
+                        if (--n == 0) return false;
                     }
-                    if (task.status < 0)
-                        return false;
+                    if (task.status < 0) return false;
                 }
             }
             return true;
@@ -1155,15 +1093,13 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             Object o;
             if (base - (s = top) < 0 && (a = array) != null) {
                 long j = (((a.length - 1) & (s - 1)) << ASHIFT) + ABASE;
-                if ((o = U.getObjectVolatile(a, j)) != null &&
-                        (o instanceof CountedCompleter)) {
+                if ((o = U.getObjectVolatile(a, j)) != null && (o instanceof CountedCompleter)) {
                     CountedCompleter<?> t = (CountedCompleter<?>) o;
                     for (CountedCompleter<?> r = t; ; ) {
                         if (r == task) {
                             if (mode < 0) { // must lock
                                 if (U.compareAndSwapInt(this, QLOCK, 0, 1)) {
-                                    if (top == s && array == a &&
-                                            U.compareAndSwapObject(a, j, t, null)) {
+                                    if (top == s && array == a && U.compareAndSwapObject(a, j, t, null)) {
                                         U.putOrderedInt(this, QTOP, s - 1);
                                         U.putOrderedInt(this, QLOCK, 0);
                                         return t;
@@ -1201,21 +1137,17 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 h = b | Integer.MIN_VALUE;  // to sense movement on re-poll
             else {
                 long j = (((a.length - 1) & b) << ASHIFT) + ABASE;
-                if ((o = U.getObjectVolatile(a, j)) == null)
-                    h = 2;                  // retryable
-                else if (!(o instanceof CountedCompleter))
-                    h = -1;                 // unmatchable
+                if ((o = U.getObjectVolatile(a, j)) == null) h = 2;                  // retryable
+                else if (!(o instanceof CountedCompleter)) h = -1;                 // unmatchable
                 else {
                     CountedCompleter<?> t = (CountedCompleter<?>) o;
                     for (CountedCompleter<?> r = t; ; ) {
                         if (r == task) {
-                            if (base == b &&
-                                    U.compareAndSwapObject(a, j, t, null)) {
+                            if (base == b && U.compareAndSwapObject(a, j, t, null)) {
                                 base = b + 1;
                                 t.doExec();
                                 h = 1;      // success
-                            } else
-                                h = 2;      // lost CAS
+                            } else h = 2;      // lost CAS
                             break;
                         } else if ((r = r.completer) == null) {
                             h = -1;         // unmatched
@@ -1233,11 +1165,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         final boolean isApparentlyUnblocked() {
             Thread wt;
             Thread.State s;
-            return (scanState >= 0 &&
-                    (wt = owner) != null &&
-                    (s = wt.getState()) != Thread.State.BLOCKED &&
-                    s != Thread.State.WAITING &&
-                    s != Thread.State.TIMED_WAITING);
+            return (scanState >= 0 && (wt = owner) != null && (s = wt.getState()) != Thread.State.BLOCKED && s != Thread.State.WAITING && s != Thread.State.TIMED_WAITING);
         }
 
         // Unsafe mechanics. Note that some are (and must be) the same as in FJP
@@ -1253,16 +1181,12 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 U = sun.misc.Unsafe.getUnsafe();
                 Class<?> wk = WorkQueue.class;
                 Class<?> ak = ForkJoinTask[].class;
-                QTOP = U.objectFieldOffset
-                        (wk.getDeclaredField("top"));
-                QLOCK = U.objectFieldOffset
-                        (wk.getDeclaredField("qlock"));
-                QCURRENTSTEAL = U.objectFieldOffset
-                        (wk.getDeclaredField("currentSteal"));
+                QTOP = U.objectFieldOffset(wk.getDeclaredField("top"));
+                QLOCK = U.objectFieldOffset(wk.getDeclaredField("qlock"));
+                QCURRENTSTEAL = U.objectFieldOffset(wk.getDeclaredField("currentSteal"));
                 ABASE = U.arrayBaseOffset(ak);
                 int scale = U.arrayIndexScale(ak);
-                if ((scale & (scale - 1)) != 0)
-                    throw new Error("data type scale not a power of two");
+                if ((scale & (scale - 1)) != 0) throw new Error("data type scale not a power of two");
                 ASHIFT = 31 - Integer.numberOfLeadingZeros(scale);
             } catch (Exception e) {
                 throw new Error(e);
@@ -1276,8 +1200,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      * Creates a new ForkJoinWorkerThread. This factory is used unless
      * overridden in ForkJoinPool constructors.
      */
-    public static final ForkJoinWorkerThreadFactory
-            defaultForkJoinWorkerThreadFactory;
+    public static final ForkJoinWorkerThreadFactory defaultForkJoinWorkerThreadFactory;
 
     /**
      * Permission required for callers of methods that may start or
@@ -1427,9 +1350,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      */
     private int lockRunState() {
         int rs;
-        return ((((rs = runState) & RSLOCK) != 0 ||
-                !U.compareAndSwapInt(this, RUNSTATE, rs, rs |= RSLOCK)) ?
-                awaitRunStateLock() : rs);
+        return ((((rs = runState) & RSLOCK) != 0 || !U.compareAndSwapInt(this, RUNSTATE, rs, rs |= RSLOCK)) ? awaitRunStateLock() : rs);
     }
 
     /**
@@ -1450,28 +1371,22 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                     }
                     return ns;
                 }
-            } else if (r == 0)
-                r = ThreadLocalRandom.nextSecondarySeed();
+            } else if (r == 0) r = ThreadLocalRandom.nextSecondarySeed();
             else if (spins > 0) {
                 r ^= r << 6;
                 r ^= r >>> 21;
                 r ^= r << 7; // xorshift
-                if (r >= 0)
-                    --spins;
-            } else if ((rs & STARTED) == 0 || (lock = stealCounter) == null)
-                Thread.yield();   // initialization race
+                if (r >= 0) --spins;
+            } else if ((rs & STARTED) == 0 || (lock = stealCounter) == null) Thread.yield();   // initialization race
             else if (U.compareAndSwapInt(this, RUNSTATE, rs, rs | RSIGNAL)) {
                 synchronized (lock) {
                     if ((runState & RSIGNAL) != 0) {
                         try {
                             lock.wait();
                         } catch (InterruptedException ie) {
-                            if (!(Thread.currentThread() instanceof
-                                    ForkJoinWorkerThread))
-                                wasInterrupted = true;
+                            if (!(Thread.currentThread() instanceof ForkJoinWorkerThread)) wasInterrupted = true;
                         }
-                    } else
-                        lock.notifyAll();
+                    } else lock.notifyAll();
                 }
             }
         }
@@ -1487,10 +1402,9 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         if (!U.compareAndSwapInt(this, RUNSTATE, oldRunState, newRunState)) {
             Object lock = stealCounter;
             runState = newRunState;              // clears RSIGNAL bit
-            if (lock != null)
-                synchronized (lock) {
-                    lock.notifyAll();
-                }
+            if (lock != null) synchronized (lock) {
+                lock.notifyAll();
+            }
         }
     }
 
@@ -1530,15 +1444,12 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
     private void tryAddWorker(long c) {
         boolean add = false;
         do {
-            long nc = ((AC_MASK & (c + AC_UNIT)) |
-                    (TC_MASK & (c + TC_UNIT)));
+            long nc = ((AC_MASK & (c + AC_UNIT)) | (TC_MASK & (c + TC_UNIT)));
             if (ctl == c) {
                 int rs, stop;                 // check if terminating
-                if ((stop = (rs = lockRunState()) & STOP) == 0)
-                    add = U.compareAndSwapLong(this, CTL, c, nc);
+                if ((stop = (rs = lockRunState()) & STOP) == 0) add = U.compareAndSwapLong(this, CTL, c, nc);
                 unlockRunState(rs, rs & ~RSLOCK);
-                if (stop != 0)
-                    break;
+                if (stop != 0) break;
                 if (add) {
                     createWorker();
                     break;
@@ -1557,8 +1468,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
     final WorkQueue registerWorker(ForkJoinWorkerThread wt) {
         UncaughtExceptionHandler handler;
         wt.setDaemon(true);                           // configure thread
-        if ((handler = ueh) != null)
-            wt.setUncaughtExceptionHandler(handler);
+        if ((handler = ueh) != null) wt.setUncaughtExceptionHandler(handler);
         WorkQueue w = new WorkQueue(this, wt);
         int i = 0;                                    // assign a pool index
         int mode = config & MODE_MASK;
@@ -1608,16 +1518,12 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             WorkQueue[] ws;                           // remove index from array
             int idx = w.config & SMASK;
             int rs = lockRunState();
-            if ((ws = workQueues) != null && ws.length > idx && ws[idx] == w)
-                ws[idx] = null;
+            if ((ws = workQueues) != null && ws.length > idx && ws[idx] == w) ws[idx] = null;
             unlockRunState(rs, rs & ~RSLOCK);
         }
         long c;                                       // decrement counts
         do {
-        } while (!U.compareAndSwapLong
-                (this, CTL, c = ctl, ((AC_MASK & (c - AC_UNIT)) |
-                        (TC_MASK & (c - TC_UNIT)) |
-                        (SP_MASK & c))));
+        } while (!U.compareAndSwapLong(this, CTL, c = ctl, ((AC_MASK & (c - AC_UNIT)) | (TC_MASK & (c - TC_UNIT)) | (SP_MASK & c))));
         if (w != null) {
             w.qlock = -1;                             // ensure set
             w.transferStealCount(this);
@@ -1626,13 +1532,10 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         for (; ; ) {                                    // possibly replace
             WorkQueue[] ws;
             int m, sp;
-            if (tryTerminate(false, false) || w == null || w.array == null ||
-                    (runState & STOP) != 0 || (ws = workQueues) == null ||
-                    (m = ws.length - 1) < 0)              // already terminating
+            if (tryTerminate(false, false) || w == null || w.array == null || (runState & STOP) != 0 || (ws = workQueues) == null || (m = ws.length - 1) < 0)              // already terminating
                 break;
             if ((sp = (int) (c = ctl)) != 0) {         // wake up replacement
-                if (tryRelease(c, ws[sp & m], AC_UNIT))
-                    break;
+                if (tryRelease(c, ws[sp & m], AC_UNIT)) break;
             } else if (ex != null && (c & ADD_WORKER) != 0L) {
                 tryAddWorker(c);                      // create replacement
                 break;
@@ -1675,8 +1578,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             long nc = (UC_MASK & (c + AC_UNIT)) | (SP_MASK & v.stackPred);
             if (d == 0 && U.compareAndSwapLong(this, CTL, c, nc)) {
                 v.scanState = vs;                      // activate v
-                if ((p = v.parker) != null)
-                    U.unpark(p);
+                if ((p = v.parker) != null) U.unpark(p);
                 break;
             }
             if (q != null && q.base == q.top)          // no more work
@@ -1701,8 +1603,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             long nc = (UC_MASK & (c + inc)) | (SP_MASK & v.stackPred);
             if (U.compareAndSwapLong(this, CTL, c, nc)) {
                 v.scanState = vs;
-                if ((p = v.parker) != null)
-                    U.unpark(p);
+                if ((p = v.parker) != null) U.unpark(p);
                 return true;
             }
         }
@@ -1719,10 +1620,8 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         int seed = w.hint;               // initially holds randomization hint
         int r = (seed == 0) ? 1 : seed;  // avoid 0 for xorShift
         for (ForkJoinTask<?> t; ; ) {
-            if ((t = scan(w, r)) != null)
-                w.runTask(t);
-            else if (!awaitWork(w, r))
-                break;
+            if ((t = scan(w, r)) != null) w.runTask(t);
+            else if (!awaitWork(w, r)) break;
             r ^= r << 13;
             r ^= r >>> 17;
             r ^= r << 5; // xorshift
@@ -1757,12 +1656,9 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 int b, n;
                 long c;
                 if ((q = ws[k]) != null) {
-                    if ((n = (b = q.base) - q.top) < 0 &&
-                            (a = q.array) != null) {      // non-empty
+                    if ((n = (b = q.base) - q.top) < 0 && (a = q.array) != null) {      // non-empty
                         long i = (((a.length - 1) & b) << ASHIFT) + ABASE;
-                        if ((t = ((ForkJoinTask<?>)
-                                U.getObjectVolatile(a, i))) != null &&
-                                q.base == b) {
+                        if ((t = ((ForkJoinTask<?>) U.getObjectVolatile(a, i))) != null && q.base == b) {
                             if (ss >= 0) {
                                 if (U.compareAndSwapObject(a, i, t, null)) {
                                     q.base = b + 1;
@@ -1771,8 +1667,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                                     return t;
                                 }
                             } else if (oldSum == 0 &&   // try to activate
-                                    w.scanState < 0)
-                                tryRelease(c = ctl, ws[m & (int) c], AC_UNIT);
+                                    w.scanState < 0) tryRelease(c = ctl, ws[m & (int) c], AC_UNIT);
                         }
                         if (ss < 0)                   // refresh
                             ss = w.scanState;
@@ -1786,19 +1681,15 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                     checkSum += b;
                 }
                 if ((k = (k + 1) & m) == origin) {    // continue until stable
-                    if ((ss >= 0 || (ss == (ss = w.scanState))) &&
-                            oldSum == (oldSum = checkSum)) {
+                    if ((ss >= 0 || (ss == (ss = w.scanState))) && oldSum == (oldSum = checkSum)) {
                         if (ss < 0 || w.qlock < 0)    // already inactive
                             break;
                         int ns = ss | INACTIVE;       // try to inactivate
-                        long nc = ((SP_MASK & ns) |
-                                (UC_MASK & ((c = ctl) - AC_UNIT)));
+                        long nc = ((SP_MASK & ns) | (UC_MASK & ((c = ctl) - AC_UNIT)));
                         w.stackPred = (int) c;         // hold prev stack top
                         U.putInt(w, QSCANSTATE, ns);
-                        if (U.compareAndSwapLong(this, CTL, c, nc))
-                            ss = ns;
-                        else
-                            w.scanState = ss;         // back out
+                        if (U.compareAndSwapLong(this, CTL, c, nc)) ss = ns;
+                        else w.scanState = ss;         // back out
                     }
                     checkSum = 0;
                 }
@@ -1824,8 +1715,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         if (w == null || w.qlock < 0)                 // w is terminating
             return false;
         for (int pred = w.stackPred, spins = SPINS, ss; ; ) {
-            if ((ss = w.scanState) >= 0)
-                break;
+            if ((ss = w.scanState) >= 0) break;
             else if (spins > 0) {
                 r ^= r << 6;
                 r ^= r >>> 21;
@@ -1835,19 +1725,15 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                     WorkQueue[] ws;
                     int s, j;
                     AtomicLong sc;
-                    if (pred != 0 && (ws = workQueues) != null &&
-                            (j = pred & SMASK) < ws.length &&
-                            (v = ws[j]) != null &&        // see if pred parking
-                            (v.parker == null || v.scanState >= 0))
-                        spins = SPINS;                // continue spinning
+                    if (pred != 0 && (ws = workQueues) != null && (j = pred & SMASK) < ws.length && (v = ws[j]) != null &&        // see if pred parking
+                            (v.parker == null || v.scanState >= 0)) spins = SPINS;                // continue spinning
                 }
             } else if (w.qlock < 0)                     // recheck after spins
                 return false;
             else if (!Thread.interrupted()) {
                 long c, prevctl, parkTime, deadline;
                 int ac = (int) ((c = ctl) >> AC_SHIFT) + (config & SMASK);
-                if ((ac <= 0 && tryTerminate(false, false)) ||
-                        (runState & STOP) != 0)           // pool terminating
+                if ((ac <= 0 && tryTerminate(false, false)) || (runState & STOP) != 0)           // pool terminating
                     return false;
                 if (ac <= 0 && ss == (int) c) {        // is last waiter
                     prevctl = (UC_MASK & (c + AC_UNIT)) | (SP_MASK & pred);
@@ -1856,8 +1742,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                         return false;                 // else use timed wait
                     parkTime = IDLE_TIMEOUT * ((t >= 0) ? 1 : 1 - t);
                     deadline = System.nanoTime() + parkTime - TIMEOUT_SLOP;
-                } else
-                    prevctl = parkTime = deadline = 0L;
+                } else prevctl = parkTime = deadline = 0L;
                 Thread wt = Thread.currentThread();
                 U.putObject(wt, PARKBLOCKER, this);   // emulate LockSupport
                 w.parker = wt;
@@ -1865,11 +1750,8 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                     U.park(false, parkTime);
                 U.putOrderedObject(w, QPARKER, null);
                 U.putObject(wt, PARKBLOCKER, null);
-                if (w.scanState >= 0)
-                    break;
-                if (parkTime != 0L && ctl == c &&
-                        deadline - System.nanoTime() <= 0L &&
-                        U.compareAndSwapLong(this, CTL, c, prevctl))
+                if (w.scanState >= 0) break;
+                if (parkTime != 0L && ctl == c && deadline - System.nanoTime() <= 0L && U.compareAndSwapLong(this, CTL, c, prevctl))
                     return false;                     // shrink pool
             }
         }
@@ -1894,12 +1776,10 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      * @param maxTasks if non-zero, the maximum number of other tasks to run
      * @return task status on exit
      */
-    final int helpComplete(WorkQueue w, CountedCompleter<?> task,
-                           int maxTasks) {
+    final int helpComplete(WorkQueue w, CountedCompleter<?> task, int maxTasks) {
         WorkQueue[] ws;
         int s = 0, m;
-        if ((ws = workQueues) != null && (m = ws.length - 1) >= 0 &&
-                task != null && w != null) {
+        if ((ws = workQueues) != null && (m = ws.length - 1) >= 0 && task != null && w != null) {
             int mode = w.config;                 // for popCC
             int r = w.hint ^ w.top;              // arbitrary seed for origin
             int origin = r & m;                  // first queue to scan
@@ -1907,30 +1787,24 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             for (int k = origin, oldSum = 0, checkSum = 0; ; ) {
                 CountedCompleter<?> p;
                 WorkQueue q;
-                if ((s = task.status) < 0)
-                    break;
+                if ((s = task.status) < 0) break;
                 if (h == 1 && (p = w.popCC(task, mode)) != null) {
                     p.doExec();                  // run local task
-                    if (maxTasks != 0 && --maxTasks == 0)
-                        break;
+                    if (maxTasks != 0 && --maxTasks == 0) break;
                     origin = k;                  // reset
                     oldSum = checkSum = 0;
                 } else {                           // poll other queues
-                    if ((q = ws[k]) == null)
-                        h = 0;
-                    else if ((h = q.pollAndExecCC(task)) < 0)
-                        checkSum += h;
+                    if ((q = ws[k]) == null) h = 0;
+                    else if ((h = q.pollAndExecCC(task)) < 0) checkSum += h;
                     if (h > 0) {
-                        if (h == 1 && maxTasks != 0 && --maxTasks == 0)
-                            break;
+                        if (h == 1 && maxTasks != 0 && --maxTasks == 0) break;
                         r ^= r << 13;
                         r ^= r >>> 17;
                         r ^= r << 5; // xorshift
                         origin = k = r & m;      // move and restart
                         oldSum = checkSum = 0;
                     } else if ((k = (k + 1) & m) == origin) {
-                        if (oldSum == (oldSum = checkSum))
-                            break;
+                        if (oldSum == (oldSum = checkSum)) break;
                         checkSum = 0;
                     }
                 }
@@ -1955,8 +1829,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
     private void helpStealer(WorkQueue w, ForkJoinTask<?> task) {
         WorkQueue[] ws = workQueues;
         int oldSum = 0, checkSum, m;
-        if (ws != null && (m = ws.length - 1) >= 0 && w != null &&
-                task != null) {
+        if (ws != null && (m = ws.length - 1) >= 0 && w != null && task != null) {
             do {                                       // restart point
                 checkSum = 0;                          // for stability check
                 ForkJoinTask<?> subtask;
@@ -1979,18 +1852,15 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                         int b;
                         checkSum += (b = v.base);
                         ForkJoinTask<?> next = v.currentJoin;
-                        if (subtask.status < 0 || j.currentJoin != subtask ||
-                                v.currentSteal != subtask) // stale
+                        if (subtask.status < 0 || j.currentJoin != subtask || v.currentSteal != subtask) // stale
                             break descent;
                         if (b - v.top >= 0 || (a = v.array) == null) {
-                            if ((subtask = next) == null)
-                                break descent;
+                            if ((subtask = next) == null) break descent;
                             j = v;
                             break;
                         }
                         int i = (((a.length - 1) & b) << ASHIFT) + ABASE;
-                        ForkJoinTask<?> t = ((ForkJoinTask<?>)
-                                U.getObjectVolatile(a, i));
+                        ForkJoinTask<?> t = ((ForkJoinTask<?>) U.getObjectVolatile(a, i));
                         if (v.base == b) {
                             if (t == null)             // stale
                                 break descent;
@@ -2001,12 +1871,9 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                                 do {
                                     U.putOrderedObject(w, QCURRENTSTEAL, t);
                                     t.doExec();        // clear local tasks too
-                                } while (task.status >= 0 &&
-                                        w.top != top &&
-                                        (t = w.pop()) != null);
+                                } while (task.status >= 0 && w.top != top && (t = w.pop()) != null);
                                 U.putOrderedObject(w, QCURRENTSTEAL, ps);
-                                if (w.base != w.top)
-                                    return;            // can't further help
+                                if (w.base != w.top) return;            // can't further help
                             }
                         }
                     }
@@ -2029,8 +1896,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         long c;
         int m, pc, sp;
         if (w == null || w.qlock < 0 ||           // caller terminating
-                (ws = workQueues) == null || (m = ws.length - 1) <= 0 ||
-                (pc = config & SMASK) == 0)           // parallelism disabled
+                (ws = workQueues) == null || (m = ws.length - 1) <= 0 || (pc = config & SMASK) == 0)           // parallelism disabled
             canBlock = false;
         else if ((sp = (int) (c = ctl)) != 0)      // release idle worker
             canBlock = tryRelease(c, ws[sp & m], 0L);
@@ -2041,28 +1907,21 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             for (int i = 0; i <= m; ++i) {        // two passes of odd indices
                 WorkQueue v;
                 if ((v = ws[((i << 1) | 1) & m]) != null) {
-                    if ((v.scanState & SCANNING) != 0)
-                        break;
+                    if ((v.scanState & SCANNING) != 0) break;
                     ++nbusy;
                 }
             }
-            if (nbusy != (tc << 1) || ctl != c)
-                canBlock = false;                 // unstable or stale
+            if (nbusy != (tc << 1) || ctl != c) canBlock = false;                 // unstable or stale
             else if (tc >= pc && ac > 1 && w.isEmpty()) {
-                long nc = ((AC_MASK & (c - AC_UNIT)) |
-                        (~AC_MASK & c));       // uncompensated
+                long nc = ((AC_MASK & (c - AC_UNIT)) | (~AC_MASK & c));       // uncompensated
                 canBlock = U.compareAndSwapLong(this, CTL, c, nc);
-            } else if (tc >= MAX_CAP ||
-                    (this == common && tc >= pc + commonMaxSpares))
-                throw new RejectedExecutionException(
-                        "Thread limit exceeded replacing blocked worker");
+            } else if (tc >= MAX_CAP || (this == common && tc >= pc + commonMaxSpares))
+                throw new RejectedExecutionException("Thread limit exceeded replacing blocked worker");
             else {                                // similar to tryAddWorker
                 boolean add = false;
                 int rs;      // CAS within lock
-                long nc = ((AC_MASK & c) |
-                        (TC_MASK & (c + TC_UNIT)));
-                if (((rs = lockRunState()) & STOP) == 0)
-                    add = U.compareAndSwapLong(this, CTL, c, nc);
+                long nc = ((AC_MASK & c) | (TC_MASK & (c + TC_UNIT)));
+                if (((rs = lockRunState()) & STOP) == 0) add = U.compareAndSwapLong(this, CTL, c, nc);
                 unlockRunState(rs, rs & ~RSLOCK);
                 canBlock = add && createWorker(); // throws on exception
             }
@@ -2083,24 +1942,16 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         if (task != null && w != null) {
             ForkJoinTask<?> prevJoin = w.currentJoin;
             U.putOrderedObject(w, QCURRENTJOIN, task);
-            CountedCompleter<?> cc = (task instanceof CountedCompleter) ?
-                    (CountedCompleter<?>) task : null;
+            CountedCompleter<?> cc = (task instanceof CountedCompleter) ? (CountedCompleter<?>) task : null;
             for (; ; ) {
-                if ((s = task.status) < 0)
-                    break;
-                if (cc != null)
-                    helpComplete(w, cc, 0);
-                else if (w.base == w.top || w.tryRemoveAndExec(task))
-                    helpStealer(w, task);
-                if ((s = task.status) < 0)
-                    break;
+                if ((s = task.status) < 0) break;
+                if (cc != null) helpComplete(w, cc, 0);
+                else if (w.base == w.top || w.tryRemoveAndExec(task)) helpStealer(w, task);
+                if ((s = task.status) < 0) break;
                 long ms, ns;
-                if (deadline == 0L)
-                    ms = 0L;
-                else if ((ns = deadline - System.nanoTime()) <= 0L)
-                    break;
-                else if ((ms = TimeUnit.NANOSECONDS.toMillis(ns)) <= 0L)
-                    ms = 1L;
+                if (deadline == 0L) ms = 0L;
+                else if ((ns = deadline - System.nanoTime()) <= 0L) break;
+                else if ((ms = TimeUnit.NANOSECONDS.toMillis(ns)) <= 0L) ms = 1L;
                 if (tryCompensate(w)) {
                     task.internalWait(ms);
                     U.getAndAddLong(this, CTL, AC_UNIT);
@@ -2127,13 +1978,11 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 WorkQueue q;
                 int b;
                 if ((q = ws[k]) != null) {
-                    if ((b = q.base) - q.top < 0)
-                        return q;
+                    if ((b = q.base) - q.top < 0) return q;
                     checkSum += b;
                 }
                 if ((k = (k + 1) & m) == origin) {
-                    if (oldSum == (oldSum = checkSum))
-                        break;
+                    if (oldSum == (oldSum = checkSum)) break;
                     checkSum = 0;
                 }
             }
@@ -2163,17 +2012,13 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 if ((b = q.base) - q.top < 0 && (t = q.pollAt(b)) != null) {
                     U.putOrderedObject(w, QCURRENTSTEAL, t);
                     t.doExec();
-                    if (++w.nsteals < 0)
-                        w.transferStealCount(this);
+                    if (++w.nsteals < 0) w.transferStealCount(this);
                 }
             } else if (active) {      // decrement active count without queuing
                 long nc = (AC_MASK & ((c = ctl) - AC_UNIT)) | (~AC_MASK & c);
-                if ((int) (nc >> AC_SHIFT) + (config & SMASK) <= 0)
-                    break;          // bypass decrement-then-increment
-                if (U.compareAndSwapLong(this, CTL, c, nc))
-                    active = false;
-            } else if ((int) ((c = ctl) >> AC_SHIFT) + (config & SMASK) <= 0 &&
-                    U.compareAndSwapLong(this, CTL, c, c + AC_UNIT))
+                if ((int) (nc >> AC_SHIFT) + (config & SMASK) <= 0) break;          // bypass decrement-then-increment
+                if (U.compareAndSwapLong(this, CTL, c, nc)) active = false;
+            } else if ((int) ((c = ctl) >> AC_SHIFT) + (config & SMASK) <= 0 && U.compareAndSwapLong(this, CTL, c, c + AC_UNIT))
                 break;
         }
         U.putOrderedObject(w, QCURRENTSTEAL, ps);
@@ -2188,12 +2033,9 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         for (ForkJoinTask<?> t; ; ) {
             WorkQueue q;
             int b;
-            if ((t = w.nextLocalTask()) != null)
-                return t;
-            if ((q = findNonEmptyStealQueue()) == null)
-                return null;
-            if ((b = q.base) - q.top < 0 && (t = q.pollAt(b)) != null)
-                return t;
+            if ((t = w.nextLocalTask()) != null) return t;
+            if ((q = findNonEmptyStealQueue()) == null) return null;
+            if ((b = q.base) - q.top < 0 && (t = q.pollAt(b)) != null) return t;
         }
     }
 
@@ -2245,15 +2087,10 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         ForkJoinPool pool;
         WorkQueue q;
         if (((t = Thread.currentThread()) instanceof ForkJoinWorkerThread)) {
-            int p = (pool = (wt = (ForkJoinWorkerThread) t).pool).
-                    config & SMASK;
+            int p = (pool = (wt = (ForkJoinWorkerThread) t).pool).config & SMASK;
             int n = (q = wt.workQueue).top - q.base;
             int a = (int) (pool.ctl >> AC_SHIFT) + p;
-            return n - (a > (p >>>= 1) ? 0 :
-                    a > (p >>>= 1) ? 1 :
-                            a > (p >>>= 1) ? 2 :
-                                    a > (p >>>= 1) ? 4 :
-                                            8);
+            return n - (a > (p >>>= 1) ? 0 : a > (p >>>= 1) ? 1 : a > (p >>>= 1) ? 2 : a > (p >>>= 1) ? 4 : 8);
         }
         return 0;
     }
@@ -2273,8 +2110,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         if (this == common)                       // cannot shut down
             return false;
         if ((rs = runState) >= 0) {
-            if (!enable)
-                return false;
+            if (!enable) return false;
             rs = lockRunState();                  // enter SHUTDOWN phase
             unlockRunState(rs, (rs & ~RSLOCK) | SHUTDOWN);
         }
@@ -2289,22 +2125,18 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                     long checkSum = ctl;
                     if ((int) (checkSum >> AC_SHIFT) + (config & SMASK) > 0)
                         return false;             // still active workers
-                    if ((ws = workQueues) == null || (m = ws.length - 1) <= 0)
-                        break;                    // check queues
+                    if ((ws = workQueues) == null || (m = ws.length - 1) <= 0) break;                    // check queues
                     for (int i = 0; i <= m; ++i) {
                         if ((w = ws[i]) != null) {
-                            if ((b = w.base) != w.top || w.scanState >= 0 ||
-                                    w.currentSteal != null) {
+                            if ((b = w.base) != w.top || w.scanState >= 0 || w.currentSteal != null) {
                                 tryRelease(c = ctl, ws[m & (int) c], AC_UNIT);
                                 return false;     // arrange for recheck
                             }
                             checkSum += b;
-                            if ((i & 1) == 0)
-                                w.qlock = -1;     // try to disable external
+                            if ((i & 1) == 0) w.qlock = -1;     // try to disable external
                         }
                     }
-                    if (oldSum == (oldSum = checkSum))
-                        break;
+                    if (oldSum == (oldSum = checkSum)) break;
                 }
             }
             if ((runState & STOP) == 0) {
@@ -2320,8 +2152,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             ForkJoinWorkerThread wt;
             int m;
             long checkSum = ctl;
-            if ((short) (checkSum >>> TC_SHIFT) + (config & SMASK) <= 0 ||
-                    (ws = workQueues) == null || (m = ws.length - 1) <= 0) {
+            if ((short) (checkSum >>> TC_SHIFT) + (config & SMASK) <= 0 || (ws = workQueues) == null || (m = ws.length - 1) <= 0) {
                 if ((runState & TERMINATED) == 0) {
                     rs = lockRunState();          // done
                     unlockRunState(rs, (rs & ~RSLOCK) | TERMINATED);
@@ -2344,8 +2175,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                                 } catch (Throwable ignore) {
                                 }
                             }
-                            if (w.scanState < 0)
-                                U.unpark(wt);     // wake up
+                            if (w.scanState < 0) U.unpark(wt);     // wake up
                         }
                     }
                 }
@@ -2358,8 +2188,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             else if (++pass > 1) {                // try to dequeue
                 long c;
                 int j = 0, sp;            // bound attempts
-                while (j++ <= m && (sp = (int) (c = ctl)) != 0)
-                    tryRelease(c, ws[sp & m], AC_UNIT);
+                while (j++ <= m && (sp = (int) (c = ctl)) != 0) tryRelease(c, ws[sp & m], AC_UNIT);
             }
         }
         return true;
@@ -2396,8 +2225,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 rs = lockRunState();
                 try {
                     if ((rs & STARTED) == 0) {
-                        U.compareAndSwapObject(this, STEALCOUNTER, null,
-                                new AtomicLong());
+                        U.compareAndSwapObject(this, STEALCOUNTER, null, new AtomicLong());
                         // create workQueues array with size a power of two
                         int p = config & SMASK; // ensure at least 2 slots
                         int n = (p > 1) ? p - 1 : 1;
@@ -2419,8 +2247,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                     int s = q.top;
                     boolean submitted = false; // initial submission or resizing
                     try {                      // locked version of push
-                        if ((a != null && a.length > s + 1 - q.base) ||
-                                (a = q.growArray()) != null) {
+                        if ((a != null && a.length > s + 1 - q.base) || (a = q.growArray()) != null) {
                             int j = (((a.length - 1) & s) << ASHIFT) + ABASE;
                             U.putOrderedObject(a, j, task);
                             U.putOrderedInt(q, QTOP, s + 1);
@@ -2441,14 +2268,11 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 q.config = k | SHARED_QUEUE;
                 q.scanState = INACTIVE;
                 rs = lockRunState();           // publish index
-                if (rs > 0 && (ws = workQueues) != null &&
-                        k < ws.length && ws[k] == null)
+                if (rs > 0 && (ws = workQueues) != null && k < ws.length && ws[k] == null)
                     ws[k] = q;                 // else terminated
                 unlockRunState(rs, rs & ~RSLOCK);
-            } else
-                move = true;                   // move if busy
-            if (move)
-                r = ThreadLocalRandom.advanceProbe(r);
+            } else move = true;                   // move if busy
+            if (move) r = ThreadLocalRandom.advanceProbe(r);
         }
     }
 
@@ -2466,19 +2290,15 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         int m;
         int r = ThreadLocalRandom.getProbe();
         int rs = runState;
-        if ((ws = workQueues) != null && (m = (ws.length - 1)) >= 0 &&
-                (q = ws[m & r & SQMASK]) != null && r != 0 && rs > 0 &&
-                U.compareAndSwapInt(q, QLOCK, 0, 1)) {
+        if ((ws = workQueues) != null && (m = (ws.length - 1)) >= 0 && (q = ws[m & r & SQMASK]) != null && r != 0 && rs > 0 && U.compareAndSwapInt(q, QLOCK, 0, 1)) {
             ForkJoinTask<?>[] a;
             int am, n, s;
-            if ((a = q.array) != null &&
-                    (am = a.length - 1) > (n = (s = q.top) - q.base)) {
+            if ((a = q.array) != null && (am = a.length - 1) > (n = (s = q.top) - q.base)) {
                 int j = ((am & s) << ASHIFT) + ABASE;
                 U.putOrderedObject(a, j, task);
                 U.putOrderedInt(q, QTOP, s + 1);
                 U.putIntVolatile(q, QLOCK, 0);
-                if (n <= 1)
-                    signalWork(ws, q);
+                if (n <= 1) signalWork(ws, q);
                 return;
             }
             U.compareAndSwapInt(q, QLOCK, 1, 0);
@@ -2494,9 +2314,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         int r = ThreadLocalRandom.getProbe();
         WorkQueue[] ws;
         int m;
-        return (p != null && (ws = p.workQueues) != null &&
-                (m = ws.length - 1) >= 0) ?
-                ws[m & r & SQMASK] : null;
+        return (p != null && (ws = p.workQueues) != null && (m = ws.length - 1) >= 0) ? ws[m & r & SQMASK] : null;
     }
 
     /**
@@ -2510,14 +2328,10 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         ForkJoinTask<?>[] a;
         int m, s;
         int r = ThreadLocalRandom.getProbe();
-        if ((ws = workQueues) != null && (m = ws.length - 1) >= 0 &&
-                (w = ws[m & r & SQMASK]) != null &&
-                (a = w.array) != null && (s = w.top) != w.base) {
+        if ((ws = workQueues) != null && (m = ws.length - 1) >= 0 && (w = ws[m & r & SQMASK]) != null && (a = w.array) != null && (s = w.top) != w.base) {
             long j = (((a.length - 1) & (s - 1)) << ASHIFT) + ABASE;
             if (U.compareAndSwapInt(w, QLOCK, 0, 1)) {
-                if (w.top == s && w.array == a &&
-                        U.getObject(a, j) == task &&
-                        U.compareAndSwapObject(a, j, task, null)) {
+                if (w.top == s && w.array == a && U.getObject(a, j) == task && U.compareAndSwapObject(a, j, task, null)) {
                     U.putOrderedInt(w, QTOP, s - 1);
                     U.putOrderedInt(w, QLOCK, 0);
                     return true;
@@ -2535,8 +2349,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         WorkQueue[] ws;
         int n;
         int r = ThreadLocalRandom.getProbe();
-        return ((ws = workQueues) == null || (n = ws.length) == 0) ? 0 :
-                helpComplete(ws[(n - 1) & r & SQMASK], task, maxTasks);
+        return ((ws = workQueues) == null || (n = ws.length) == 0) ? 0 : helpComplete(ws[(n - 1) & r & SQMASK], task, maxTasks);
     }
 
     // Exported methods
@@ -2555,8 +2368,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      *                           java.lang.RuntimePermission}{@code ("modifyThread")}
      */
     public ForkJoinPool() {
-        this(Math.min(MAX_CAP, Runtime.getRuntime().availableProcessors()),
-                defaultForkJoinWorkerThreadFactory, null, false);
+        this(Math.min(MAX_CAP, Runtime.getRuntime().availableProcessors()), defaultForkJoinWorkerThreadFactory, null, false);
     }
 
     /**
@@ -2601,28 +2413,18 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      *                                  because it does not hold {@link
      *                                  java.lang.RuntimePermission}{@code ("modifyThread")}
      */
-    public ForkJoinPool(int parallelism,
-                        ForkJoinWorkerThreadFactory factory,
-                        UncaughtExceptionHandler handler,
-                        boolean asyncMode) {
-        this(checkParallelism(parallelism),
-                checkFactory(factory),
-                handler,
-                asyncMode ? FIFO_QUEUE : LIFO_QUEUE,
-                "ForkJoinPool-" + nextPoolId() + "-worker-");
+    public ForkJoinPool(int parallelism, ForkJoinWorkerThreadFactory factory, UncaughtExceptionHandler handler, boolean asyncMode) {
+        this(checkParallelism(parallelism), checkFactory(factory), handler, asyncMode ? FIFO_QUEUE : LIFO_QUEUE, "ForkJoinPool-" + nextPoolId() + "-worker-");
         checkPermission();
     }
 
     private static int checkParallelism(int parallelism) {
-        if (parallelism <= 0 || parallelism > MAX_CAP)
-            throw new IllegalArgumentException();
+        if (parallelism <= 0 || parallelism > MAX_CAP) throw new IllegalArgumentException();
         return parallelism;
     }
 
-    private static ForkJoinWorkerThreadFactory checkFactory
-            (ForkJoinWorkerThreadFactory factory) {
-        if (factory == null)
-            throw new NullPointerException();
+    private static ForkJoinWorkerThreadFactory checkFactory(ForkJoinWorkerThreadFactory factory) {
+        if (factory == null) throw new NullPointerException();
         return factory;
     }
 
@@ -2631,11 +2433,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      * any security checks or parameter validation.  Invoked directly by
      * makeCommonPool.
      */
-    private ForkJoinPool(int parallelism,
-                         ForkJoinWorkerThreadFactory factory,
-                         UncaughtExceptionHandler handler,
-                         int mode,
-                         String workerNamePrefix) {
+    private ForkJoinPool(int parallelism, ForkJoinWorkerThreadFactory factory, UncaughtExceptionHandler handler, int mode, String workerNamePrefix) {
         this.workerNamePrefix = workerNamePrefix;
         this.factory = factory;
         this.ueh = handler;
@@ -2682,8 +2480,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      *                                    scheduled for execution
      */
     public <T> T invoke(ForkJoinTask<T> task) {
-        if (task == null)
-            throw new NullPointerException();
+        if (task == null) throw new NullPointerException();
         externalPush(task);
         return task.join();
     }
@@ -2697,8 +2494,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      *                                    scheduled for execution
      */
     public void execute(ForkJoinTask<?> task) {
-        if (task == null)
-            throw new NullPointerException();
+        if (task == null) throw new NullPointerException();
         externalPush(task);
     }
 
@@ -2710,13 +2506,11 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      *                                    scheduled for execution
      */
     public void execute(Runnable task) {
-        if (task == null)
-            throw new NullPointerException();
+        if (task == null) throw new NullPointerException();
         ForkJoinTask<?> job;
         if (task instanceof ForkJoinTask<?>) // avoid re-wrap
             job = (ForkJoinTask<?>) task;
-        else
-            job = new ForkJoinTask.RunnableExecuteAction(task);
+        else job = new ForkJoinTask.RunnableExecuteAction(task);
         externalPush(job);
     }
 
@@ -2731,8 +2525,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      *                                    scheduled for execution
      */
     public <T> ForkJoinTask<T> submit(ForkJoinTask<T> task) {
-        if (task == null)
-            throw new NullPointerException();
+        if (task == null) throw new NullPointerException();
         externalPush(task);
         return task;
     }
@@ -2765,13 +2558,11 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      *                                    scheduled for execution
      */
     public ForkJoinTask<?> submit(Runnable task) {
-        if (task == null)
-            throw new NullPointerException();
+        if (task == null) throw new NullPointerException();
         ForkJoinTask<?> job;
         if (task instanceof ForkJoinTask<?>) // avoid re-wrap
             job = (ForkJoinTask<?>) task;
-        else
-            job = new ForkJoinTask.AdaptedRunnableAction(task);
+        else job = new ForkJoinTask.AdaptedRunnableAction(task);
         externalPush(job);
         return job;
     }
@@ -2798,9 +2589,8 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             done = true;
             return futures;
         } finally {
-            if (!done)
-                for (int i = 0, size = futures.size(); i < size; i++)
-                    futures.get(i).cancel(false);
+            if (!done) for (int i = 0, size = futures.size(); i < size; i++)
+                futures.get(i).cancel(false);
         }
     }
 
@@ -2879,8 +2669,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         WorkQueue w;
         if ((ws = workQueues) != null) {
             for (int i = 1; i < ws.length; i += 2) {
-                if ((w = ws[i]) != null && w.isApparentlyUnblocked())
-                    ++rc;
+                if ((w = ws[i]) != null && w.isApparentlyUnblocked()) ++rc;
             }
         }
         return rc;
@@ -2931,8 +2720,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         WorkQueue w;
         if ((ws = workQueues) != null) {
             for (int i = 1; i < ws.length; i += 2) {
-                if ((w = ws[i]) != null)
-                    count += w.nsteals;
+                if ((w = ws[i]) != null) count += w.nsteals;
             }
         }
         return count;
@@ -2954,8 +2742,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         WorkQueue w;
         if ((ws = workQueues) != null) {
             for (int i = 1; i < ws.length; i += 2) {
-                if ((w = ws[i]) != null)
-                    count += w.queueSize();
+                if ((w = ws[i]) != null) count += w.queueSize();
             }
         }
         return count;
@@ -2974,8 +2761,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         WorkQueue w;
         if ((ws = workQueues) != null) {
             for (int i = 0; i < ws.length; i += 2) {
-                if ((w = ws[i]) != null)
-                    count += w.queueSize();
+                if ((w = ws[i]) != null) count += w.queueSize();
             }
         }
         return count;
@@ -2992,8 +2778,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         WorkQueue w;
         if ((ws = workQueues) != null) {
             for (int i = 0; i < ws.length; i += 2) {
-                if ((w = ws[i]) != null && !w.isEmpty())
-                    return true;
+                if ((w = ws[i]) != null && !w.isEmpty()) return true;
             }
         }
         return false;
@@ -3012,8 +2797,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         ForkJoinTask<?> t;
         if ((ws = workQueues) != null) {
             for (int i = 0; i < ws.length; i += 2) {
-                if ((w = ws[i]) != null && (t = w.poll()) != null)
-                    return t;
+                if ((w = ws[i]) != null && (t = w.poll()) != null) return t;
             }
         }
         return null;
@@ -3074,13 +2858,11 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             for (int i = 0; i < ws.length; ++i) {
                 if ((w = ws[i]) != null) {
                     int size = w.queueSize();
-                    if ((i & 1) == 0)
-                        qs += size;
+                    if ((i & 1) == 0) qs += size;
                     else {
                         qt += size;
                         st += w.nsteals;
-                        if (w.isApparentlyUnblocked())
-                            ++rc;
+                        if (w.isApparentlyUnblocked()) ++rc;
                     }
                 }
             }
@@ -3091,20 +2873,8 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         if (ac < 0) // ignore transient negative
             ac = 0;
         int rs = runState;
-        String level = ((rs & TERMINATED) != 0 ? "Terminated" :
-                (rs & STOP) != 0 ? "Terminating" :
-                        (rs & SHUTDOWN) != 0 ? "Shutting down" :
-                                "Running");
-        return super.toString() +
-                "[" + level +
-                ", parallelism = " + pc +
-                ", size = " + tc +
-                ", active = " + ac +
-                ", running = " + rc +
-                ", steals = " + st +
-                ", tasks = " + qt +
-                ", submissions = " + qs +
-                "]";
+        String level = ((rs & TERMINATED) != 0 ? "Terminated" : (rs & STOP) != 0 ? "Terminating" : (rs & SHUTDOWN) != 0 ? "Shutting down" : "Running");
+        return super.toString() + "[" + level + ", parallelism = " + pc + ", size = " + tc + ", active = " + ac + ", running = " + rc + ", steals = " + st + ", tasks = " + qt + ", submissions = " + qs + "]";
     }
 
     /**
@@ -3200,26 +2970,20 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      * {@code false} if the timeout elapsed before termination
      * @throws InterruptedException if interrupted while waiting
      */
-    public boolean awaitTermination(long timeout, TimeUnit unit)
-            throws InterruptedException {
-        if (Thread.interrupted())
-            throw new InterruptedException();
+    public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+        if (Thread.interrupted()) throw new InterruptedException();
         if (this == common) {
             awaitQuiescence(timeout, unit);
             return false;
         }
         long nanos = unit.toNanos(timeout);
-        if (isTerminated())
-            return true;
-        if (nanos <= 0L)
-            return false;
+        if (isTerminated()) return true;
+        if (nanos <= 0L) return false;
         long deadline = System.nanoTime() + nanos;
         synchronized (this) {
             for (; ; ) {
-                if (isTerminated())
-                    return true;
-                if (nanos <= 0L)
-                    return false;
+                if (isTerminated()) return true;
+                if (nanos <= 0L) return false;
                 long millis = TimeUnit.NANOSECONDS.toMillis(nanos);
                 wait(millis > 0L ? millis : 1L);
                 nanos = deadline - System.nanoTime();
@@ -3242,8 +3006,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         long nanos = unit.toNanos(timeout);
         ForkJoinWorkerThread wt;
         Thread thread = Thread.currentThread();
-        if ((thread instanceof ForkJoinWorkerThread) &&
-                (wt = (ForkJoinWorkerThread) thread).pool == this) {
+        if ((thread instanceof ForkJoinWorkerThread) && (wt = (ForkJoinWorkerThread) thread).pool == this) {
             helpQuiescePool(wt.workQueue);
             return true;
         }
@@ -3251,11 +3014,9 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         WorkQueue[] ws;
         int r = 0, m;
         boolean found = true;
-        while (!isQuiescent() && (ws = workQueues) != null &&
-                (m = ws.length - 1) >= 0) {
+        while (!isQuiescent() && (ws = workQueues) != null && (m = ws.length - 1) >= 0) {
             if (!found) {
-                if ((System.nanoTime() - startTime) > nanos)
-                    return false;
+                if ((System.nanoTime() - startTime) > nanos) return false;
                 Thread.yield(); // cannot block
             }
             found = false;
@@ -3263,11 +3024,9 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
                 ForkJoinTask<?> t;
                 WorkQueue q;
                 int b, k;
-                if ((k = r++ & m) <= m && k >= 0 && (q = ws[k]) != null &&
-                        (b = q.base) - q.top < 0) {
+                if ((k = r++ & m) <= m && k >= 0 && (q = ws[k]) != null && (b = q.base) - q.top < 0) {
                     found = true;
-                    if ((t = q.pollAt(b)) != null)
-                        t.doExec();
+                    if ((t = q.pollAt(b)) != null) t.doExec();
                     break;
                 }
             }
@@ -3384,20 +3143,17 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
      * @param blocker the blocker task
      * @throws InterruptedException if {@code blocker.block()} did so
      */
-    public static void managedBlock(ManagedBlocker blocker)
-            throws InterruptedException {
+    public static void managedBlock(ManagedBlocker blocker) throws InterruptedException {
         ForkJoinPool p;
         ForkJoinWorkerThread wt;
         Thread t = Thread.currentThread();
-        if ((t instanceof ForkJoinWorkerThread) &&
-                (p = (wt = (ForkJoinWorkerThread) t).pool) != null) {
+        if ((t instanceof ForkJoinWorkerThread) && (p = (wt = (ForkJoinWorkerThread) t).pool) != null) {
             WorkQueue w = wt.workQueue;
             while (!blocker.isReleasable()) {
                 if (p.tryCompensate(w)) {
                     try {
                         do {
-                        } while (!blocker.isReleasable() &&
-                                !blocker.block());
+                        } while (!blocker.isReleasable() && !blocker.block());
                     } finally {
                         U.getAndAddLong(p, CTL, AC_UNIT);
                     }
@@ -3406,8 +3162,7 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
             }
         } else {
             do {
-            } while (!blocker.isReleasable() &&
-                    !blocker.block());
+            } while (!blocker.isReleasable() && !blocker.block());
         }
     }
 
@@ -3443,49 +3198,36 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         try {
             U = sun.misc.Unsafe.getUnsafe();
             Class<?> k = ForkJoinPool.class;
-            CTL = U.objectFieldOffset
-                    (k.getDeclaredField("ctl"));
-            RUNSTATE = U.objectFieldOffset
-                    (k.getDeclaredField("runState"));
-            STEALCOUNTER = U.objectFieldOffset
-                    (k.getDeclaredField("stealCounter"));
+            CTL = U.objectFieldOffset(k.getDeclaredField("ctl"));
+            RUNSTATE = U.objectFieldOffset(k.getDeclaredField("runState"));
+            STEALCOUNTER = U.objectFieldOffset(k.getDeclaredField("stealCounter"));
             Class<?> tk = Thread.class;
-            PARKBLOCKER = U.objectFieldOffset
-                    (tk.getDeclaredField("parkBlocker"));
+            PARKBLOCKER = U.objectFieldOffset(tk.getDeclaredField("parkBlocker"));
             Class<?> wk = WorkQueue.class;
-            QTOP = U.objectFieldOffset
-                    (wk.getDeclaredField("top"));
-            QLOCK = U.objectFieldOffset
-                    (wk.getDeclaredField("qlock"));
-            QSCANSTATE = U.objectFieldOffset
-                    (wk.getDeclaredField("scanState"));
-            QPARKER = U.objectFieldOffset
-                    (wk.getDeclaredField("parker"));
-            QCURRENTSTEAL = U.objectFieldOffset
-                    (wk.getDeclaredField("currentSteal"));
-            QCURRENTJOIN = U.objectFieldOffset
-                    (wk.getDeclaredField("currentJoin"));
+            QTOP = U.objectFieldOffset(wk.getDeclaredField("top"));
+            QLOCK = U.objectFieldOffset(wk.getDeclaredField("qlock"));
+            QSCANSTATE = U.objectFieldOffset(wk.getDeclaredField("scanState"));
+            QPARKER = U.objectFieldOffset(wk.getDeclaredField("parker"));
+            QCURRENTSTEAL = U.objectFieldOffset(wk.getDeclaredField("currentSteal"));
+            QCURRENTJOIN = U.objectFieldOffset(wk.getDeclaredField("currentJoin"));
             Class<?> ak = ForkJoinTask[].class;
             ABASE = U.arrayBaseOffset(ak);
             int scale = U.arrayIndexScale(ak);
-            if ((scale & (scale - 1)) != 0)
-                throw new Error("data type scale not a power of two");
+            if ((scale & (scale - 1)) != 0) throw new Error("data type scale not a power of two");
             ASHIFT = 31 - Integer.numberOfLeadingZeros(scale);
         } catch (Exception e) {
             throw new Error(e);
         }
 
         commonMaxSpares = DEFAULT_COMMON_MAX_SPARES;
-        defaultForkJoinWorkerThreadFactory =
-                new DefaultForkJoinWorkerThreadFactory();
+        defaultForkJoinWorkerThreadFactory = new DefaultForkJoinWorkerThreadFactory();
         modifyThreadPermission = new RuntimePermission("modifyThread");
 
-        common = java.security.AccessController.doPrivileged
-                (new java.security.PrivilegedAction<ForkJoinPool>() {
-                    public ForkJoinPool run() {
-                        return makeCommonPool();
-                    }
-                });
+        common = java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<ForkJoinPool>() {
+            public ForkJoinPool run() {
+                return makeCommonPool();
+            }
+        });
         int par = common.config & SMASK; // report 1 even if threads disabled
         commonParallelism = par > 0 ? par : 1;
     }
@@ -3499,42 +3241,31 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         ForkJoinWorkerThreadFactory factory = null;
         UncaughtExceptionHandler handler = null;
         try {  // ignore exceptions in accessing/parsing properties
-            String pp = System.getProperty
-                    ("java.util.concurrent.ForkJoinPool.common.parallelism");
-            String fp = System.getProperty
-                    ("java.util.concurrent.ForkJoinPool.common.threadFactory");
-            String hp = System.getProperty
-                    ("java.util.concurrent.ForkJoinPool.common.exceptionHandler");
-            if (pp != null)
-                parallelism = Integer.parseInt(pp);
+            String pp = System.getProperty("java.util.concurrent.ForkJoinPool.common.parallelism");
+            String fp = System.getProperty("java.util.concurrent.ForkJoinPool.common.threadFactory");
+            String hp = System.getProperty("java.util.concurrent.ForkJoinPool.common.exceptionHandler");
+            if (pp != null) parallelism = Integer.parseInt(pp);
             if (fp != null)
-                factory = ((ForkJoinWorkerThreadFactory) ClassLoader.
-                        getSystemClassLoader().loadClass(fp).newInstance());
+                factory = ((ForkJoinWorkerThreadFactory) ClassLoader.getSystemClassLoader().loadClass(fp).newInstance());
             if (hp != null)
-                handler = ((UncaughtExceptionHandler) ClassLoader.
-                        getSystemClassLoader().loadClass(hp).newInstance());
+                handler = ((UncaughtExceptionHandler) ClassLoader.getSystemClassLoader().loadClass(hp).newInstance());
         } catch (Exception ignore) {
         }
         if (factory == null) {
-            if (System.getSecurityManager() == null)
-                factory = defaultForkJoinWorkerThreadFactory;
+            if (System.getSecurityManager() == null) factory = defaultForkJoinWorkerThreadFactory;
             else // use security-managed default
                 factory = new InnocuousForkJoinWorkerThreadFactory();
         }
         if (parallelism < 0 && // default 1 less than #cores
-                (parallelism = Runtime.getRuntime().availableProcessors() - 1) <= 0)
-            parallelism = 1;
-        if (parallelism > MAX_CAP)
-            parallelism = MAX_CAP;
-        return new ForkJoinPool(parallelism, factory, handler, LIFO_QUEUE,
-                "ForkJoinPool.commonPool-worker-");
+                (parallelism = Runtime.getRuntime().availableProcessors() - 1) <= 0) parallelism = 1;
+        if (parallelism > MAX_CAP) parallelism = MAX_CAP;
+        return new ForkJoinPool(parallelism, factory, handler, LIFO_QUEUE, "ForkJoinPool.commonPool-worker-");
     }
 
     /**
      * Factory for innocuous worker threads
      */
-    static final class InnocuousForkJoinWorkerThreadFactory
-            implements ForkJoinWorkerThreadFactory {
+    static final class InnocuousForkJoinWorkerThreadFactory implements ForkJoinWorkerThreadFactory {
 
         /**
          * An ACC to restrict permissions for the factory itself.
@@ -3545,24 +3276,17 @@ ExecutorService相⽐，其主要的不同在于采⽤了⼯作窃取算法(work
         static {
             Permissions innocuousPerms = new Permissions();
             innocuousPerms.add(modifyThreadPermission);
-            innocuousPerms.add(new RuntimePermission(
-                    "enableContextClassLoaderOverride"));
-            innocuousPerms.add(new RuntimePermission(
-                    "modifyThreadGroup"));
-            innocuousAcc = new AccessControlContext(new ProtectionDomain[]{
-                    new ProtectionDomain(null, innocuousPerms)
-            });
+            innocuousPerms.add(new RuntimePermission("enableContextClassLoaderOverride"));
+            innocuousPerms.add(new RuntimePermission("modifyThreadGroup"));
+            innocuousAcc = new AccessControlContext(new ProtectionDomain[]{new ProtectionDomain(null, innocuousPerms)});
         }
 
         public final ForkJoinWorkerThread newThread(ForkJoinPool pool) {
-            return (ForkJoinWorkerThread.InnocuousForkJoinWorkerThread)
-                    java.security.AccessController.doPrivileged(
-                            new java.security.PrivilegedAction<ForkJoinWorkerThread>() {
-                                public ForkJoinWorkerThread run() {
-                                    return new ForkJoinWorkerThread.
-                                            InnocuousForkJoinWorkerThread(pool);
-                                }
-                            }, innocuousAcc);
+            return (ForkJoinWorkerThread.InnocuousForkJoinWorkerThread) java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<ForkJoinWorkerThread>() {
+                public ForkJoinWorkerThread run() {
+                    return new ForkJoinWorkerThread.InnocuousForkJoinWorkerThread(pool);
+                }
+            }, innocuousAcc);
         }
     }
 
