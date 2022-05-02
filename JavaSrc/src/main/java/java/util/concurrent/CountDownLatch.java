@@ -1,38 +1,3 @@
-/*
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-/*
- *
- *
- *
- *
- *
- * Written by Doug Lea with assistance from members of JCP JSR-166
- * Expert Group and released to the public domain, as explained at
- * http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package java.util.concurrent;
 
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
@@ -157,6 +122,12 @@ import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 public class CountDownLatch {
 
     /**
+     *通过一个计数器来实现的，计数器的初始化值为线程的数量。每当一个线程完成了自己的任务后，计数器的值就相应得减1。
+     * 当计数器到达0时，表示所有的线程都已完成任务，然后等待的线程就可以恢复执行任务.
+     * counDownLatch是一个一次性的， 计数无法重置
+     */
+
+    /**
      * Synchronization control For CountDownLatch.
      * Uses AQS state to represent count.
      */
@@ -165,6 +136,7 @@ public class CountDownLatch {
         private static final long serialVersionUID = 4982264981922014374L;
 
         Sync(int count) {
+            //一开始是设置大于 0 的 state 值
             setState(count);
         }
 
@@ -187,7 +159,8 @@ public class CountDownLatch {
                 // 获取当前 AQS.state
                 int c = getState();
                 // 条件成立：说明前面已经有线程 触发 唤醒操作了，这里返回 false
-                // 在对state进行减一操作之前，会先判断一下state的值是否为0，如果state已经为0了，此时还有线程来对state进行减1，这个时候是不正常的操作，因此会返回false
+                // 在对state进行减一操作之前，会先判断一下state的值是否为0，如果state已经为0了，
+                // 此时还有线程来对state进行减1，这个时候是不正常的操作，因此会返回false
                 if (c == 0) {
                     return false;
                 }

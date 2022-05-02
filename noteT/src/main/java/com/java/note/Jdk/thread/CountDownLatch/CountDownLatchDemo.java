@@ -15,7 +15,18 @@ public class CountDownLatchDemo {
     public static int count = 0;
 
     public static void main(String[] args) throws InterruptedException {
-        closeDoor();
+        //closeDoor();
+        moreCountDown();
+    }
+
+    public static void moreCountDown() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        Thread.sleep(1000 * 2);
+        countDownLatch.countDown();
+        countDownLatch.countDown();
+        System.out.println(countDownLatch.getCount());
+        countDownLatch.countDown();
+        countDownLatch.countDown();
     }
 
     public static void closeDoor() throws InterruptedException {

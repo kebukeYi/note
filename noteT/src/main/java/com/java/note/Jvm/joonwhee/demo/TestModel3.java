@@ -2,7 +2,7 @@ package com.java.note.Jvm.joonwhee.demo;
 
 import lombok.Data;
 
-@Data
+//@Data
 public class TestModel3 {
 
     private String field1;
