@@ -495,10 +495,8 @@ public class ThreadLocal<T> {
             //根据 key 的 HashCode，找到 key 在数组上的槽点 i
             int i = key.threadLocalHashCode & (len - 1);
             // 从槽点 i 开始向后循环搜索，找空余槽点（空余位置）或者找现有槽点
-            //如果没有现有槽点，则必定有空余槽点，因为没有空间时会扩容
-            for (Entry e = tab[i];
-                 e != null;
-                 e = tab[i = nextIndex(i, len)]) {
+            // 如果没有现有槽点，则必定有空余槽点，因为没有空间时会扩容
+            for (Entry e = tab[i]; e != null; e = tab[i = nextIndex(i, len)]) {
                 //获取当前元素 key
                 ThreadLocal<?> k = e.get();
                 //说明是替换操作
@@ -510,12 +508,14 @@ public class ThreadLocal<T> {
                 //如果是空 说明 key为 null 是过期数据， 走替换逻辑
                 //找到异常槽点：槽点被 GC 掉，重设 Key 值和 Value 值
                 if (k == null) {
+                    //
                     replaceStaleEntry(key, value, i);
                     return;
                 }
-            }
-            // 执行到这里 for 循环遇到了slot 为空的情况，说明是真正的新数据 不用替换
-            //没有找到现有的槽点，增加新的 Entry
+            }//for over
+
+            // 执行到这里 for 循环遇到了 slot 为空的情况，说明是真正的新数据 不用替换
+            // 没有找到现有的槽点，增加新的 Entry
             tab[i] = new Entry(key, value);
             //设置 ThreadLocal 数量
             int sz = ++size;
@@ -523,7 +523,6 @@ public class ThreadLocal<T> {
             //条件一：!cleanSomeSlots(i, sz)  成立 说明 启发式清理工作 未清理到任何数据
             //条件二：sz >= threshold   当前 table 内的 entry 是否大于阈值
             if (!cleanSomeSlots(i, sz) && sz >= threshold) {
-                //
                 rehash();
             }
         }
@@ -627,8 +626,8 @@ public class ThreadLocal<T> {
                     //前提条件是 前驱查找并未找到过期数据
                     slotToExpunge = i;
                 }
-
             }
+
             // If key not found, put new entry in stale slot
             //向后查找过程中也并未发现 k==key 的entry 说明是一个新数据，直接添加到
             tab[staleSlot].value = null;
