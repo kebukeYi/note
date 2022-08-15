@@ -9,77 +9,59 @@ import sun.misc.Unsafe;
 
 /**
  * Provides a framework for implementing blocking locks and related
- * synchronizers (semaphores, events, etc) that rely on（依赖于先进先出队列）
- * first-in-first-out (FIFO) wait queues.  This class is designed to
- * be a useful basis for most kinds of synchronizers that rely on a
- * single atomic {@code int} value to represent state. Subclasses
- * must define the protected methods that change this state, and which
- * define what that state means in terms of this object being acquired
- * or released.  通过给定的int 值用来表示状态，该状态用于表示锁匙获取还是释放的；通过给定的方法改变状态的值。
- * Given these, the other methods in this class carry
- * out all queuing and blocking mechanics.
+ * synchronizers (semaphores, events, etc) that rely on（依赖于先进先出队列）first-in-first-out (FIFO) wait queues.
+ *
+ * This class is designed to be a useful basis for most kinds of synchronizers that rely on a single atomic {@code int} value to represent state.
+ * Subclasses must define the protected methods that change this state, and which define what that state means in terms of this object being acquired or released.
+ * 通过给定的int 值用来表示状态，该状态用于表示锁匙获取还是释放的；通过给定的方法改变状态的值。
+ *
+ * Given these, the other methods in this class carry out all queuing and blocking mechanics.
  * Subclasses can maintain other state fields, but only the atomically updated {@code int}
- * value manipulated using methods {@link #getState}, {@link #setState} and {@link #compareAndSetState} is tracked with respect
- * to synchronization.
+ * value manipulated using methods {@link #getState}, {@link #setState} and {@link #compareAndSetState} is tracked with respect to synchronization.
  *
  * <p>Subclasses should be defined as non-public internal helper
- * classes that are used to implement the synchronization properties
- * of their enclosing class.  Class
- * {@code AbstractQueuedSynchronizer} does not implement any
- * synchronization interface.  Instead it defines methods such as
- * {@link #acquireInterruptibly} that can be invoked as
- * appropriate by concrete locks and related synchronizers to
- * implement their public methods.子类一般使用内部类用来实现需要的同步的工作
+ * classes that are used to implement the synchronization properties of their enclosing class.
  *
- * <p>This class supports either or both a default <em>exclusive</em>
+ * Class {@code AbstractQueuedSynchronizer} does not implement any synchronization interface.
+ *  Instead it defines methods such as {@link #acquireInterruptibly} that can be invoked as appropriate by concrete locks
+ *  and related synchronizers to implement their public methods.
+ *  子类一般使用内部类用来实现需要的同步的工作
+ *
+ * This class supports either or both a default <em>exclusive</em>
  * mode and a <em>shared</em> mode. 有两种模式：独占和共享
- * When acquired in exclusive mode,
- * attempted acquires by other threads cannot succeed. Shared mode
- * acquires by multiple threads may (but need not) succeed. This class
- * does not &quot;understand&quot; these differences except in the
- * mechanical sense that when a shared mode acquire succeeds, the next
- * waiting thread (if one exists) must also determine whether it can
- * acquire as well. Threads waiting in the different modes share the
- * same FIFO queue. Usually, implementation subclasses support only
- * one of these modes, but both can come into play for example in a
- * {@link ReadWriteLock}. Subclasses that support only exclusive or
- * only shared modes need not define the methods supporting the unused mode.
+ * When acquired in exclusive mode, attempted acquires by other threads cannot succeed.
+ * Shared mode acquires by multiple threads may (but need not) succeed.
+ *
+ * This class does not &quot;understand&quot; these differences except in the mechanical sense that when a shared mode acquire succeeds,
+ * the next waiting thread (if one exists) must also determine whether it can acquire as well.
+ * 这个类不理解这些区别，除了在机械意义上，当一个共享模式获取成功时，下一个等待线程(如果存在)也必须确定它是否也可以获取。
+ *
+ * Threads waiting in the different modes share the same FIFO queue.
+ * Usually, implementation subclasses support only one of these modes, but both can come into play for example in a {@link ReadWriteLock}.
+ * Subclasses that support only exclusive or only shared modes need not define the methods supporting the unused mode.
  * 这个类提供了两种模式:独占和共享,一般地之类会只有一种模式,但 ReadWriteLocki两种模式是并存,子类不需要再定义别的方法来实现这两种模式
  *
- * <p>This class defines a nested {@link ConditionObject} class that
- * can be used as a {@link Condition} implementation by subclasses
- * supporting exclusive mode for which method {@link #isHeldExclusively} reports whether synchronization is exclusively
- * held with respect to the current thread, method {@link #release}
- * invoked with the current {@link #getState} value fully releases
- * this object, and {@link #acquire}, given this saved state value,
- * eventually restores this object to its previous acquired state.  No
- * {@code AbstractQueuedSynchronizer} method otherwise creates such a
- * condition, so if this constraint cannot be met, do not use it.  The
- * behavior of {@link ConditionObject} depends of course on the
- * semantics of its synchronizer implementation.
+ * This class defines a nested {@link ConditionObject} class that can be used as a {@link Condition} implementation by subclasses
+ * supporting exclusive mode for which method {@link #isHeldExclusively} reports whether synchronization is exclusively held with respect to the current thread,
+ * method {@link #release} invoked with the current {@link #getState} value fully releases this object, and {@link #acquire}, given this saved state value,
+ * eventually restores this object to its previous acquired state.
  *
- * <p>This class provides inspection, instrumentation, and monitoring
- * methods for the internal queue, as well as similar methods for
- * condition objects. These can be exported as desired into classes
- * using an {@code AbstractQueuedSynchronizer} for their
- * synchronization mechanics.
+ * No {@code AbstractQueuedSynchronizer} method otherwise creates such a condition, so if this constraint cannot be met, do not use it.
+ * The behavior of {@link ConditionObject} depends of course on the semantics of its synchronizer implementation.
  *
- * <p>Serialization of this class stores only the underlying atomic
- * integer maintaining state, so deserialized objects have empty
- * thread queues. Typical subclasses requiring serializability will
- * define a {@code readObject} method that restores this to a known
- * initial state upon deserialization.
- * 序列化相关:子类一股需要定
- * 义 readojbect,方法来记住已经
- * 初始化的记录(否则反序列化,
- * 这些状态会丢失)
+ * This class provides inspection, instrumentation, and monitoring methods for the internal queue, as well as similar methods for condition objects.
+ * These can be exported as desired into classes using an {@code AbstractQueuedSynchronizer} for their synchronization mechanics.
+ *
+ * Serialization of this class stores only the underlying atomic integer maintaining state,
+ * so deserialized objects have empty thread queues.
+ * Typical subclasses requiring serializability will define a {@code readObject} method that restores this to a known initial state upon deserialization.
+ * 序列化相关:子类一股需要定义 readObject()方法来记住已经初始化的记录(否则反序列化,这些状态会丢失)
  *
  * <h3>Usage</h3>
  *
- * <p>To use this class as the basis of a synchronizer, redefine the
- * following methods, as applicable, by inspecting and/or modifying
- * the synchronization state using {@link #getState}, {@link
- * #setState} and/or {@link #compareAndSetState}:
+ * To use this class as the basis of a synchronizer,
+ * redefine the following methods, as applicable,
+ * by inspecting and/or modifying the synchronization state using {@link #getState}, {@link #setState} and/or {@link #compareAndSetState}:
  *
  * <ul>
  * <li> {@link #tryAcquire}
@@ -89,22 +71,16 @@ import sun.misc.Unsafe;
  * <li> {@link #isHeldExclusively}
  * </ul>
  * <p>
- * Each of these methods by default throws {@link
- * UnsupportedOperationException}.  Implementations of these methods
- * must be internally thread-safe, and should in general be short and
- * not block. Defining these methods is the <em>only</em> supported
- * means of using this class. All other methods are declared
+ * Each of these methods by default throws {@link UnsupportedOperationException}.
+ * Implementations of these methods must be internally thread-safe, and should in general be short and not block.
+ * Defining these methods is the <em>only</em> supported means of using this class. All other methods are declared
  * {@code final} because they cannot be independently varied.
  *
- * <p>You may also find the inherited methods from {@link
- * AbstractOwnableSynchronizer} useful to keep track of the thread
- * owning an exclusive synchronizer.  You are encouraged to use them
- * -- this enables monitoring and diagnostic tools to assist users in
- * determining which threads hold locks.
+ * You may also find the inherited methods from {@link AbstractOwnableSynchronizer} useful to keep track of the thread owning an exclusive synchronizer.
+ * You are encouraged to use them -- this enables monitoring and diagnostic tools to assist users in determining which threads hold locks.
  *
- * <p>Even though this class is based on an internal FIFO queue, it
- * does not automatically enforce FIFO acquisition policies.  The core
- * of exclusive synchronization takes the form:
+ * Even though this class is based on an internal FIFO queue, it does not automatically enforce FIFO acquisition policies.
+ * The core of exclusive synchronization takes the form:
  *
  * <pre>
  *     独占模式
@@ -121,59 +97,49 @@ import sun.misc.Unsafe;
  * <p>
  * (Shared mode is similar but may involve cascading signals.)
  *
- * <p id="barging">
- * Because checks in acquire are invoked before
- * enqueuing, a newly acquiring thread may <em>barge</em> ahead of
- * others that are blocked and queued.  However, you can, if desired,
- * define {@code tryAcquire} and/or {@code tryAcquireShared} to
- * disable barging by internally invoking one or more of the inspection
- * methods, thereby providing a <em>fair</em> FIFO acquisition order.
- * <p>
- * In particular, most fair synchronizers can define {@code tryAcquire}
- * to return {@code false} if {@link #hasQueuedPredecessors} (a method
- * specifically designed to be used by fair synchronizers) returns
- * {@code true}.  Other variations are possible.
+ * <p id="barging"> 非法闯入
+ * Because checks in acquire are invoked before enqueuing ,
+ * a newly acquiring thread may barge ahead of others that are blocked and queued.
+ * However, you can, if desired , define {@code tryAcquire} and/or {@code tryAcquireShared} to disable barging by internally invoking one or more of the inspection methods ,
+ * thereby providing a fair FIFO acquisition order.
  *
- * <p>Throughput and scalability are generally highest for the
- * default barging (also known as <em>greedy</em>,
- * <em>renouncement</em>, and <em>convoy-avoidance</em>) strategy.
- * While this is not guaranteed to be fair or starvation-free, earlier
- * queued threads are allowed to recontend before later queued
- * threads, and each recontention has an unbiased chance to succeed
- * against incoming threads.  Also, while acquires do not
- * &quot;spin&quot; in the usual sense, they may perform multiple
- * invocations of {@code tryAcquire} interspersed with other
- * computations before blocking.  This gives most of the benefits of
- * spins when exclusive synchronization is only briefly held, without
- * most of the liabilities when it isn't. If so desired, you can
- * augment this by preceding calls to acquire methods with
- * "fast-path" checks, possibly prechecking {@link #hasContended}
- * and/or {@link #hasQueuedThreads} to only do so if the synchronizer
- * is likely not to be contended.
+ * In particular, most fair synchronizers can define {@code tryAcquire} to return {@code false}
+ * if {@link #hasQueuedPredecessors} (a method specifically designed to be used by fair synchronizers)
+ * returns {@code true}.  Other variations are possible.
  *
- * <p>This class provides an efficient and scalable basis for
- * synchronization in part by specializing its range of use to
- * synchronizers that can rely on {@code int} state, acquire, and
- * release parameters, and an internal FIFO wait queue. When this does
- * not suffice, you can build synchronizers from a lower level using
- * {@link java.util.concurrent.atomic atomic} classes, your own custom
- * {@link java.util.Queue} classes, and {@link LockSupport} blocking
- * support.
- * 这个类捏供了 state、获取、释
- * 放、还有内部的队列给我们实
- * 现同步。如果觉得功能不够的
- * 话,可以自己使用 atomic包和
- * Queue类来自己实现
+ * Throughput and scalability are generally highest for the default barging (also known as greedy , renouncement , and convoy-avoidance) strategy.
+ * 对于默认的barging(也称为贪婪、放弃和车队回避)策略，吞吐量和可伸缩性通常是最高的。
+ *
+ * While this is not guaranteed to be fair or starvation-free, earlier queued threads are allowed to recontend before later queued threads ,
+ * 虽然这不能保证是公平的或无饥饿的，但允许较早队列的线程在较晚队列的线程之前重新竞争，
+ *
+ * and each recontention has an unbiased chance to succeed against incoming threads.
+ * 并且每次重新竞争都有一个公正的机会成功地对付传入的线程。
+ *
+ * Also, while acquires do not spin in the usual sense, they may perform multiple invocations of {@code tryAcquire} interspersed with other computations before blocking.
+ * 此外，虽然acquire在通常意义上不会旋转，但在阻塞之前，它们可能会执行多次调用{@code tryAcquire}并穿插其他计算。
+ *
+ * This gives most of the benefits of spins when exclusive synchronization is only briefly held, without most of the liabilities when it isn't.
+ * 当独占同步只是短暂地进行时，这就提供了自旋的大部分好处，而当它没有进行时，则没有大部分的缺点。
+ *
+ * If so desired, you can augment this by preceding calls to acquire methods with "fast-path" checks,
+ * 如果需要，您可以通过前面的调用来获得具有“快速路径”检查的方法，
+ * possibly prechecking {@link #hasContended} and/or {@link #hasQueuedThreads} to only do so if the synchronizer is likely not to be contended.
+ * 可能会预先检查{@link # hascontenended}和/或{@link #hasQueuedThreads}，只有在同步器可能不存在争用的情况下才会这样做。
+ *
+ * This class provides an efficient and scalable basis for synchronization in part by specializing its range of use to synchronizers that can rely on {@code int} state, acquire, and
+ * release parameters, and an internal FIFO wait queue.
+ * When this does not suffice, you can build synchronizers from a lower level using {@link java.util.concurrent.atomic atomic} classes,
+ * your own custom {@link java.util.Queue} classes, and {@link LockSupport} blocking support.
+ * 这个类捏供了 state、获取、释放、还有内部的队列给我们实现同步。
+ * 如果觉得功能不够的话,可以自己使用 atomic包和Queue类来自己实现
  *
  * <h3>Usage Examples</h3>
  *
- * <p>Here is a non-reentrant mutual exclusion lock class that uses
- * the value zero to represent the unlocked state, and one to
- * represent the locked state. While a non-reentrant lock
- * does not strictly require recording of the current owner
- * thread, this class does so anyway to make usage easier to monitor.
- * It also supports conditions and exposes
- * one of the instrumentation methods:
+ * Here is a non-reentrant mutual exclusion lock class that uses the value zero to represent the unlocked state , and one to represent the locked state.
+ * While a non-reentrant lock does not strictly require recording of the current owner thread,
+ * this class does so anyway to make usage easier to monitor.
+ * It also supports conditions and exposes one of the instrumentation methods:
  *
  *  <pre> {@code
  * class Mutex implements Lock, java.io.Serializable {
@@ -208,8 +174,7 @@ import sun.misc.Unsafe;
  *     Condition newCondition() { return new ConditionObject(); }
  *
  *     // Deserializes properly
- *     private void readObject(ObjectInputStream s)
- *         throws IOException, ClassNotFoundException {
+ *     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
  *       s.defaultReadObject();
  *       setState(0); // reset to unlocked state
  *     }
@@ -227,17 +192,13 @@ import sun.misc.Unsafe;
  *   public void lockInterruptibly() throws InterruptedException {
  *     sync.acquireInterruptibly(1);
  *   }
- *   public boolean tryLock(long timeout, TimeUnit unit)
- *       throws InterruptedException {
+ *   public boolean tryLock(long timeout, TimeUnit unit) throws InterruptedException {
  *     return sync.tryAcquireNanos(1, unit.toNanos(timeout));
  *   }
  * }}</pre>
  *
- * <p>Here is a latch class that is like a
- * {@link java.util.concurrent.CountDownLatch CountDownLatch}
- * except that it only requires a single {@code signal} to
- * fire. Because a latch is non-exclusive, it uses the {@code shared}
- * acquire and release methods.
+ * Here is a latch class that is like a {@link java.util.concurrent.CountDownLatch CountDownLatch} except that it only requires a single {@code signal} to fire.
+ * Because a latch is non-exclusive, it uses the {@code shared} acquire and release methods.
  *
  *  <pre> {@code
  * class BooleanLatch {
@@ -280,68 +241,93 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     /**
      * Wait queue node class.
      *
-     * <p>The wait queue is a variant of a "CLH" (Craig, Landin, and
-     * Hagersten) lock queue. CLH locks are normally used for
-     * spinlocks(自旋锁).  We instead use them for blocking synchronizers, but
-     * use the same basic tactic of holding some of the control
-     * information about a thread in the predecessor of its node.
-     * A "status"  field in each node keeps track of whether a thread should block. 判断线程是否被阻塞。
-     * A node is signalled when its predecessor releases.  Each node of the queue otherwise serves as a
-     * specific-notification-style monitor holding a single waiting
-     * thread. The status field does NOT control whether threads are
-     * granted locks etc though.  A thread may try to acquire if it is
-     * first in the queue. But being first does not guarantee success;
-     * it only gives the right to contend.  So the currently released
-     * contender thread may need to rewait.
+     * The wait queue is a variant of a "CLH" (Craig, Landin, and Hagersten) lock queue.
+     * 等待队列是“CLH”(Craig、Landin和Hagersten)锁队列的变体，那么变体在哪里呢？
      *
-     * <p>To enqueue into a CLH lock, you atomically splice it in as new tail. To dequeue, you just set the head field.
-     * <pre>
+     * CLH locks are normally used for spinlocks(自旋锁).
+     *
+     * We instead use them for blocking synchronizers , but use the same basic tactic of holding some of the control information about a thread in the predecessor of its node.
+     * 我们将它们用于阻塞同步器，但使用相同的基本策略，即在其节点的 前身中 保存有关线程的一些控制信息
+     *
+     * A "status"  field in each node keeps track of whether a thread should block.
+     * 每个节点中的“状态”字段跟踪线程是否应该阻塞
+     *
+     * A node is signalled when its predecessor releases.
+     * 节点在其 前身被释放 时 发出信号
+     *
+     * Each node of the queue otherwise serves as a specific-notification-style monitor holding a single waiting thread.
+     * 否则，队列的每个节点都用作持有单个等待线程的特定通知样式的监视器
+     *
+     * The status field does NOT control whether threads are granted locks etc though.
+     *  状态字段不控制线程是否被授予锁等
+     * A thread may try to acquire if it is first in the queue.
+     * 队列中的第一个线程可能会尝试获取锁
+     *
+     * But being first does not guarantee success; it only gives the right to contend.
+     * 但成为第一并不能保证成功；它只赋予抗争的权利
+     *
+     * So the currently released contender thread may need to rewait.
+     * 所以当前释放的竞争者线程可能需要重新等待
+     *
+     * To enqueue into a CLH lock, you atomically splice it in as new tail.
+     * 要加入 CLH 锁，您可以将其自动拼接为新的尾部
+     * To dequeue, you just set the head field.
+     * 要出列，您只需设置 head 字段
+     *
      *      +------+  prev +-----+       +-----+
      * head |      | <---- |     | <---- |     |  tail
      *      +------+       +-----+       +-----+
-     * </pre>
      *
-     * <p>Insertion into a CLH queue requires only a single atomic
-     * operation on "tail", so there is a simple atomic point of
-     * demarcation from unqueued to queued. Similarly, dequeuing
-     * involves only updating the "head". However, it takes a bit
-     * more work for nodes to determine who their successors are,
-     * in part to deal with possible cancellation due to timeouts
-     * and interrupts.
+     * Insertion into a CLH queue requires only a single atomic operation on "tail",
+     * 插入 CLH 队列只需要对“tail”进行一次原子操作
+     * so there is a simple atomic point of demarcation from unqueued to queued.
+     * 所以从出队到排队有一个简单的原子分界点
+     * Similarly, dequeuing involves only updating the "head".
+     * 同样，出队只涉及更新“头”
      *
-     * <p>The "prev" links (not used in original CLH locks), are mainly
-     * needed to handle cancellation. If a node is cancelled, its
-     * successor is (normally) relinked to a non-cancelled
-     * predecessor. For explanation of similar mechanics in the case
-     * of spin locks, see the papers by Scott and Scherer at
-     * http://www.cs.rochester.edu/u/scott/synchronization/
+     * However, it takes a bit more work for nodes to determine who their successors are,
+     * 然而，节点需要更多的工作来确定他们的继任者是谁
+     * in part to deal with possible cancellation due to timeouts and interrupts.
+     * 部分是为了处理由于超时和中断而可能导致的取消
      *
-     * <p>We also use "next" links to implement blocking mechanics.
-     * The thread id for each node is kept in its own node, so a
-     * predecessor signals the next node to wake up by traversing
-     * next link to determine which thread it is.  Determination of
-     * successor must avoid races with newly queued nodes to set
-     * the "next" fields of their predecessors.  This is solved
-     * when necessary by checking backwards from the atomically
-     * updated "tail" when a node's successor appears to be null.
-     * (Or, said differently, the next-links are an optimization
-     * so that we don't usually need a backward scan.)
+     * The "prev" links (not used in original CLH locks), are mainly needed to handle cancellation.
+     * “prev”链接（未在原始 CLH 锁中使用）主要用于处理取消
+     * If a node is cancelled, its successor is (normally) relinked to a non-cancelled predecessor.
+     *  如果一个节点被取消，它的后继者（通常）重新链接到一个未取消的前任者
+     * For explanation of similar mechanics in the case of spin locks, see the papers by Scott and Scherer at http://www.cs.rochester.edu/u/scott/synchronization/
+     * 用于解释自旋锁情况下的类似机制 ，请参阅 Scott 和 Scherer 的论文，网址为 http://www.cs.rochester.eduuscottsynchronization/
      *
-     * <p>Cancellation introduces some conservatism to the basic
-     * algorithms.  Since we must poll for cancellation of other
-     * nodes, we can miss noticing whether a cancelled node is
-     * ahead or behind us. This is dealt with by always unparking
-     * successors upon cancellation, allowing them to stabilize on
-     * a new predecessor, unless we can identify an uncancelled
-     * predecessor who will carry this responsibility.
+     * We also use "next" links to implement blocking mechanics.
+     * 我们还使用“下一个”链接来实现阻塞机制
+     * The thread id for each node is kept in its own node,
+     * 每个节点的线程 id 保存在自己的节点中
+     * so a predecessor signals the next node to wake up by traversing next link to determine which thread it is.
+     * 因此，前任通过遍历下一个链接以确定它是哪个线程来通知下一个节点唤醒
+     * Determination of successor must avoid races with newly queued nodes to set the "next" fields of their predecessors.
+     * 确定后继节点必须避免与新排队的节点竞争，以设置其前一节点的“下一个”字段。
+     * This is solved when necessary by checking backwards from the atomically updated "tail" when a node's successor appears to be null.
+     * 当节点的后继节点看起来为空时，通过从原子更新的“tail”向后检查来解决这个问题
+     * (Or, said differently, the next-links are an optimization so that we don't usually need a backward scan.)
+     * 或者，换句话说，下一个链接是一种优化，因此我们通常不需要向后扫描
      *
-     * <p>CLH queues need a dummy header node to get started. But
-     * we don't create them on construction, because it would be wasted
-     * effort if there is never contention. Instead, the node
-     * is constructed and head and tail pointers are set upon first
-     * contention.
+     * Cancellation introduces some conservatism to the basic algorithms.
+     * 消去为基本算法引入了一些保守性
+     * Since we must poll for cancellation of other nodes,
+     * 由于我们必须轮询其他节点的取消
+     * we can miss noticing whether a cancelled node is ahead or behind us.
+     * 我们可能会错过注意到取消的节点是在我们前面还是在我们后面
+     * This is dealt with by always unparking successors upon cancellation, allowing them to stabilize on a new predecessor,
+     * unless we can identify an uncancelled predecessor who will carry this responsibility.
+     * 解决这个问题的方法是在取消时总是取消后继，允许它们稳定在新的前任上，除非我们可以确定一个未取消的前任将承担这个责任。
      *
-     * <p>Threads waiting on Conditions use the same nodes, but
+     * CLH queues need a dummy header node to get started.
+     * CLH 队列需要一个虚拟头节点才能启动
+     * But we don't create them on construction, because it would be wasted effort if there is never contention.
+     * 但是我们不会在构建时创建它们，因为如果从不存在争用，那将是浪费精力
+     * Instead, the node is constructed and head and tail pointers are set upon first contention.
+     * 相反，在第一次争用时构造节点并设置头和尾指针
+     *
+     * Threads waiting on Conditions use the same nodes, but
      * use an additional link. Conditions only need to link nodes
      * in simple (non-concurrent) linked queues because they are
      * only accessed when exclusively held.  Upon await, a node is
@@ -349,7 +335,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      * transferred to the main queue.  A special value of status
      * field is used to mark which queue a node is on.
      *
-     * <p>Thanks go to Dave Dice, Mark Moir, Victor Luchangco, Bill
+     * Thanks go to Dave Dice, Mark Moir, Victor Luchangco, Bill
      * Scherer and Michael Scott, along with members of JSR-166
      * expert group, for helpful ideas, discussions, and critiques
      * on the design of this class.
@@ -387,8 +373,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         static final int CONDITION = -2;
 
         /**
-         * waitStatus value to indicate the next acquireShared should
-         * unconditionally propagate
+         * waitStatus value to indicate the next acquireShared should unconditionally propagate
          * waitStatus的值，表示有资源可用，新head结点需要继续唤醒后继结点（共享模式下，
          * 多线程并发释放资源，而head唤醒其后继结点后，需要把多出来的资源留给后面的结点；设置新的head结点时，会继续唤醒其后继结点）
          */
@@ -435,31 +420,30 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         volatile int waitStatus;
 
         /**
-         * Link to predecessor node that current node/thread relies on
-         * for checking waitStatus. Assigned during enqueuing, and nulled
-         * out (for sake of GC) only upon dequeuing.  Also, upon
-         * cancellation of a predecessor, we short-circuit while
-         * finding a non-cancelled one, which will always exist
-         * because the head node is never cancelled: A node becomes
-         * head only as a result of successful acquire. A
-         * cancelled thread never succeeds in acquiring, and a thread only
-         * cancels itself, not any other node.
+         * Link to predecessor node that current node/thread relies on for checking waitStatus.
+         * 链接到当前节点线程依赖于检查 waitStatus 的前驱节点
+         * Assigned during enqueuing, and nulled out (for sake of GC) only upon dequeuing.
+         * 在入队期间分配，并且仅在出队时清空（为了 GC）
+         * Also, upon cancellation of a predecessor, we short-circuit while finding a non-cancelled one,
+         * which will always exist because the head node is never cancelled: A node becomes head only as a result of successful acquire.
+         * 此外，在取消前一个节点时，我们在找到未取消的节点时短路，该节点将始终存在，因为头节点永远不会取消:只有成功获取节点才会变成头节点。
+         * A cancelled thread never succeeds in acquiring, and a thread only cancels itself, not any other node.
+         * 被取消的线程永远不会成功获取，而且线程只会取消自己，而不会取消任何其他节点。
          * 前驱结点
          */
         volatile Node prev;
 
         /**
-         * Link to the successor node that the current node/thread
-         * unparks upon release. Assigned during enqueuing, adjusted
-         * when bypassing cancelled predecessors, and nulled out (for
-         * sake of GC) when dequeued.  The enq operation does not
-         * assign next field of a predecessor until after attachment,
-         * so seeing a null next field does not necessarily mean that
-         * node is at end of queue. However, if a next field appears
-         * to be null, we can scan prev's from the tail to
-         * double-check.  The next field of cancelled nodes is set to
-         * point to the node itself instead of null, to make life
-         * easier for isOnSyncQueue.
+         * Link to the successor node that the current node/thread unparks upon release.
+         * 链接到当前节点线程在释放时取消驻留的后继节点
+         * Assigned during enqueuing, adjusted when bypassing cancelled predecessors, and nulled out (for sake of GC) when dequeued.
+         * 在排队时赋值，在绕过被取消的前辈时进行调整，在退出队列时为空(为了GC的需要)
+         * The enq operation does not assign next field of a predecessor until after attachment, so seeing a null next field does not necessarily mean that node is at end of queue.
+         * enq操作直到附件之后才会分配前任的下一个字段，所以看到空的下一个字段并不一定意味着节点在队列的末尾
+         * However, if a next field appears to be null, we can scan prev's from the tail to double-check.
+         * 然而，如果下一个字段似乎是空的，我们可以从尾部扫描prev来再次检查。
+         * The next field of cancelled nodes is set to point to the node itself instead of null, to make life easier for isOnSyncQueue.
+         * 被取消节点的下一个字段被设置为指向该节点本身，而不是null，以使isOnSyncQueue更容易操作。
          * 后继结点
          */
         volatile Node next;
@@ -521,10 +505,10 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     }
 
     /**
-     * Head of the wait queue, lazily initialized.  Except for
-     * initialization, it is modified only via method setHead.  Note:
-     * If head exists, its waitStatus is guaranteed not to be
-     * CANCELLED.
+     * Head of the wait queue, lazily initialized.
+     * Except for initialization, it is modified only via method setHead.
+     * Note: If head exists, its waitStatus is guaranteed not to be CANCELLED.
+     * 如果 head 存在，则保证其 waitStatus 不会被 CANCELLED
      * 头节点 任何时候  头节点对应的线程是拿到锁的当前线程
      */
     private transient volatile Node head;
@@ -677,7 +661,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
 
         node.thread = null;
 
-//        node.thread=Thread.currentThread();
+        // node.thread=Thread.currentThread();
 
         node.prev = null;
     }

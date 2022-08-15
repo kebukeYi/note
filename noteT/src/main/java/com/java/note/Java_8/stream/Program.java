@@ -158,6 +158,7 @@ public class Program {
 //        stream.filter(ele -> ele.getScore() > 90).sorted((ele1, ele2) -> ele1.getScore() - ele2.getScore()).forEach(System.out::println);
 
         Person person = new Person();
+        //stream.reduce((ele1, ele2) -> person.setScore(ele1.getScore() + ele2.getScore()));
         stream.reduce((ele1, ele2) -> person.setScore(ele1.getScore() + ele2.getScore()));
         System.out.println(person.getScore());
 

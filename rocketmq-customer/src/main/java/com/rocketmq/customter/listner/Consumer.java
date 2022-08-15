@@ -1,7 +1,6 @@
 package com.rocketmq.customter.listner;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.MessageSelector;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
