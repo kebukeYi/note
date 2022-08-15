@@ -17,6 +17,7 @@ import java.util.*;
  * @Author kebukeyi
  * @Date 2022/8/15 10:54
  * @Description https://blog.csdn.net/weixin_39792935/article/details/121684704
+ * http://localhost:8080/swagger-ui.html
  * @Version 1.0.0
  */
 @SuppressWarnings("DuplicatedCode")
