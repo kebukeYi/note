@@ -309,6 +309,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--2022年12月5日00:25:41 for dynamic add bean`s property-->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+
 
     </dependencies>
 
